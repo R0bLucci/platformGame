@@ -1,0 +1,21 @@
+#ifndef GAME_H
+#define GAME_H
+
+struct Graphic;
+
+class Game{
+public:
+	Game();	
+	~Game();
+
+private:
+	// Game loop that handles event, sprites updates, and draw to screen 
+	void gameLoop();
+	// Update oblects in the game
+	void update(int elapedTime);
+	// Redraw sprites 
+	void draw(Graphic &graphic);	
+
+};
+
+#endif

@@ -1,10 +1,8 @@
 #include <SDL2/SDL.h>
-#include <stdio.h>
-#include "graphic.h"
+#include "game.h"
 
 int main(int argc, char* argv[]){
-	Graphic graphic;
-	while(true){
-	}
+	Game game;
+	game.gameLoop();
 	return 0;
 }
