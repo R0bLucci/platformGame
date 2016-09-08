@@ -26,3 +26,11 @@ Graphic::~Graphic(){
 SDL_Renderer * Graphic::getRenderer(){
 	return this->renderer;
 }
+
+void Graphic::clear(){
+	SDL_RenderClear(this->renderer);
+}
+
+void Graphic::render(){
+	SDL_RenderPresent(this->renderer);
+}

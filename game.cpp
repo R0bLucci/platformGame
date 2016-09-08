@@ -48,7 +48,11 @@ void Game::update(){
 	//std::cout << (float)this->elapsedTime << std::endl;
 }
 
-void Game::draw(Graphic &graphic){}
+void Game::draw(Graphic &graphic){ 
+	graphic.clear();
+
+	graphic.render();
+}
 
 
 int Game::calculateElapsedTime(int &lastElapsedTime){
