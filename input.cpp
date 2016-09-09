@@ -9,16 +9,12 @@ bool Input::handleInput(SDL_Event &event){
 	this->clearEventPairList();
 	bool quit = false;
 	if(event.type == SDL_KEYDOWN){
-		std::cout << "added key down: " << event.key.keysym.scancode << std::endl;
 		this->keysPressed.push_back(EventPair(event.key.keysym.scancode, true));		
 	}else if (event.type = SDL_KEYUP){
-		std::cout << "added key up: " << event.key.keysym.scancode << std::endl;
 		this->keysReleased.push_back(EventPair(event.key.keysym.scancode, true));		
 	}else if(event.type = SDL_QUIT){
 		quit = true;
 	}	
-	std::cout << "size pressed: " << this->keysPressed.size() << std::endl;
-	std::cout << "size released: " << this->keysReleased.size() << std::endl;
 	return quit;	
 }
 

@@ -1,8 +1,12 @@
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
 
+#include <string>
 struct SDL_Window;
 struct SDL_Rederer;
+struct SDL_Surface;
+struct SDL_Rect;
+struct SDL_Texture;
 
 class Graphic {
 public:
@@ -14,11 +18,14 @@ public:
 	void render();
 	// Clear the screen to set a blank canvas for the new frame to be drawn
 	void clear();
+	// Get png file  	
+	SDL_Surface * getSurface(const std::string path);
+	// Prepare sprite to renderer buffer so that it can be displayed later
+	void blitSurface(SDL_Texture * texture, const SDL_Rect * source, const SDL_Rect * destination);
 private:
 	SDL_Window * window;
 	SDL_Renderer * renderer;
-
+	SDL_Surface * surface;
 };
-
 
 #endif

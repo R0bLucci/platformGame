@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include <SDL2/SDL.h>
+#include <iostream>
 
 struct EventPair {
 	bool value;
@@ -13,6 +14,8 @@ struct EventPair {
 	EventPair(SDL_Scancode s, bool b) :
 	code(s), value(b) 
 	{}
+	
+	~EventPair(){}
 
 	bool getValue(){
 		return this->value;	

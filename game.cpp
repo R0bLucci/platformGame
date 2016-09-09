@@ -3,21 +3,26 @@
 #include "game.h"
 #include "input.h"
 #include "graphic.h"
+#include "player.h"
+#include "globals.h"
+
+const int FPS = 50;
+const int MAX_TIME = 1000 / 50;
 
 Game::Game() : 
-elapsedTime(0)
-{
+elapsedTime(0){
 	SDL_Init(SDL_INIT_EVERYTHING);
 }
 
-Game::~Game(){}
-
+Game::~Game(){
+	delete this->player;
+}
 
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	int initFrameTime = SDL_GetTicks();
-	
+	this->player = new Player(graphic, Vector2(304, 100));	
+	int initFrameTime = SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
 		SDL_Event event;
@@ -26,14 +31,27 @@ void Game::gameLoop(){
 			quit = input.handleInput(event);
 			if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
 				quit = true;	
-			}else if(input.wasKeyPressed(SDL_SCANCODE_UP)){
-				std::cout << "UP" << std::endl;
-			}else if(input.wasKeyPressed(SDL_SCANCODE_DOWN)){
-				std::cout << "DOWN" << std::endl;
 			}else if(input.wasKeyPressed(SDL_SCANCODE_RIGHT)){
-				std::cout << "RIGHT" << std::endl;
+				this->player->moveRight();
 			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT)){
-				std::cout << "LEFT" << std::endl;
+				this->player->moveLeft();
+			}
+
+			if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
+				this->player->idle();
+			}
+
+
+			if(input.wasKeyPressed(SDL_SCANCODE_UP)){
+				this->player->lookUp();			
+			}else if(input.wasKeyPressed(SDL_SCANCODE_DOWN)){
+				this->player->lookDown();
+			}
+			
+			if(input.wasKeyReleased(SDL_SCANCODE_UP)){
+				this->player->stopLookUp();
+			}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
+				this->player->stopLookDown();
 			}
 		}
 
@@ -46,11 +64,12 @@ void Game::gameLoop(){
 
 void Game::update(){
 	//std::cout << (float)this->elapsedTime << std::endl;
+	this->player->update(this->elapsedTime);
 }
 
 void Game::draw(Graphic &graphic){ 
 	graphic.clear();
-
+	this->player->draw(graphic);
 	graphic.render();
 }
 
@@ -59,5 +78,5 @@ int Game::calculateElapsedTime(int &lastElapsedTime){
 	int currentFrameDuration = SDL_GetTicks(); 	
 	int elapsedTime = currentFrameDuration - lastElapsedTime;
 	lastElapsedTime = currentFrameDuration;
-	this->elapsedTime = elapsedTime;
+	this->elapsedTime = std::min(elapsedTime, MAX_TIME);
 }
