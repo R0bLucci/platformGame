@@ -7,7 +7,7 @@
 #include "globals.h"
 
 const int FPS = 50;
-const int MAX_TIME = 1000 / 50;
+const int MAX_TIME = 1000 / FPS;
 
 Game::Game() : 
 elapsedTime(0){
@@ -21,7 +21,7 @@ Game::~Game(){
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->player = new Player(graphic, Vector2(304, 100));	
+	this->player = new Player(graphic, Vector2(31, 100));	
 	int initFrameTime = SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
@@ -37,10 +37,13 @@ void Game::gameLoop(){
 				this->player->moveLeft();
 			}
 
+			if(input.wasKeyPressed(SDL_SCANCODE_SPACE)){
+				this->player->jump();
+			}
+
 			if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
 				this->player->idle();
 			}
-
 
 			if(input.wasKeyPressed(SDL_SCANCODE_UP)){
 				this->player->lookUp();			
@@ -63,7 +66,6 @@ void Game::gameLoop(){
 
 
 void Game::update(){
-	//std::cout << (float)this->elapsedTime << std::endl;
 	this->player->update(this->elapsedTime);
 }
 

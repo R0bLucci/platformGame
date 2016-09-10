@@ -2,6 +2,7 @@
 #define PLAYER_H
 #include "globals.h"
 #include "animatedSprite.h"
+struct BoundingBox;
 struct Graphic;
 
 class Player : public AnimatedSprite {
@@ -20,6 +21,10 @@ public:
 	void update(float elapsedTime);
 	void draw(Graphic & graphic);
 	void stopMoving();
+	BoundingBox * boundingBox;
+	BoundingBox * box;
+	BoundingBox * box2;
+	
 private:
 	enum Direction {
 		UP,
