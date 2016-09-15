@@ -16,6 +16,7 @@ spawnPoint(spawnPoint), currentLevelName(levelName), size(0,0), tileSize(0,0){
 Level::~Level(){
 	for(int i=0, n = this->tilesetList.size(); i < n; i++){
 		delete this->tilesetList[i];
+		this->tilesetList[i] = NULL;
 	}
 }
 

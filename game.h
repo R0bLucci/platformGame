@@ -3,6 +3,7 @@
 
 struct Graphic;
 struct Player;
+struct Level;
 
 class Game {
 public:
@@ -23,6 +24,7 @@ private:
 	int calculateElapsedTime(int &lastElapsedTime);
 	
 	Player * player;
+	Level * level;
 };
 
 #endif
