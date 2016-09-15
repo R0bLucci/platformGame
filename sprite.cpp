@@ -5,7 +5,7 @@
 
 Sprite::Sprite(Graphic &graphic, int originX, int originY, int width, int height, float posX, float posY) : 
 posX(posX), posY(posY) {
-	SDL_Surface * surface = graphic.getSurface("resources/MyChar.png");
+	SDL_Surface * surface = graphic.getSurface("MyChar.png", false);
 	if(surface == nullptr){
 		return;
 	}

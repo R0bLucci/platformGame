@@ -3,12 +3,12 @@
 
 namespace globals {
 	const int WIDTH = 640;
-	const int HEIGHT = 480; 
+	const int HEIGHT = 512; 
 	const int SPRITE_SCALER = 2;
 	const float WALK_SPEED = 0.2f;
 	
 	const float GRAVITY = 0.002f;
-	const float JUMP = 13.0f;
+	const float JUMP = 16.0f;
 	const float GRAVITY_CAP = 0.8f;
 }
 

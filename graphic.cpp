@@ -4,9 +4,7 @@
 #include "globals.h"
 #include <iostream>
 
-Graphic::Graphic(): 
-surface(0)
-{
+Graphic::Graphic() {
 	this->window = SDL_CreateWindow("Game", 100, 100, globals::WIDTH, globals::HEIGHT, SDL_WINDOW_SHOWN);
 	// Check if window was successufuly creted 
 	if(this->window == 0){
@@ -21,17 +19,20 @@ surface(0)
 	}
 }
 
-SDL_Surface * Graphic::getSurface(const std::string path){
-	if(this->surface == 0){
-		this->surface = IMG_Load(path.c_str());
-	}	
-
-	if(!this->surface){
-		std::cout << "Img error loading " << IMG_GetError() << std::endl;
-		return nullptr;
+SDL_Surface * Graphic::getSurface(const std::string name, bool isLevel){
+	std::string path;
+	if(isLevel){
+		path = "resources/level/" + name;
+	}else{
+		path = "resources/spriteSheet/" + name;
+	}
+	if(this->surfaces.count(path) == 0){
+		SDL_Surface * surface = IMG_Load(path.c_str());
+		this->surfaces[path] = surface;
+		return surface;
 	}	
 	
-	return this->surface;
+	return this->surfaces[path];
 }
 
 Graphic::~Graphic(){
