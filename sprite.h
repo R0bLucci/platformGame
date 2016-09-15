@@ -7,16 +7,16 @@ struct SDL_Texture;
 
 class Sprite {
 public:
-	Sprite(Graphic &graphic, int originX, int originY, int width, int height, float posX, float posY);
+	Sprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY);
 	~Sprite();
 	
 	void draw(Graphic &graphic);	
-	void update(float elapsedTime);
+	void update(double elapsedTime);
 protected:
 	SDL_Rect source;
 	SDL_Texture * texture;
-	int posX;
-	int posY;
+	double posX;
+	double posY;
 };
 
 #endif

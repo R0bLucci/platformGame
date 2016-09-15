@@ -58,43 +58,43 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 }
 
 
-void BoundingBox::moveBoundingBox(float x, float y){
+void BoundingBox::moveBoundingBox(double x, double y){
 	this->x = std::ceil(x); 
 	this->y = std::ceil(y);
 }
 
-Vector2f BoundingBox::getRightSideCentre(){
-	float x = this->getRightSide();
-	float y = this->getTopSide() + (this->getHeight() / 2);
-	Vector2f point(x,y);
+Vector2 BoundingBox::getRightSideCentre(){
+	double x = this->getRightSide();
+	double y = this->getTopSide() + (this->getHeight() / 2);
+	Vector2 point(x,y);
 	return point;
 }
 
-Vector2f BoundingBox::getLeftSideCentre(){
-	float x = this->getLeftSide();
-	float y = this->getTopSide() + (this->getHeight() / 2);
-	Vector2f point(x,y);
+Vector2 BoundingBox::getLeftSideCentre(){
+	double x = this->getLeftSide();
+	double y = this->getTopSide() + (this->getHeight() / 2);
+	Vector2 point(x,y);
 	return point;
 }
 
-Vector2f BoundingBox::getTopSideCentre(){
-	float x = this->getLeftSide() + (this->getWidth() / 2);
-	float y = this->getTopSide();
-	Vector2f point(x,y);
+Vector2 BoundingBox::getTopSideCentre(){
+	double x = this->getLeftSide() + (this->getWidth() / 2);
+	double y = this->getTopSide();
+	Vector2 point(x,y);
 	return point;
 }
 
-Vector2f BoundingBox::getBottomSideCentre(){
-	float x = this->getLeftSide() + (this->getWidth() / 2);
-	float y = this->getBottomSide();
-	Vector2f point(x,y);
+Vector2 BoundingBox::getBottomSideCentre(){
+	double x = this->getLeftSide() + (this->getWidth() / 2);
+	double y = this->getBottomSide();
+	Vector2 point(x,y);
 	return point;
 }
 
-double BoundingBox::getDistance(Vector2f v1, Vector2f v2){
-	Vector2f result = v2 - v1;
-	float x = result.x * result.x;
-	float y = result.y * result.y;
+double BoundingBox::getDistance(Vector2 v1, Vector2 v2){
+	Vector2 result = v2 - v1;
+	double x = result.x * result.x;
+	double y = result.y * result.y;
 	return sqrt( (x + y) );
 }
 

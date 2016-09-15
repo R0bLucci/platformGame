@@ -4,7 +4,7 @@
 
 
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
-isGrounded(false), dx(0.0f), dy(0.0f), facing(LEFT), 
+isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
 isLookingUp(false), isLookingDown(false),
 AnimatedSprite(graphic, 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
 	this->boundingBox = new BoundingBox(Vector2(spawnPoint.x, spawnPoint.y), 
@@ -31,18 +31,15 @@ void Player::setUpAnimation(){
 	this->addAnimation("lookDownLeft", 1, Vector2(6, 0));
 }
 
-void Player::update(float elapsedTime){
-	if(this->dx > 0.0f){
-		this->posX += std::ceil(this->dx * elapsedTime);
-	}else{
-		this->posX += this->dx * elapsedTime;
-	}
+void Player::update(double elapsedTime){
+	
+	this->posX += round(this->dx * elapsedTime);
 	
 	if(this->dy <= globals::GRAVITY_CAP){
-		this->dy += std::ceil(globals::GRAVITY * elapsedTime);
+		this->dy += round(globals::GRAVITY * elapsedTime);
 	}
 
-	this->posY += this->dy * elapsedTime;
+	this->posY += round(this->dy * elapsedTime);
 
 	AnimatedSprite::update(elapsedTime);
 	this->boundingBox->moveBoundingBox(this->posX, this->posY);
@@ -94,18 +91,18 @@ void Player::draw(Graphic & graphic){
 }
 
 void Player::moveRight(){
-	if(this->isGrounded){
+	//if(this->isGrounded){
 		this->setCurrentAnimation("walkRight");
 		this->dx = globals::WALK_SPEED;
-	}
+	//}
 	this->facing = RIGHT;
 }
 
 void Player::moveLeft(){
-	if(this->isGrounded){
+	//if(this->isGrounded){
 		this->setCurrentAnimation("walkLeft");
 		this->dx = -globals::WALK_SPEED;
-	}
+	//}
 	this->facing = LEFT;
 }
 
@@ -138,10 +135,11 @@ void Player::lookDown(){
 }
 
 void Player::idle() {
-	if(this->isGrounded){
+	//if(this->isGrounded){
 		this->dx = 0.0f;
 		this->setCurrentAnimation(this->facing == RIGHT ? "idleRight" : "idleLeft");
-	}
+	//}
+
 }
 
 void Player::stopLookUp(){

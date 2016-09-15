@@ -18,12 +18,12 @@ public:
 	inline int getLeftSide() { return this->x; }
 	inline int getWidth() { return this->w; }
 	inline int getHeight() { return this->h; }
-	Vector2f getRightSideCentre();
-	Vector2f getLeftSideCentre();
-	Vector2f getTopSideCentre();
-	Vector2f getBottomSideCentre();
-	double getDistance(Vector2f v1, Vector2f v2);
-	void moveBoundingBox(float x, float y);
+	Vector2 getRightSideCentre();
+	Vector2 getLeftSideCentre();
+	Vector2 getTopSideCentre();
+	Vector2 getBottomSideCentre();
+	double getDistance(Vector2 v1, Vector2 v2);
+	void moveBoundingBox(double x, double y);
 	
 	collision::side sideIsCollidingWidth(BoundingBox box);
 };

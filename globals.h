@@ -5,11 +5,11 @@ namespace globals {
 	const int WIDTH = 640;
 	const int HEIGHT = 512; 
 	const int SPRITE_SCALER = 2;
-	const float WALK_SPEED = 0.2f;
+	const double WALK_SPEED = 0.5;
 	
-	const float GRAVITY = 0.002f;
-	const float JUMP = 16.0f;
-	const float GRAVITY_CAP = 0.8f;
+	const double GRAVITY = 0.2;
+	const double JUMP = 2.9;
+	const double GRAVITY_CAP = 0.8;
 }
 
 namespace collision {
@@ -23,13 +23,13 @@ namespace collision {
 }
 
 struct Vector2 {
-	int x, y;	
+	double x, y;	
 
 	Vector2() :
 	x(0), y(0) 
 	{}
 
-	Vector2(int x, int y) :
+	Vector2(double x, double y) :
 	x(x), y(y) 
 	{}
 
@@ -37,7 +37,7 @@ struct Vector2 {
 		return Vector2(0,0);
 	}
 	
-	Vector2 operator *(int factor) {
+	Vector2 operator *(double factor) {
 		Vector2 v(*this);
 		v.x *= factor;
 		v.y *= factor;
@@ -45,8 +45,8 @@ struct Vector2 {
 	}
 	
 	Vector2 operator -(Vector2 v){
-		int x = this->x - v.x;
-		int y = this->y - v.y;
+		double x = this->x - v.x;
+		double y = this->y - v.y;
 		Vector2 result(x,y);
 		return result;
 	}

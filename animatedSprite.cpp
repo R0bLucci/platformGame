@@ -2,7 +2,7 @@
 #include <iostream>
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, int originX, int originY, int width, int height, 
-	float posX, float posY, const int timeToUpdate) : frameIndex(0), currentAnimation(""), 
+	double posX, double posY, const double timeToUpdate) : frameIndex(0), currentAnimation(""), 
 Sprite(graphic, originX, originY, width, height, posX, posY), timeToUpdate(timeToUpdate), elapsedTime(0){
 	this->setUpAnimation();
 }
@@ -11,16 +11,16 @@ AnimatedSprite::~AnimatedSprite(){}
 
 void AnimatedSprite::addAnimation(std::string animationName, int frames, Vector2 origin, bool isHorizontal){
 	std::vector<SDL_Rect> rects;
-	origin = origin * 16;
+	origin = origin * 16.0;
 	// Get next rectangles left to right 
 	if(isHorizontal){
 		for(int i = 0; i < frames; i++){
-			SDL_Rect rect = { (i * this->source.w) + origin.x, 0 + origin.y, this->source.w, this->source.h };
+			SDL_Rect rect = { (i * this->source.w) + (int) origin.x, 0 + (int) origin.y, this->source.w, this->source.h };
 			rects.push_back(rect);
 		}
 	}else{ // Get next rectangles top to bottom
 		for(int i = 0; i < frames - 1; i++){
-			SDL_Rect rect = { 0 + origin.x, (i * this->source.h) + origin.y, this->source.w, this->source.h };
+			SDL_Rect rect = { 0 + (int) origin.x, (i * this->source.h) +(int) origin.y, this->source.w, this->source.h };
 			rects.push_back(rect);
 		}
 	}
@@ -32,7 +32,7 @@ void AnimatedSprite::setCurrentAnimation(std::string animationName){
 
 void AnimatedSprite::setUpAnimation(){}
 
-void AnimatedSprite::update(float elapsedTime){
+void AnimatedSprite::update(double elapsedTime){
 	Sprite::update(elapsedTime);
 	this->elapsedTime += elapsedTime;
 	std::vector<SDL_Rect> cachedAnimations = this->animations[this->currentAnimation];

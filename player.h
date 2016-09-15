@@ -18,7 +18,7 @@ public:
 	void stopLookUp();
 	void stopLookDown();
 	void idle();
-	void update(float elapsedTime);
+	void update(double elapsedTime);
 	void draw(Graphic & graphic);
 	void stopMoving();
 	BoundingBox * boundingBox;
@@ -35,8 +35,8 @@ private:
 	bool isGrounded;
 	bool isLookingUp;
 	bool isLookingDown;
-	float dx;
-	float dy;
+	double dx;
+	double dy;
 	Direction facing;	
 	void setUpAnimation();
 };

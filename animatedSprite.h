@@ -11,17 +11,17 @@ struct Graphic;
 
 class AnimatedSprite : public Sprite {
 public:
-	AnimatedSprite(Graphic &graphic, int originX, int originY, int width, int height, float posX, float posY
-		,const int timeToUpdate);
+	AnimatedSprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY
+		,const double timeToUpdate);
 
 	~AnimatedSprite();
-	void update(float elapsedTime);
+	void update(double elapsedTime);
 	void draw(Graphic & graphic);
 
 protected:
 	int frameIndex;
-	const int timeToUpdate;
-	int elapsedTime;
+	const double timeToUpdate;
+	double elapsedTime;
 	std::string currentAnimation;
 	void setUpAnimation();
 	void setCurrentAnimation(std::string animationName);

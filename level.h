@@ -15,7 +15,7 @@ public:
 	Level(Graphic &graphic,std::string levelName, Vector2 spawnPoint);
 	~Level();
 
-	void update(float elapsedTime);
+	void update(double elapsedTime);
 	void draw(Graphic &graphic);
 private:
 	Vector2 size;

@@ -14,14 +14,14 @@ public:
 	void gameLoop();
 private:
 	// Time passed on each interation of the game loop
-	float elapsedTime;
+	double elapsedTime;
 
 	// Update oblects in the game
 	void update();
 	// Redraw sprites 
 	void draw(Graphic &graphic);	
 	// Compute the time that passes on each iteration of the game loop	
-	int calculateElapsedTime(int &lastElapsedTime);
+	double calculateElapsedTime(double &lastElapsedTime);
 	
 	Player * player;
 	Level * level;

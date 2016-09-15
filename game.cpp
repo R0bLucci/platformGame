@@ -7,8 +7,8 @@
 #include "level.h"
 #include "globals.h"
 
-const int FPS = 50;
-const int MAX_TIME = 1000 / FPS;
+const double FPS = 50;
+const double MAX_TIME = 1000 / FPS;
 
 Game::Game() : 
 elapsedTime(0){
@@ -27,7 +27,7 @@ void Game::gameLoop(){
 	Input input;
 	this->level = new Level(graphic,"level1", Vector2(31,100));
 	this->player = new Player(graphic, Vector2(31, 100));	
-	int initFrameTime = SDL_GetTicks();	
+	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
 		SDL_Event event;
@@ -36,6 +36,14 @@ void Game::gameLoop(){
 			quit = input.handleInput(event);
 			if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
 				quit = true;	
+			}else if(input.wasKeyPressed(SDL_SCANCODE_RIGHT) && 
+						input.wasKeyPressed(SDL_SCANCODE_SPACE)){
+				this->player->moveRight();
+				this->player->jump();
+			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT) && 
+						input.wasKeyPressed(SDL_SCANCODE_SPACE)){
+				this->player->moveLeft();
+				this->player->jump();
 			}else if(input.wasKeyPressed(SDL_SCANCODE_RIGHT)){
 				this->player->moveRight();
 			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT)){
@@ -81,9 +89,9 @@ void Game::draw(Graphic &graphic){
 	graphic.render();
 }
 
-int Game::calculateElapsedTime(int &lastElapsedTime){
-	int currentFrameDuration = SDL_GetTicks(); 	
-	int elapsedTime = currentFrameDuration - lastElapsedTime;
+double Game::calculateElapsedTime(double &lastElapsedTime){
+	double currentFrameDuration = (double) SDL_GetTicks(); 	
+	double elapsedTime = currentFrameDuration - lastElapsedTime;
 	lastElapsedTime = currentFrameDuration;
-	this->elapsedTime = std::min(elapsedTime, MAX_TIME);
+	this->elapsedTime = (double) std::min(elapsedTime, MAX_TIME);
 }

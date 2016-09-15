@@ -132,7 +132,7 @@ void Level::addTileToTileset(Tile *tile){
 	}
 }
 
-void Level::update(float elapsedTime){
+void Level::update(double elapsedTime){
 
 }
 
