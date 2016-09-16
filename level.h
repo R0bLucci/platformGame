@@ -26,7 +26,7 @@ private:
 	std::vector<Tileset*> tilesetList;
 
 	void mapLoader(std::string mapName, Graphic &graphic);
-	void parseCSV(const char * text, int layerWidht, int layerHeight, Graphic &graphic);
+	void parseCSV(const char * text, int layerWidht, int layerHeight);
 	void addTileToTileset(Tile *tile);
 };
 

@@ -82,10 +82,10 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 		while(dataNode){
 			if(name == "background"){
 				//Generate backgound tile
-				this->parseCSV(text, layerWidth, layerHeight, graphic);
+				this->parseCSV(text, layerWidth, layerHeight);
 			}else if(name == "Tile Layer 1"){
 				//Genetare foreground tile (these tiles will be collidable with the player)
-				this->parseCSV(text, layerWidth, layerHeight, graphic);
+				this->parseCSV(text, layerWidth, layerHeight);
 			}
 				
 			dataNode = dataNode->NextSiblingElement("data");
@@ -94,27 +94,34 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 	}
 }
 
-void Level::parseCSV(const char * text, int layerWidth, int layerHeight, Graphic &graphic){
+void Level::parseCSV(const char * text, int layerWidth, int layerHeight){
 	std::string csv = text;	
-	int commaIndex = 0;
-	int counter = 0; 
-	int lastComma = 0; 
-	int result = commaIndex;
-	int layerX = 0, layerY = 0;
-	int imageX = 0, imageY = 0;
+	int commaIndex = 0; // Index position of the last occurance of a comma
+	int counter = 0; // Check when the csv has a new line character 
+	int lastComma = 0; // Save index position of the second last comma that was found 
+	int result = commaIndex; // Value to check when the csv formatted string has ended
+	int layerX = 0, layerY = 0; // Origin point (x,y) of the square in the map
 	while(result != std::string::npos){
 		commaIndex = csv.find(",", ++commaIndex);
 		result = commaIndex;
-		// get numbert
+		// get tile gid as a string
 		std::string sGid = csv.substr(lastComma + 1, commaIndex - (lastComma + 1));	
+		// Convert gid to interger
 		int gid = stoi(sGid);
+		// Save last index of the comma for the next iteration
 		lastComma = commaIndex;
+		// Create a new tile only if the gid is positive
+		// a gid of zero means that the tile is empty
 		if(gid > 0){
 			Tile * tile = new Tile(gid, layerX, layerY);
 			this->addTileToTileset(tile);
 		}
+		// Increment x to move the origin point by one at each iteration 
 		layerX++;
 
+		// Check if a row is completely trasversed in that case
+		// Reset the x point and the counter to zero and increment y by one.
+		// Incrememtn the comma index so that the new line character for the next row is skipped
 		if(++counter == layerWidth){
 			lastComma++;
 			layerY++;

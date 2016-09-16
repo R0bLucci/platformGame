@@ -33,13 +33,20 @@ void Player::setUpAnimation(){
 
 void Player::update(double elapsedTime){
 	
-	this->posX += round(this->dx * elapsedTime);
+	std::cout << "time " << elapsedTime << std::endl;
+	this->posX += this->dx * elapsedTime;
+
+	std::cout << "dx " << this->dx << std::endl;
 	
 	if(this->dy <= globals::GRAVITY_CAP){
-		this->dy += round(globals::GRAVITY * elapsedTime);
+		this->dy += globals::GRAVITY * elapsedTime;
+		std::cout << "dy " << this->dy << std::endl;
 	}
 
-	this->posY += round(this->dy * elapsedTime);
+	this->posY += this->dy * elapsedTime;
+
+	std::cout << "posX " << this->posX << std::endl;
+	std::cout << "posY " << this->posY << std::endl;
 
 	AnimatedSprite::update(elapsedTime);
 	this->boundingBox->moveBoundingBox(this->posX, this->posY);
@@ -109,18 +116,18 @@ void Player::moveLeft(){
 void Player::jump(){
 	if(this->isGrounded){
 		this->isGrounded = false;
-		this->dy = 0.0f;
+		this->dy = 0.0;
 		this->dy -= globals::JUMP;
 	}
 }
 
 void Player::stopMoving(){
-	this->dx = 0.0f;
+	this->dx = 0.0;
 }
 
 void Player::lookUp(){
 	this->isLookingUp = true;
-	this->dx = 0.0f;
+	this->dx = 0.0;
 	if(this->isGrounded){
 		this->setCurrentAnimation(this->facing == RIGHT ? "lookUpRight" : "lookUpLeft");	
 	}
@@ -128,7 +135,7 @@ void Player::lookUp(){
 
 void Player::lookDown(){
 	this->isLookingDown = true;
-	this->dx = 0.0f;
+	this->dx = 0.0;
 	if(this->isGrounded){
 		this->setCurrentAnimation(this->facing == RIGHT ? "lookDownRight" : "lookDownLeft");	
 	}
@@ -136,7 +143,7 @@ void Player::lookDown(){
 
 void Player::idle() {
 	//if(this->isGrounded){
-		this->dx = 0.0f;
+		this->dx = 0.0;
 		this->setCurrentAnimation(this->facing == RIGHT ? "idleRight" : "idleLeft");
 	//}
 

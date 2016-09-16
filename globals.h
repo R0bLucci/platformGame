@@ -5,10 +5,10 @@ namespace globals {
 	const int WIDTH = 640;
 	const int HEIGHT = 512; 
 	const int SPRITE_SCALER = 2;
-	const double WALK_SPEED = 0.5;
+	const double WALK_SPEED = 0.2;
 	
-	const double GRAVITY = 0.2;
-	const double JUMP = 2.9;
+	const double GRAVITY = 0.002;
+	const double JUMP = 0.7;
 	const double GRAVITY_CAP = 0.8;
 }
 
