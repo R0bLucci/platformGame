@@ -12,34 +12,34 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	int index = -1;
 
 	// Check left collision with the left side of the bounding box
-	if((boxLeft <= this->getLeftSide() && boxRight >= this->getLeftSide()) &&
-		((boxTop >= this->getTopSide() && boxTop <= this->getBottomSide()) ||
-		(boxBottom >= this->getTopSide() && boxBottom <= this->getBottomSide()))){
-		distances[++index] = this->getDistance(this->getLeftSideCentre(), box.getRightSideCentre());
+	if((boxLeft < this->getLeftSide() && boxRight > this->getLeftSide()) &&
+		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
+		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
+		distances[++index] = std::abs(this->getRightSide() - boxLeft);
 		sides[index] = collision::LEFT;
 	}
 
 	// Check top collision with the top side of this bounding box
-	if((boxTop <= this->getTopSide() && boxBottom >= this->getTopSide()) && 
-		((boxLeft >= this->getLeftSide() && boxLeft <= this->getRightSide()) ||
-		(boxRight >= this->getLeftSide() && boxRight <= this->getRightSide()))){
-		distances[++index] = this->getDistance(this->getTopSideCentre(), box.getBottomSideCentre());
+	if((boxTop < this->getTopSide() && boxBottom > this->getTopSide()) && 
+		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
+		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
+		distances[++index] = std::abs(boxBottom - this->getTopSide());
 		sides[index] = collision::TOP;
 	}
 	
 	// Check bottom collision with bottom side of this bounding box	
-	if((boxBottom >= this->getBottomSide() && boxTop <= this->getBottomSide()) && 
-		((boxLeft >= this->getLeftSide() && boxLeft <= this->getRightSide()) ||
-		(boxRight >= this->getLeftSide() && boxRight <= this->getRightSide()))){
-		distances[++index] = this->getDistance(this->getBottomSideCentre(), box.getTopSideCentre());
+	if((boxBottom > this->getBottomSide() && boxTop < this->getBottomSide()) && 
+		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
+		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
+		distances[++index] = std::abs(this->getBottomSide() - boxTop);
 		sides[index] = collision::BOTTOM;
 	}
 	
 	// Check right collision with the right side of the bounding box	
-	if((boxRight >= this->getRightSide() && boxLeft <= this->getRightSide()) &&
-		((boxTop >= this->getTopSide() && boxTop <= this->getBottomSide()) ||
-		(boxBottom >= this->getTopSide() && boxBottom <= this->getBottomSide()))){
-		distances[++index] = this->getDistance(this->getRightSideCentre(), box.getLeftSideCentre());
+	if((boxRight > this->getRightSide() && boxLeft < this->getRightSide()) &&
+		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
+		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
+		distances[++index] = std::abs(boxRight - this->getLeftSide());
 		sides[index] = collision::RIGHT;
 	}
 

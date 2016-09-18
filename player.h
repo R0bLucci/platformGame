@@ -2,8 +2,11 @@
 #define PLAYER_H
 #include "globals.h"
 #include "animatedSprite.h"
+#include <vector>
+
 struct BoundingBox;
 struct Graphic;
+struct Tile;
 
 class Player : public AnimatedSprite {
 public:
@@ -21,10 +24,11 @@ public:
 	void update(double elapsedTime);
 	void draw(Graphic & graphic);
 	void stopMoving();
+	std::vector<Vector2> surrindingArea(int unitX, int unitY);
+	void handleTileCollision(std::vector<Tile*> tiles);
+	void handleTileCollision(Tile* tile);
+	void handleCollision(std::vector<BoundingBox*> boxes);
 	BoundingBox * boundingBox;
-	BoundingBox * box;
-	BoundingBox * box2;
-	
 private:
 	enum Direction {
 		UP,

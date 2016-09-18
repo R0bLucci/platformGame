@@ -23,7 +23,7 @@ private:
 			width(imageWidth), height(imageHeight), source(source){ 
 				this->createTexture(graphic);
 			}
-			~Image() {}
+			~Image() { }
 			
 			inline int getWidth() const { return this->width; }
 			inline int getHeight() const { return this->height; }

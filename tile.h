@@ -5,6 +5,7 @@
 
 class Tileset;
 class Graphic;
+class BoundingBox;
 
 class Tile {
 public:
@@ -19,11 +20,15 @@ public:
 	int h;
 	int gid;
 	SDL_Rect source;
-
+	
+	BoundingBox * getBoundingBox();
+	void setBoundingBox(BoundingBox * b);
 	void draw(Tileset &tileset, Graphic &graphic);
 	void setSource(Tileset &tileset);	
 private:
-	
+	BoundingBox * box;
+	int scalerX;
+	int scalerY;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "tinyxml2.h"
 #include "tile.h"
 #include "tileset.h"
+#include "player.h"
+#include "boundingBox.h"
 
 using namespace tinyxml2;
 
@@ -17,6 +19,11 @@ Level::~Level(){
 	for(int i=0, n = this->tilesetList.size(); i < n; i++){
 		delete this->tilesetList[i];
 		this->tilesetList[i] = NULL;
+	}
+
+	for(int i=0, n = this->collidables.size(); i < n; i++){
+		delete this->collidables[i];
+		this->collidables[i] = NULL;
 	}
 }
 
@@ -82,19 +89,42 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 		while(dataNode){
 			if(name == "background"){
 				//Generate backgound tile
-				this->parseCSV(text, layerWidth, layerHeight);
+				this->parseCSV(text, name, layerWidth, layerHeight);
 			}else if(name == "Tile Layer 1"){
 				//Genetare foreground tile (these tiles will be collidable with the player)
-				this->parseCSV(text, layerWidth, layerHeight);
+				this->parseCSV(text, name, layerWidth, layerHeight);
 			}
 				
 			dataNode = dataNode->NextSiblingElement("data");
 		}
 		layerNode = layerNode->NextSiblingElement("layer");
 	}
+	
+	XMLElement * objGroup = mapNode->FirstChildElement("objectgroup");
+	while(objGroup){
+		std::string name = objGroup->Attribute("name");
+		XMLElement * obj = objGroup->FirstChildElement("object");	
+		while(obj){
+			if(name == "collidables"){
+				double x = 0, y = 0, width = 0, height = 0;	
+				obj->QueryDoubleAttribute("x", &x);
+				obj->QueryDoubleAttribute("y", &y);
+				obj->QueryDoubleAttribute("width", &width);
+				obj->QueryDoubleAttribute("height", &height);
+				BoundingBox * box = new BoundingBox(
+					Vector2(std::ceil(x) * globals::SPRITE_SCALER,
+					std::ceil(y) * globals::SPRITE_SCALER), 
+					std::ceil(width) * globals::SPRITE_SCALER, 
+					std::ceil(height) * globals::SPRITE_SCALER);
+				this->collidables.push_back(box);
+			}
+			obj = obj->NextSiblingElement("object");
+		}
+		objGroup = objGroup->NextSiblingElement("objectgroup");
+	}
 }
 
-void Level::parseCSV(const char * text, int layerWidth, int layerHeight){
+void Level::parseCSV(const char * text, std::string name, int layerWidth, int layerHeight){
 	std::string csv = text;	
 	int commaIndex = 0; // Index position of the last occurance of a comma
 	int counter = 0; // Check when the csv has a new line character 
@@ -124,23 +154,23 @@ void Level::parseCSV(const char * text, int layerWidth, int layerHeight){
 		// Incrememtn the comma index so that the new line character for the next row is skipped
 		if(++counter == layerWidth){
 			lastComma++;
-			layerY++;
 			layerX = 0;
 			counter = 0;	
+			layerY++;
 		}
 	}
 }
 
 void Level::addTileToTileset(Tile *tile){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
-		if(this->tilesetList[i]->addTile(tile)){
+		if(this->tilesetList[i]->addTile(tile)){ 
 			break;
 		}
 	}
 }
 
-void Level::update(double elapsedTime){
-
+void Level::update(double elapsedTime, Player * player){	
+	player->handleCollision(this->collidables);
 }
 
 

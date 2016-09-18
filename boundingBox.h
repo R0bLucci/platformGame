@@ -2,11 +2,17 @@
 #define BOUNDING_BOX_H
 
 #include "globals.h"
+#include "tile.h"
+#include <iostream>
 
 class BoundingBox {
 public:
 	BoundingBox(Vector2 origin, int width, int height) :
 	x(origin.x), y(origin.y), w(width), h(height) {} 
+	
+	BoundingBox(Tile & tile) : x(tile.layerX * (globals::SPRITE_SCALER * tile.w)), 
+				y(tile.layerY * (globals::SPRITE_SCALER * tile.h)), 
+				w(tile.w), h(tile.h) { std::cout << tile.w << "h " << tile.h << std::endl;} 
 
 	~BoundingBox();
 	

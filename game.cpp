@@ -26,7 +26,7 @@ void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
 	this->level = new Level(graphic,"level1", Vector2(31,100));
-	this->player = new Player(graphic, Vector2(31, 100));	
+	this->player = new Player(graphic, Vector2(200, 100));	
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
@@ -78,8 +78,8 @@ void Game::gameLoop(){
 }
 
 void Game::update(){
-	this->level->update(this->elapsedTime);
 	this->player->update(this->elapsedTime);
+	this->level->update(this->elapsedTime, this->player);
 }
 
 void Game::draw(Graphic &graphic){ 
