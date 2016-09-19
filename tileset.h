@@ -8,6 +8,7 @@
 #include <iostream>
 
 class Tile;
+class Camera;
 
 class Tileset {
 private:
@@ -52,7 +53,8 @@ public:
 	int getColumns() const;
 	Image getImage() const;
 	bool addTile(Tile *tile);
-	void draw(Graphic &graphic);
+	void draw(Graphic &graphic, Camera & camera);
+	std::vector<Tile *>  update(double elapedTime, Camera * camera);
 
 	std::vector<Tile*> getTiles();
 };

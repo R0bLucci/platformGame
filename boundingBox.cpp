@@ -1,6 +1,7 @@
 #include "boundingBox.h"
 #include <math.h>
 #include <iostream>
+#include "camera.h"
 
 collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	int boxTop = box.getTopSide();
@@ -98,4 +99,35 @@ double BoundingBox::getDistance(Vector2 v1, Vector2 v2){
 	return sqrt( (x + y) );
 }
 
+void BoundingBox::setOrigin(Vector2 newOrigin){
+	this->x = newOrigin.x;
+	this->y = newOrigin.y;
+}
+
 BoundingBox::~BoundingBox(){}
+
+bool BoundingBox::isOnCamera(Camera * camera){ 
+
+	int cameraLeft, boxLeft;
+	int cameraRight, boxRight;
+	int cameraTop, boxTop;
+	int cameraBottom, boxBottom;
+
+	cameraLeft = camera->getPosition().x;
+	cameraRight = camera->getPosition().x + camera->getWidth();
+	cameraTop = camera->getPosition().y;
+	cameraBottom = camera->getPosition().y + camera->getHeight();
+	boxLeft = this->getLeftSide();
+	boxRight = this->getRightSide();	
+	boxTop = this->getTopSide();
+	boxBottom = this->getBottomSide();
+	
+	if(cameraBottom <= boxTop ||
+		cameraTop >= boxBottom ||
+		cameraRight <= boxLeft ||
+		cameraLeft >= boxRight){
+		return false;
+	}
+	
+	return true;	
+}

@@ -39,4 +39,31 @@ struct EventPair {
 	}
 };
 
+namespace utils {
+
+	//bool isVisible(Camera &camera, BoundingBox &box){
+	//	int cameraLeft, boxLeft;
+	//	int cameraRight, boxRight;
+	//	int cameraTop, boxTop;
+	//	int cameraBottom, boxBottom;
+	//	
+	//	cameraLeft = camera.getPosition().x;
+	//	cameraRight = camera.getPosition().x + camera.getWidth();
+	//	cameraTop = camera.getHeight();
+	//	cameraBottom = camera.getHeight() + camera.getPosition().y;
+	//	boxLeft = box.getLeftSide();
+	//	boxRight = box.getRightSide();	
+	//	boxTop = box.getTopSide();
+	//	boxBottom = box.getBottomSide();
+	//	
+	//	if(cameraBottom <= boxTop ||
+	//		cameraTop >= boxBottom ||
+	//		cameraRight <= boxLeft ||
+	//		cameraLeft >= boxRight){
+	//		return false;
+	//	}
+	//	
+	//	return true;	
+	//}
+}
 #endif

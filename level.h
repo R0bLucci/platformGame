@@ -9,6 +9,7 @@ struct Graphic;
 struct Tileset;
 struct Tile;
 struct Player;
+struct Camera;
 struct BoundingBox;
 
 class Level {
@@ -18,6 +19,9 @@ public:
 
 	void update(double elapsedTime, Player * player);
 	void draw(Graphic &graphic);
+	int getWidth();
+	int getHeight();
+	Camera * getCamera();
 private:
 	Vector2 size;
 	Vector2 tileSize;
@@ -25,7 +29,11 @@ private:
 	std::string currentLevelName;
 	std::vector<BoundingBox*> collidables;
 	std::vector<Tileset*> tilesetList;
+	int width;
+	int height;
+	Camera * camera;
 
+	void setLevelWidthAndHeight(int w, int h);
 	void mapLoader(std::string mapName, Graphic &graphic);
 	void parseCSV(const char * text, std::string name, int layerWidht, int layerHeight);
 	void addTileToTileset(Tile *tile);

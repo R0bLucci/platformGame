@@ -2,6 +2,7 @@
 #include <iostream>
 #include "boundingBox.h"
 #include "tile.h"
+#include "camera.h"
 
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
 isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
@@ -26,6 +27,10 @@ void Player::setUpAnimation(){
 	this->addAnimation("lookUpLeft", 1, Vector2(3, 0));
 	this->addAnimation("lookDownRight", 1, Vector2(6, 1));
 	this->addAnimation("lookDownLeft", 1, Vector2(6, 0));
+}
+
+Vector2 Player::getPosition(){
+	return Vector2(this->posX, this->posY);
 }
 
 void Player::update(double elapsedTime){
@@ -67,6 +72,40 @@ std::vector<Vector2> Player::surrindingArea(int unitX, int unitY){
 	
 }
 
+void Player::handleCollision2(std::vector<BoundingBox> boxes){
+	for(int i = 0, n = boxes.size(); i < n ; i++){
+		//std::cout << n << std::endl;
+		BoundingBox box = boxes[i];
+		switch(box.sideIsCollidingWidth(*this->boundingBox)){
+			case collision::TOP:
+			this->dy = 0.0;
+			//std::cout << "Colliding top" << std::endl;
+			this->posY = box.getTopSide() - (this->boundingBox->getHeight() + 1);
+			this->isGrounded = true;
+			break;
+		
+			case collision::BOTTOM:
+			this->dy = 0;
+			this->posY = box.getBottomSide() + 1;
+			//std::cout << "Colliding bottom" << std::endl;
+			break;
+
+			case collision::RIGHT:
+			this->posX = box.getRightSide() + 1;
+			//std::cout << "Colliding right" << std::endl;
+			break;
+
+			case collision::LEFT:
+			this->posX = box.getLeftSide() - (this->boundingBox->getWidth() + 1);
+			//std::cout << "Colliding left" << std::endl;
+			break;
+
+			case collision::NONE:
+			break;
+		}
+
+	}
+}
 void Player::handleCollision(std::vector<BoundingBox*> boxes){
 	BoundingBox * box = nullptr;
 	for(int i = 0, n = boxes.size(); i < n ; i++){
@@ -75,7 +114,7 @@ void Player::handleCollision(std::vector<BoundingBox*> boxes){
 		switch(box->sideIsCollidingWidth(*this->boundingBox)){
 			case collision::TOP:
 			this->dy = 0.0;
-			std::cout << "Colliding top" << std::endl;
+			//std::cout << "Colliding top" << std::endl;
 			this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);
 			this->isGrounded = true;
 			break;
@@ -83,17 +122,17 @@ void Player::handleCollision(std::vector<BoundingBox*> boxes){
 			case collision::BOTTOM:
 			this->dy = 0;
 			this->posY = box->getBottomSide() + 1;
-			std::cout << "Colliding bottom" << std::endl;
+			//std::cout << "Colliding bottom" << std::endl;
 			break;
 
 			case collision::RIGHT:
 			this->posX = box->getRightSide() + 1;
-			std::cout << "Colliding right" << std::endl;
+			//std::cout << "Colliding right" << std::endl;
 			break;
 
 			case collision::LEFT:
 			this->posX = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
-			std::cout << "Colliding left" << std::endl;
+			//std::cout << "Colliding left" << std::endl;
 			break;
 
 			case collision::NONE:
@@ -167,9 +206,8 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 	}
 }
 
-void Player::draw(Graphic & graphic){
-
-	AnimatedSprite::draw(graphic);
+void Player::draw(Graphic & graphic, Camera & camera){
+	AnimatedSprite::draw(graphic, camera.getPosition());
 }
 
 void Player::moveRight(){

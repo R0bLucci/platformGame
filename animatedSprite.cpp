@@ -46,6 +46,6 @@ void AnimatedSprite::update(double elapsedTime){
 	}
 }
 
-void AnimatedSprite::draw(Graphic &graphic){
-	Sprite::draw(graphic);
+void AnimatedSprite::draw(Graphic &graphic, const Vector2 &cameraOffset){
+	Sprite::draw(graphic, cameraOffset);
 }

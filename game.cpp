@@ -5,13 +5,12 @@
 #include "graphic.h"
 #include "player.h"
 #include "level.h"
-#include "globals.h"
 
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
 
 Game::Game() : 
-elapsedTime(0){
+elapsedTime(0) {
 	SDL_Init(SDL_INIT_EVERYTHING);
 }
 
@@ -25,8 +24,9 @@ Game::~Game(){
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->level = new Level(graphic,"level1", Vector2(31,100));
+	this->level = new Level(graphic,"level2", Vector2(31,100));
 	this->player = new Player(graphic, Vector2(200, 100));	
+
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
@@ -85,7 +85,7 @@ void Game::update(){
 void Game::draw(Graphic &graphic){ 
 	graphic.clear();
 	this->level->draw(graphic);
-	this->player->draw(graphic);
+	this->player->draw(graphic, *this->level->getCamera());
 	graphic.render();
 }
 

@@ -1,5 +1,8 @@
 #include "tile.h"
 #include "tileset.h"
+#include "camera.h"
+#include "globals.h"
+#include "boundingBox.h"
 
 Tileset::Tileset(int firstgid, int tileWidth, int tileHeight, int tileCount, int columns, std::string source,
 		int imageWidth, int imageHeight, Graphic &graphic) :
@@ -39,10 +42,6 @@ Tileset::Image Tileset::getImage() const {
 
 bool Tileset::addTile(Tile * tile){
 	if(tile->gid >= this->firstgid && tile->gid <= this->tileCount){
-		tile->w = this->tileWidth;
-		tile->h = this->tileHeight;
-		tile->imageX = ((tile->gid - 1) % this->tileWidth);
-		tile->imageY = std::ceil((((double)tile->gid) / this->tileHeight) - 1);
 		tile->setSource(*this);
 		this->tiles.push_back(tile);
 		return true;
@@ -54,8 +53,22 @@ std::vector<Tile*> Tileset::getTiles(){
 	return this->tiles;
 }
 
-void Tileset::draw(Graphic &graphic){
+void Tileset::draw(Graphic &graphic, Camera & camera){
 	for(int i = 0, n = this->tiles.size(); i < n; i++){
-		this->tiles[i]->draw(*this, graphic);
+		this->tiles[i]->draw(*this, graphic, camera);
 	}
+}
+
+std::vector<Tile *> Tileset::update(double elapsedTime, Camera * camera){
+	std::vector<Tile *> tiles;
+	for(int i = 0, n = this->tiles.size(); i < n; i++){
+		Tile * t = this->tiles[i];
+		if(t->isVisible(*camera)){
+			if(t->gid > 1){
+			t->update(elapsedTime, camera);
+			tiles.push_back(t);
+			}
+		}
+	}	
+	return tiles;
 }

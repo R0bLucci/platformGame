@@ -6,6 +6,7 @@
 #include "tile.h"
 #include "tileset.h"
 #include "player.h"
+#include "camera.h"
 #include "boundingBox.h"
 
 using namespace tinyxml2;
@@ -25,6 +26,8 @@ Level::~Level(){
 		delete this->collidables[i];
 		this->collidables[i] = NULL;
 	}
+	delete this->camera;
+	this->camera = NULL;
 }
 
 void Level::mapLoader(std::string mapName, Graphic &graphic){
@@ -50,6 +53,12 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 	mapNode->QueryIntAttribute("tileheight", &tileHeight);
 	this->tileSize = Vector2(tileWidth, tileHeight);
 
+	// Determine the whole level width and hieght in pixels	
+	this->setLevelWidthAndHeight(width * tileWidth, height * tileHeight);
+	
+	// set Camera for the level
+	this->camera = new Camera(Vector2(), globals::WIDTH,
+				globals::HEIGHT, this->width * globals::SPRITE_SCALER, this->height * globals::SPRITE_SCALER);
 	XMLElement * tilesetNode = mapNode->FirstChildElement("tileset");
 	while(tilesetNode){
 		//Get tileset attribute keep looping if there are more than onetile set	
@@ -160,6 +169,19 @@ void Level::parseCSV(const char * text, std::string name, int layerWidth, int la
 		}
 	}
 }
+	
+void Level::setLevelWidthAndHeight(int w, int h){
+	this->width = w;
+	this->height = h;
+}
+
+int Level::getWidth(){
+	return this->width;
+}
+
+int Level::getHeight(){
+	return this->height;
+}
 
 void Level::addTileToTileset(Tile *tile){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
@@ -170,12 +192,39 @@ void Level::addTileToTileset(Tile *tile){
 }
 
 void Level::update(double elapsedTime, Player * player){	
-	player->handleCollision(this->collidables);
+	std::vector<BoundingBox> onScreen;
+	//std::vector<Tile *> onScreen;
+	this->camera->move(player->getPosition().x + 16,
+			player->getPosition().y + 16 );
+	for(int i = 0, n = this->collidables.size(); i < n; i++){
+		BoundingBox * b = this->collidables[i];
+		BoundingBox copy = *b;
+		if(b->isOnCamera(this->camera)){
+			/*copy.setOrigin(
+			Vector2(((copy.x - this->camera->getPosition().x)),
+				((copy.y - this->camera->getPosition().y)))
+			);*/
+			//copy.setWidth(copy.getWidth() - this->camera->getPosition().x);
+			//copy.setHeight(copy.getHeight() - this->camera->getPosition().y);
+			onScreen.push_back(copy);
+		}
+	}
+	player->handleCollision2(onScreen);
+	//player->handleCollision(this->collidables);
+	/*for(int i = 0, n = this->tilesetList.size(); i < n; i++){
+		Tileset * ts = this->tilesetList[i];
+		onScreen = ts->update(elapsedTime, this->camera);
+	}*/
+	//player->handleTileCollision(onScreen);
 }
 
 
 void Level::draw(Graphic &graphic){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
-		this->tilesetList[i]->draw(graphic);
+		this->tilesetList[i]->draw(graphic, *this->camera);
 	}
+}
+
+Camera* Level::getCamera(){
+	return this->camera;
 }

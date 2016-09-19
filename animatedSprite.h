@@ -16,7 +16,7 @@ public:
 
 	~AnimatedSprite();
 	void update(double elapsedTime);
-	void draw(Graphic & graphic);
+	void draw(Graphic & graphic, const Vector2 & cameraOffset = {0.0, 0.0});
 
 protected:
 	int frameIndex;

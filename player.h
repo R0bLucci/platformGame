@@ -7,6 +7,7 @@
 struct BoundingBox;
 struct Graphic;
 struct Tile;
+struct Camera;
 
 class Player : public AnimatedSprite {
 public:
@@ -22,12 +23,14 @@ public:
 	void stopLookDown();
 	void idle();
 	void update(double elapsedTime);
-	void draw(Graphic & graphic);
+	void draw(Graphic & graphic, Camera & cameraOffset);
 	void stopMoving();
+	Vector2 getPosition();
 	std::vector<Vector2> surrindingArea(int unitX, int unitY);
 	void handleTileCollision(std::vector<Tile*> tiles);
 	void handleTileCollision(Tile* tile);
 	void handleCollision(std::vector<BoundingBox*> boxes);
+	void handleCollision2(std::vector<BoundingBox> boxes);
 	BoundingBox * boundingBox;
 private:
 	enum Direction {

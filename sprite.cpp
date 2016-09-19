@@ -21,8 +21,8 @@ posX(posX), posY(posY) {
 
 Sprite::~Sprite(){}
 	
-void Sprite::draw(Graphic &graphic){
-	SDL_Rect destination = {(int)this->posX, (int)this->posY, 
+void Sprite::draw(Graphic &graphic, const Vector2 & cameraOffset){
+	SDL_Rect destination = {(int)(this->posX - cameraOffset.x), (int)(this->posY - cameraOffset.y),
 		this->source.w * globals::SPRITE_SCALER, this->source.h * globals::SPRITE_SCALER};
 	graphic.blitSurface(this->texture, &this->source, &destination);
 }

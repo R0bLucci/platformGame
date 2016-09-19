@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "globals.h"
+
 struct Graphic;
 struct Player;
 struct Level;
