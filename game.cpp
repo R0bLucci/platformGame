@@ -72,6 +72,9 @@ void Game::gameLoop(){
 		}
 
 		this->calculateElapsedTime(initFrameTime);	
+		
+		SDL_Delay(MAX_TIME - this->elapsedTime);
+
 		this->update();
 		this->draw(graphic);
 	} 
