@@ -22,7 +22,7 @@ public:
 	void stopLookUp();
 	void stopLookDown();
 	void idle();
-	void update(double elapsedTime);
+	void update(double elapsedTime, Camera * camera);
 	void draw(Graphic & graphic, Camera & cameraOffset);
 	void stopMoving();
 	Vector2 getPosition();
@@ -31,7 +31,6 @@ public:
 	void handleTileCollision(Tile* tile);
 	void handleCollision(std::vector<BoundingBox*> boxes);
 	void handleCollision2(std::vector<BoundingBox> boxes);
-	BoundingBox * boundingBox;
 private:
 	enum Direction {
 		UP,

@@ -1,25 +1,19 @@
 #include "sprite.h"
 #include "graphic.h"
-#include "globals.h"
-
+#include "boundingBox.h"
 
 Sprite::Sprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY) : 
-posX(posX), posY(posY) {
-	SDL_Surface * surface = graphic.getSurface("MyChar.png", false);
-	if(surface == nullptr){
-		return;
-	}
+posX(posX), posY(posY), 
+boundingBox(new BoundingBox(Vector2(posX, posY), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
 
-	this->texture = SDL_CreateTextureFromSurface(graphic.getRenderer(), surface);
-	if(this->texture == nullptr){
-		return;
-	}
-
+	this->texture = graphic.getTexture("MyChar.png", false);
 	this->source = { originX, originY, width, height};
-	SDL_FreeSurface(surface);
 }
 
-Sprite::~Sprite(){}
+Sprite::~Sprite(){
+	delete this->boundingBox;
+	this->boundingBox = NULL;
+}
 	
 void Sprite::draw(Graphic &graphic, const Vector2 & cameraOffset){
 	SDL_Rect destination = {(int)(this->posX - cameraOffset.x), (int)(this->posY - cameraOffset.y),
@@ -29,3 +23,28 @@ void Sprite::draw(Graphic &graphic, const Vector2 & cameraOffset){
 
 void Sprite::update(double elapsedTime){}
 
+bool Sprite::isColliding(BoundingBox * box){ 
+
+	int boxLeft, thisLeft;
+	int boxRight, thisRight;
+	int boxTop, thisTop;
+	int boxBottom, thisBottom;
+
+	boxLeft = box->getLeftSide();
+	boxRight = box->getRightSide();
+	boxTop = box->getTopSide();
+	boxBottom = box->getBottomSide();
+	thisLeft = this->boundingBox->getLeftSide();
+	thisRight = this->boundingBox->getRightSide();	
+	thisTop = this->boundingBox->getTopSide();
+	thisBottom = this->boundingBox->getBottomSide();
+	
+	if(boxBottom <= thisTop ||
+		boxTop >= thisBottom ||
+		boxRight <= thisLeft ||
+		boxLeft >= thisRight){
+		return false;
+	}
+	
+	return true;	
+}

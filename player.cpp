@@ -8,14 +8,10 @@ Player::Player(Graphic & graphic, Vector2 spawnPoint) :
 isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
 isLookingUp(false), isLookingDown(false),
 AnimatedSprite(graphic, 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
-	this->boundingBox = new BoundingBox(Vector2(spawnPoint.x, spawnPoint.y), 
-		this->source.w * globals::SPRITE_SCALER, this->source.h * globals::SPRITE_SCALER);
 	this->setUpAnimation();
 }
 
 Player::~Player(){
-	delete this->boundingBox;
-	this->boundingBox = NULL;
 }
 
 void Player::setUpAnimation(){
@@ -30,28 +26,31 @@ void Player::setUpAnimation(){
 }
 
 Vector2 Player::getPosition(){
-	return Vector2(this->posX, this->posY);
+	return Vector2(this->posX + (this->source.w * globals::SPRITE_SCALER / 2), 
+			this->posY + (this->source.h * globals::SPRITE_SCALER / 2));
 }
 
-void Player::update(double elapsedTime){
+void Player::update(double elapsedTime, Camera *camera){
 	
 	//std::cout << "time " << elapsedTime << std::endl;
 	this->posX += this->dx * elapsedTime;
 
 	//std::cout << "dx " << this->dx << std::endl;
-	
+
 	if(this->dy <= globals::GRAVITY_CAP){
 		this->dy += globals::GRAVITY * elapsedTime;
 		//std::cout << "dy " << this->dy << std::endl;
 	}
-
 	this->posY += this->dy * elapsedTime;
+
+	if(camera){
+		camera->move(this->getPosition().x, this->getPosition().y);
+	}
 
 	//std::cout << "posX " << this->posX << std::endl;
 	//std::cout << "posY " << this->posY << std::endl;
 
 	AnimatedSprite::update(elapsedTime);
-	this->boundingBox->moveBoundingBox(this->posX, this->posY);
 }
 
 std::vector<Vector2> Player::surrindingArea(int unitX, int unitY){
@@ -73,39 +72,42 @@ std::vector<Vector2> Player::surrindingArea(int unitX, int unitY){
 }
 
 void Player::handleCollision2(std::vector<BoundingBox> boxes){
+
 	for(int i = 0, n = boxes.size(); i < n ; i++){
-		//std::cout << n << std::endl;
+		std::cout << "check boxes[" << i << "]: " << n << std::endl;
 		BoundingBox box = boxes[i];
 		switch(box.sideIsCollidingWidth(*this->boundingBox)){
 			case collision::TOP:
-			this->dy = 0.0;
-			//std::cout << "Colliding top" << std::endl;
-			this->posY = box.getTopSide() - (this->boundingBox->getHeight() + 1);
-			this->isGrounded = true;
+				this->dy = 0.0;
+				this->isGrounded = true;
+				std::cout << "Colliding top" << std::endl;
+				this->posY = box.getTopSide() - (this->boundingBox->getHeight());
 			break;
 		
 			case collision::BOTTOM:
-			this->dy = 0;
-			this->posY = box.getBottomSide() + 1;
-			//std::cout << "Colliding bottom" << std::endl;
+				this->dy = 0;
+				this->posY = box.getBottomSide();
+				std::cout << "Colliding bottom" << std::endl;
 			break;
 
 			case collision::RIGHT:
-			this->posX = box.getRightSide() + 1;
-			//std::cout << "Colliding right" << std::endl;
+				this->posX = box.getRightSide();
+				std::cout << "Colliding right" << std::endl;
 			break;
 
 			case collision::LEFT:
-			this->posX = box.getLeftSide() - (this->boundingBox->getWidth() + 1);
-			//std::cout << "Colliding left" << std::endl;
+				this->posX = box.getLeftSide() - (this->boundingBox->getWidth());
+				std::cout << "Colliding left" << std::endl;
 			break;
 
 			case collision::NONE:
+				this->isGrounded = false;
 			break;
 		}
-
 	}
+	std::cout << "Jump: " << this->isGrounded << std::endl;
 }
+
 void Player::handleCollision(std::vector<BoundingBox*> boxes){
 	BoundingBox * box = nullptr;
 	for(int i = 0, n = boxes.size(); i < n ; i++){

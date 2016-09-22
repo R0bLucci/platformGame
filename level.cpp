@@ -194,30 +194,30 @@ void Level::addTileToTileset(Tile *tile){
 void Level::update(double elapsedTime, Player * player){	
 	std::vector<BoundingBox> onScreen;
 	//std::vector<Tile *> onScreen;
-	this->camera->move(player->getPosition().x + 16,
-			player->getPosition().y + 16 );
 	for(int i = 0, n = this->collidables.size(); i < n; i++){
 		BoundingBox * b = this->collidables[i];
-		BoundingBox copy = *b;
-		if(b->isOnCamera(this->camera)){
+		if(b->isOnCamera(this->camera) && player->isColliding(b)){
+			BoundingBox copy = *b;
 			/*copy.setOrigin(
 			Vector2(((copy.x - this->camera->getPosition().x)),
 				((copy.y - this->camera->getPosition().y)))
-			);*/
-			//copy.setWidth(copy.getWidth() - this->camera->getPosition().x);
-			//copy.setHeight(copy.getHeight() - this->camera->getPosition().y);
+			);
+			copy.setWidth(copy.getWidth() - this->camera->getPosition().x);
+			copy.setHeight(copy.getHeight() - this->camera->getPosition().y);*/
 			onScreen.push_back(copy);
+			player->handleCollision2(onScreen);
 		}
 	}
-	player->handleCollision2(onScreen);
 	//player->handleCollision(this->collidables);
 	/*for(int i = 0, n = this->tilesetList.size(); i < n; i++){
 		Tileset * ts = this->tilesetList[i];
 		onScreen = ts->update(elapsedTime, this->camera);
-	}*/
-	//player->handleTileCollision(onScreen);
-}
+	}
+	player->handleTileCollision(onScreen);*/
 
+	//this->camera->move(player->getPosition().x,
+	//		player->getPosition().y);
+}
 
 void Level::draw(Graphic &graphic){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){

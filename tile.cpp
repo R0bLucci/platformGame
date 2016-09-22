@@ -59,8 +59,8 @@ void Tile::draw(Tileset & tileset, Graphic &graphic, Camera & camera){
 }	
 
 void Tile::update(double elapsedTime, Camera * camera) {
-	this->box->setOrigin(Vector2((int)((this->layerX * this->w) - camera->getPosition().x),
-					(int)((this->layerY * this->h) - camera->getPosition().y)));
+	//this->box->setOrigin(Vector2((int)((this->layerX * this->w) - camera->getPosition().x),
+					//(int)((this->layerY * this->h) - camera->getPosition().y)));
 }
 
 bool Tile::isVisible(Camera &camera){
@@ -94,7 +94,7 @@ bool Tile::isVisible(Camera &camera){
 }
 
 Vector2 Tile::getOrigin(){
-	return Vector2(this->layerX * (globals::SPRITE_SCALER * this->w),
-			this->layerY * (globals::SPRITE_SCALER * this->h));	
+	return Vector2(this->layerX *  this->w,
+			this->layerY * this->h);	
 }
 

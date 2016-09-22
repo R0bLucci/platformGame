@@ -6,6 +6,7 @@
 struct Graphic;
 struct Player;
 struct Level;
+struct Camera;
 
 class Game {
 public:

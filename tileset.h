@@ -38,7 +38,7 @@ private:
 			SDL_Texture * texture;
 
 			void createTexture(Graphic &graphic){
-				this->texture = SDL_CreateTextureFromSurface(graphic.getRenderer(), graphic.getSurface(this->source));
+				this->texture = graphic.getTexture(this->source);
 			}
 	};	
 	Image image;

@@ -5,6 +5,7 @@
 #include "globals.h"
 struct Graphic;
 struct SDL_Texture;
+struct BoundingBox;
 
 class Sprite {
 public:
@@ -13,9 +14,11 @@ public:
 	
 	void draw(Graphic &graphic, const Vector2 &cameraOffset = {0.0, 0.0});	
 	void update(double elapsedTime);
+	bool isColliding(BoundingBox * box);
 protected:
 	SDL_Rect source;
 	SDL_Texture * texture;
+	BoundingBox * boundingBox;
 	double posX;
 	double posY;
 };

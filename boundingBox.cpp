@@ -8,7 +8,7 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	int boxRight = box.getRightSide();
 	int boxBottom = box.getBottomSide();
 	int boxLeft = box.getLeftSide();
-	double distances[4];
+	int distances[4];
 	collision::side sides[4];
 	int index = -1;
 
@@ -16,7 +16,7 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	if((boxLeft < this->getLeftSide() && boxRight > this->getLeftSide()) &&
 		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
 		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
-		distances[++index] = std::abs(this->getRightSide() - boxLeft);
+		distances[++index] = abs(boxRight - this->getLeftSide());
 		sides[index] = collision::LEFT;
 	}
 
@@ -24,7 +24,7 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	if((boxTop < this->getTopSide() && boxBottom > this->getTopSide()) && 
 		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
 		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
-		distances[++index] = std::abs(boxBottom - this->getTopSide());
+		distances[++index] = abs(this->getTopSide() - boxBottom);
 		sides[index] = collision::TOP;
 	}
 	
@@ -32,7 +32,7 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	if((boxBottom > this->getBottomSide() && boxTop < this->getBottomSide()) && 
 		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
 		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
-		distances[++index] = std::abs(this->getBottomSide() - boxTop);
+		distances[++index] = abs(this->getBottomSide() - boxTop);
 		sides[index] = collision::BOTTOM;
 	}
 	
@@ -40,13 +40,14 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 	if((boxRight > this->getRightSide() && boxLeft < this->getRightSide()) &&
 		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
 		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
-		distances[++index] = std::abs(boxRight - this->getLeftSide());
+		distances[++index] = abs(boxRight - this->getLeftSide());
 		sides[index] = collision::RIGHT;
 	}
 
 	if(index < 0){
 		return collision::NONE;
 	}
+
 	double closest = distances[0];
 	int sidesIndex = 0;
 	for(int i = 1; i < index + 1; i++){

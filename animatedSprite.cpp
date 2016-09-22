@@ -1,5 +1,6 @@
 #include "animatedSprite.h"
 #include <iostream>
+#include "boundingBox.h"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, int originX, int originY, int width, int height, 
 	double posX, double posY, const double timeToUpdate) : frameIndex(0), currentAnimation(""), 
@@ -32,8 +33,14 @@ void AnimatedSprite::setCurrentAnimation(std::string animationName){
 
 void AnimatedSprite::setUpAnimation(){}
 
-void AnimatedSprite::update(double elapsedTime){
+void AnimatedSprite::moveBoundingBox(const Vector2 &cameraOffset){
+	this->boundingBox->moveBoundingBox(this->posX - cameraOffset.x , this->posY - cameraOffset.y);
+}
+
+void AnimatedSprite::update(double elapsedTime, const Vector2& cameraOffset){
 	Sprite::update(elapsedTime);
+	this->moveBoundingBox(cameraOffset);
+
 	this->elapsedTime += elapsedTime;
 	std::vector<SDL_Rect> cachedAnimations = this->animations[this->currentAnimation];
 	if(this->elapsedTime >= this->timeToUpdate){

@@ -65,8 +65,8 @@ std::vector<Tile *> Tileset::update(double elapsedTime, Camera * camera){
 		Tile * t = this->tiles[i];
 		if(t->isVisible(*camera)){
 			if(t->gid > 1){
-			t->update(elapsedTime, camera);
-			tiles.push_back(t);
+				t->update(elapsedTime, camera);
+				tiles.push_back(t);
 			}
 		}
 	}	

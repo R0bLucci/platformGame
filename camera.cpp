@@ -1,5 +1,6 @@
 #include "camera.h"
 #include <iostream>
+#include <cmath>
 
 Camera::Camera(Vector2 position, int width, int height, int levelWidth,
 		int levelHeight):
@@ -24,6 +25,6 @@ void Camera::move(double x, double y){
 	if(this->position.y > levelHeight - this->height){
 		this->position.y = levelHeight - this->height;
 	}
-/*	std::cout << position.x << " "
-	<< position.y << std::endl;*/
+	std::cout << position.x << " "
+	<< position.y << std::endl;
 }
