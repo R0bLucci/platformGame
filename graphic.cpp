@@ -19,20 +19,37 @@ Graphic::Graphic() {
 	}
 }
 
-SDL_Surface * Graphic::getSurface(const std::string name, bool isLevel){
+SDL_Texture * Graphic::getTexture(const std::string name, bool isLevel){
 	std::string path;
 	if(isLevel){
 		path = "resources/level/" + name;
 	}else{
 		path = "resources/spriteSheet/" + name;
 	}
-	if(this->surfaces.count(path) == 0){
+
+	if(this->textures.count(path) == 0){
 		SDL_Surface * surface = IMG_Load(path.c_str());
-		this->surfaces[path] = surface;
-		return surface;
+		if(!surface){
+			return (SDL_Texture*) this->throwError("Could not load surface", name);
+		}
+
+		SDL_Texture * texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+		if(!texture){
+			return (SDL_Texture *) this->throwError("Could not load texture", name);
+		}
+		
+		this->textures[path] = texture;
+		SDL_FreeSurface(surface);
+
+		return texture;
 	}	
 	
-	return this->surfaces[path];
+	return this->textures[path];
+}
+
+void *Graphic::throwError(const std::string errMsg, const std::string filepath){
+	std::cout << errMsg << ": " << filepath << std::endl;
+	return nullptr;
 }
 
 Graphic::~Graphic(){

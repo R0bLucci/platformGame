@@ -6,7 +6,6 @@
 
 struct SDL_Window;
 struct SDL_Rederer;
-struct SDL_Surface;
 struct SDL_Rect;
 struct SDL_Texture;
 
@@ -21,13 +20,15 @@ public:
 	// Clear the screen to set a blank canvas for the new frame to be drawn
 	void clear();
 	// Get png file  	
-	SDL_Surface * getSurface(const std::string name, bool isLevel = true);
+	SDL_Texture * getTexture(const std::string name, bool isLevel = true);
 	// Prepare sprite to renderer buffer so that it can be displayed later
 	void blitSurface(SDL_Texture * texture, const SDL_Rect * source, const SDL_Rect * destination);
 private:
 	SDL_Window * window;
 	SDL_Renderer * renderer;
-	std::map<std::string, SDL_Surface *> surfaces;
+	std::map<std::string, SDL_Texture *> textures;
+	
+	void *throwError(const std::string errMsg, const std::string filepath);
 };
 
 #endif
