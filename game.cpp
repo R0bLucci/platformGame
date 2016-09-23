@@ -25,8 +25,8 @@ Game::~Game(){
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->level = new Level(graphic,"level2", Vector2(31,100));
-	this->player = new Player(graphic, Vector2(200, 100));
+	this->level = new Level(graphic, "level2");
+	this->player = new Player(graphic, this->level->getSpawnPoint());
 
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
@@ -74,7 +74,9 @@ void Game::gameLoop(){
 
 		this->calculateElapsedTime(initFrameTime);	
 		
-		SDL_Delay(MAX_TIME - this->elapsedTime);
+		if(this->elapsedTime <= MAX_TIME){	
+			SDL_Delay(MAX_TIME - this->elapsedTime);
+		}
 
 		this->update();
 		this->draw(graphic);

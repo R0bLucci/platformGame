@@ -11,8 +11,8 @@
 
 using namespace tinyxml2;
 
-Level::Level(Graphic &graphic,std::string levelName, Vector2 spawnPoint):
-spawnPoint(spawnPoint), currentLevelName(levelName), size(0,0), tileSize(0,0){
+Level::Level(Graphic &graphic,std::string levelName):
+spawnPoint(Vector2(0.0, 0.0)), currentLevelName(levelName), size(0,0), tileSize(0,0){
 	this->mapLoader(levelName, graphic);
 }
 
@@ -126,6 +126,12 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 					std::ceil(width) * globals::SPRITE_SCALER, 
 					std::ceil(height) * globals::SPRITE_SCALER);
 				this->collidables.push_back(box);
+			}else if(name == "spawn"){
+				double x, y;
+				obj->QueryDoubleAttribute("x", &x);
+				obj->QueryDoubleAttribute("y", &y);
+				this->spawnPoint = Vector2(std::ceil(x) * globals::SPRITE_SCALER, 
+							std::ceil(y) * globals::SPRITE_SCALER);
 			}
 			obj = obj->NextSiblingElement("object");
 		}
@@ -210,6 +216,10 @@ void Level::draw(Graphic &graphic){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
 		this->tilesetList[i]->draw(graphic, *this->camera);
 	}
+}
+
+Vector2 Level::getSpawnPoint(){
+	return this->spawnPoint;
 }
 
 Camera* Level::getCamera(){

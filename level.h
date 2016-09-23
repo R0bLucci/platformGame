@@ -14,13 +14,14 @@ struct BoundingBox;
 
 class Level {
 public: 
-	Level(Graphic &graphic,std::string levelName, Vector2 spawnPoint);
+	Level(Graphic &graphic,std::string levelName);
 	~Level();
 
 	void update(double elapsedTime, Player * player);
 	void draw(Graphic &graphic);
 	int getWidth();
 	int getHeight();
+	Vector2 getSpawnPoint();
 	Camera * getCamera();
 private:
 	Vector2 size;
