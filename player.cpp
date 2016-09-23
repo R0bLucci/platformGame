@@ -43,14 +43,14 @@ void Player::update(double elapsedTime, Camera *camera){
 	}
 	this->posY += this->dy * elapsedTime;
 
+	AnimatedSprite::update(elapsedTime);
+
 	if(camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
 	}
 
 	//std::cout << "posX " << this->posX << std::endl;
 	//std::cout << "posY " << this->posY << std::endl;
-
-	AnimatedSprite::update(elapsedTime);
 }
 
 std::vector<Vector2> Player::surrindingArea(int unitX, int unitY){
@@ -78,10 +78,12 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 		BoundingBox box = boxes[i];
 		switch(box.sideIsCollidingWidth(*this->boundingBox)){
 			case collision::TOP:
-				this->dy = 0.0;
-				this->isGrounded = true;
-				std::cout << "Colliding top" << std::endl;
-				this->posY = box.getTopSide() - (this->boundingBox->getHeight());
+				if(this->dy >= 0.0){
+					this->dy = 0.0;
+					this->isGrounded = true;
+					std::cout << "Colliding top" << std::endl;
+					this->posY = box.getTopSide() - (this->boundingBox->getHeight());
+				}
 			break;
 		
 			case collision::BOTTOM:
