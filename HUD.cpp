@@ -19,7 +19,7 @@ void HUD::HealthBar::update(double elapsedTime, const Vector2& cameraOffset){
 
 // x: 0 y: 56 , w: 8 , h: 8
 HUD::HealthLevel::HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, int height, const Vector2 & position):
-health(44), source2(new SDL_Rect()),
+health(23), source2(new SDL_Rect()),
 Sprite(graphic, source, x, y, width, height, position.x, position.y)
 {}
 
@@ -27,8 +27,15 @@ HUD::HealthLevel::~HealthLevel(){}
 
 void HUD::HealthLevel::update(double elapsedTime, const Vector2& cameraOffset){
 	Sprite::update(elapsedTime);
-	HUD::offset(this->posX, this->posY, cameraOffset);
 	this->computeOnesAndTensColumn();
+
+	Vector2 offset;
+	if(this->source2){
+		offset = {(double) this->source.w * globals::SPRITE_SCALER, 0.0};
+	}else{
+		offset = {(double) (this->source.w * globals::SPRITE_SCALER) * 2, 0.0};
+	}
+	HUD::offset(this->posX, this->posY, cameraOffset + offset);
 }
 	
 void HUD::HealthLevel::draw(Graphic& graphic, const Vector2& cameraOffset){
