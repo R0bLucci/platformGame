@@ -5,6 +5,7 @@
 #include <string>
 #include "globals.h"
 
+
 struct Graphic;
 
 class HUD {
@@ -21,7 +22,6 @@ public:
 	void update(double elapsedTime,const Vector2& cameraOffset);
 
 private:
-	int health;
 	class HealthBar : public Sprite {
 	public:
 		HealthBar(Graphic &graphic, std::string source, const Vector2& position);
@@ -36,14 +36,28 @@ private:
 		HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, int heigh, const Vector2& positiont);	
 		~HealthLevel();
 
-		inline int getX() const { return this->x; }
-		inline int getY() const { return this->y; }
-		inline int getWidth() const { return this->w; }
-		inline int getHeight() const { return this->h; }
+		inline int getX() const { return this->source.x; }
+		inline int getY() const { return this->source.y; }
+		inline int getWidth() const { return this->source.w; }
+		inline int getHeight() const { return this->source.h; }
 
 		void update(double elapsedTime, const Vector2& cameraOffset);
+		void draw(Graphic& graphic, const Vector2& cameraOffset);
+
+		inline int getHealth() const { return this->health; }
+		inline void encreaseHealth(){ this->health++; }
+		inline void decreaseHealth(){ this->health--; }
+		
 	private:
-		int x, y, w, h;
+		int onesColumn;
+		int tensColumn;
+		int health;
+		
+		// SDL Rect used when the health reaches double digit value
+		SDL_Rect *source2;	
+	
+		void computeOnesAndTensColumn();
+		void parseHealthValue(int& column, std::string& sHealth, int beginIndex, int length);
 
 	};
 	HealthBar *healthBar;
