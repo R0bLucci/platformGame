@@ -3,13 +3,15 @@
 
 #include <SDL2/SDL.h>
 #include "globals.h"
+#include <string>
+
 struct Graphic;
 struct SDL_Texture;
 struct BoundingBox;
 
 class Sprite {
 public:
-	Sprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY);
+	Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY);
 	~Sprite();
 	
 	void draw(Graphic &graphic, const Vector2 &cameraOffset = {0.0, 0.0});	

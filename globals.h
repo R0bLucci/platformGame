@@ -50,6 +50,21 @@ struct Vector2 {
 		Vector2 result(x,y);
 		return result;
 	}
+	
+	Vector2 operator +(Vector2 v){
+		double x = this->x + v.x;
+		double y = this->y + v.y;
+	 	Vector2 result(x,y);
+		return result;
+	}
+	
+	friend Vector2 operator+(const Vector2 v1, const Vector2 v2){
+		double x = v1.x + v2.x;
+		double y = v1.y + v2.y;
+
+	 	Vector2 result(x,y);
+		return result;
+	}
 };
 
 struct Vector2f {

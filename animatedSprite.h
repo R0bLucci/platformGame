@@ -11,7 +11,7 @@ struct Graphic;
 
 class AnimatedSprite : public Sprite {
 public:
-	AnimatedSprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY
+	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY
 		,const double timeToUpdate);
 
 	~AnimatedSprite();

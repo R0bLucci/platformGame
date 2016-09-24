@@ -7,7 +7,8 @@
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
 isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
 isLookingUp(false), isLookingDown(false),
-AnimatedSprite(graphic, 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
+hud(graphic, "TextBox.png", Vector2(50, 50)),
+AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
 	this->setUpAnimation();
 }
 
@@ -49,6 +50,7 @@ void Player::update(double elapsedTime, Camera *camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
 	}
 
+	this->hud.update(elapsedTime, camera->getPosition());
 	//std::cout << "posX " << this->posX << std::endl;
 	//std::cout << "posY " << this->posY << std::endl;
 }
@@ -211,6 +213,7 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 }
 
 void Player::draw(Graphic & graphic, Camera & camera){
+	this->hud.draw(graphic, camera.getPosition());
 	AnimatedSprite::draw(graphic, camera.getPosition());
 }
 

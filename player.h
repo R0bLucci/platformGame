@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "animatedSprite.h"
 #include <vector>
+#include "HUD.h"
 
 struct BoundingBox;
 struct Graphic;
@@ -45,6 +46,7 @@ private:
 	double dy;
 	Direction facing;	
 	void setUpAnimation();
+	HUD hud;
 };
 
 #endif

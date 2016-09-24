@@ -2,11 +2,11 @@
 #include "graphic.h"
 #include "boundingBox.h"
 
-Sprite::Sprite(Graphic &graphic, int originX, int originY, int width, int height, double posX, double posY) : 
+Sprite::Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY) : 
 posX(posX), posY(posY), 
 boundingBox(new BoundingBox(Vector2(posX, posY), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
 
-	this->texture = graphic.getTexture("MyChar.png", false);
+	this->texture = graphic.getTexture(textureName, false);
 	this->source = { originX, originY, width, height};
 }
 
