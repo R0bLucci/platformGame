@@ -15,7 +15,9 @@ public:
 		,const double timeToUpdate);
 
 	~AnimatedSprite();
-	void update(double elapsedTime, const Vector2 & cameraOffset = {0.0, 0.0});
+	void update(double elapsedTime, const Vector2& boundigBoxOffset = {0.0, 0.0}, 
+			const Vector2 & cameraOffset = {0.0, 0.0});
+
 	void draw(Graphic & graphic, const Vector2 & cameraOffset = {0.0, 0.0});
 
 protected:
@@ -29,7 +31,7 @@ protected:
 	void addAnimation(std::string animationName, int frames, Vector2 origin,  bool isHorizotal = true);
 	std::map<std::string, std::vector<SDL_Rect>> animations;	
 private:
-	void moveBoundingBox(const Vector2 &cameraOffset = {0.0, 0.0});
+	void moveBoundingBox(const Vector2 &boudingBoxOffset = {0.0, 0.0}, const Vector2 &cameraOffset = {0.0, 0.0});
 };
 
 #endif

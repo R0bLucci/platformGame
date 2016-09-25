@@ -10,6 +10,7 @@ isLookingUp(false), isLookingDown(false),
 hud(graphic, "TextBox.png", Vector2(50, 50)),
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
 	this->setUpAnimation();
+	*this->boundingBox = BoundingBox(Vector2(spawnPoint.x + 8, spawnPoint.y), 16, 32);
 }
 
 Player::~Player(){
@@ -44,7 +45,8 @@ void Player::update(double elapsedTime, Camera *camera){
 	}
 	this->posY += this->dy * elapsedTime;
 
-	AnimatedSprite::update(elapsedTime);
+	const Vector2 boundingBoxOffset = {6.0, 0.0};
+	AnimatedSprite::update(elapsedTime, boundingBoxOffset);
 
 	if(camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
