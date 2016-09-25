@@ -97,11 +97,13 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 			case collision::RIGHT:
 				this->posX = box.getRightSide();
 				std::cout << "Colliding right" << std::endl;
+				this->hud.decreaseHealth(1);
 			break;
 
 			case collision::LEFT:
 				this->posX = box.getLeftSide() - (this->boundingBox->getWidth());
 				std::cout << "Colliding left" << std::endl;
+				this->hud.increaseHealth(1);
 			break;
 
 			case collision::NONE:

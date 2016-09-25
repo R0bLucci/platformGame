@@ -1,29 +1,73 @@
 #include "HUD.h"
 #include "graphic.h"
 
-//Start Health bar 
-HUD::HealthBar::HealthBar(Graphic &graphic, std::string source, const Vector2 & position):
-Sprite(graphic, source, 0, 40, 63, 7, position.x, position.y) {}
+/*---------------------------- Start Health bar -----------------------------*/
+
+HUD::HealthBar::HealthBar(Graphic &graphic, std::string source, const Vector2 & position, HUD& hud):
+Sprite(graphic, source, 0, 40, HUDUnits::OUTER_HEALTH_BAR_WIDTH, HUDUnits::OUTER_HEALTH_BAR_HEIGHT, position.x, position.y),
+hud(hud){
+	this->outerBar = this->source; 
+	this->innerBar = { 0, 25, HUDUnits::INNER_HEALTH_BAR_WIDTH, 
+				HUDUnits::INNER_HEALTH_BAR_HEIGHT };
+}
 
 HUD::HealthBar::~HealthBar(){}
 
+void HUD::HealthBar::draw(Graphic& graphic, const Vector2 & cameraOffset){
+	// Save outer health bar reference texture away 
+	this->source = this->outerBar;
+
+	// Draw the outer health bar 
+	Sprite::draw(graphic, cameraOffset);
+
+	// Draw the inner health bar
+	this->source = this->innerBar;	
+
+	// Draw inner health bar on top of the outer offset to the right to see the health level number
+	Sprite::draw(graphic, cameraOffset + this->offsetInnerHealthBar());
+	
+	// Reclaim the source one texture reference for the next time this method is called
+	this->source = this->outerBar;
+}
 
 void HUD::HealthBar::update(double elapsedTime, const Vector2& cameraOffset){
 	Sprite::update(elapsedTime);
-	HUD::offset(this->posX, this->posY, cameraOffset);
+	this->hud.offset(this->posX, this->posY, cameraOffset);
 }
-// End Health bar
+
+Vector2 HUD::HealthBar::offsetInnerHealthBar(){
+	Vector2 offset = {(double)(-HUDUnits::HEALTH_NUMBER_WIDTH * globals::SPRITE_SCALER) * 3, -2.0 };
+	return offset;
+}
+	
+void HUD::HealthBar::decreaseInnerHealthBarLength(int healthLeft){
+	double unit = this->getHealthUnit();
+	this->innerBar.w = unit * healthLeft;
+}
+
+void HUD::HealthBar::increaseInnerHealthBarLength(int health){
+	double unit = this->getHealthUnit();
+	this->innerBar.w = unit * health;
+}
+
+double HUD::HealthBar::getHealthUnit() const{
+	return (double) (HUDUnits::INNER_HEALTH_BAR_WIDTH / this->hud.maxHealth);
+}
+/*------------------------------- End Health bar ----------------------------------------*/
 
 
-// Start Health level
+/*---------------------------- Start Health level -----------------------------*/
 
-// x: 0 y: 56 , w: 8 , h: 8
-HUD::HealthLevel::HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, int height, const Vector2 & position):
-health(23), source2(new SDL_Rect()),
-Sprite(graphic, source, x, y, width, height, position.x, position.y)
-{}
+HUD::HealthLevel::HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, 
+					int height, const Vector2 & position, HUD& hud):
+source2(new SDL_Rect()),
+Sprite(graphic, source, x, y, width, height, position.x, position.y),
+hud(hud){}
 
-HUD::HealthLevel::~HealthLevel(){}
+HUD::HealthLevel::~HealthLevel(){
+	delete this->source2;
+	this->source2 = NULL;
+}
 
 void HUD::HealthLevel::update(double elapsedTime, const Vector2& cameraOffset){
 	Sprite::update(elapsedTime);
@@ -35,7 +79,7 @@ void HUD::HealthLevel::update(double elapsedTime, const Vector2& cameraOffset){
 	}else{
 		offset = {(double) (this->source.w * globals::SPRITE_SCALER) * 2, 0.0};
 	}
-	HUD::offset(this->posX, this->posY, cameraOffset + offset);
+	this->hud.offset(this->posX, this->posY, cameraOffset + offset);
 }
 	
 void HUD::HealthLevel::draw(Graphic& graphic, const Vector2& cameraOffset){
@@ -51,7 +95,7 @@ void HUD::HealthLevel::draw(Graphic& graphic, const Vector2& cameraOffset){
 }
 
 void HUD::HealthLevel::computeOnesAndTensColumn(){
-	std::string sHealth = std::to_string(this->health);
+	std::string sHealth = std::to_string(this->hud.health);
 	if(sHealth.size() == 1){
 		this->parseHealthValue(this->onesColumn, sHealth, 0, 1);
 		this->source.x = this->onesColumn * this->source.w;
@@ -70,15 +114,20 @@ void HUD::HealthLevel::parseHealthValue(int& column, std::string& sHealth, int b
 		column = std::stoi(sOnesColumns);
 }
 
-// End Health level
+/*------------------- End Health level -----------------------*/
 
 
-// Start HUD
-HUD::HUD(Graphic &graphic, std::string source, const Vector2& position):
-healthBar(new HealthBar(graphic, source, position)), 
-healthLevel(new HealthLevel(graphic, source, 0, 56, 8, 8, position)),
-position(position)
-{}
+/*------------------- Start HUD -----------------------*/
+
+HUD::HUD(Graphic &graphic, std::string source, const Vector2& position) :
+health(3), 
+position(position){
+	this->healthBar = new HealthBar(graphic, source, position, *this);
+	this->healthLevel = new HealthLevel(graphic, source, 0, 56, 
+			HUDUnits::HEALTH_NUMBER_WIDTH, HUDUnits::HEALTH_NUMBER_HEIGHT, position, *this);
+
+	this->maxHealth = this->health;
+}
 
 
 HUD::~HUD(){
@@ -98,22 +147,39 @@ void HUD::update(double elapsedTime, const Vector2& cameraOffset){
 	this->healthLevel->update(elapsedTime, offset);
 }
 
-// Static method
 void HUD::offset(double&x, double&y, const Vector2&cameraOffset){
 	x = cameraOffset.x;
 	y = cameraOffset.y;
 }
 
 int HUD::getHealth() const {
-	return this->healthLevel->getHealth();
+	return this->health;
 }
 
-void HUD::decreaseHealth(){
-	this->healthLevel->decreaseHealth();
+void HUD::decreaseHealth(int v){
+	int tmpHealth = this->health - v;
+	if(tmpHealth > 0){
+		this->health -= v;
+	}else{
+		this->health = 0;
+	}
+	this->healthBar->decreaseInnerHealthBarLength(this->health);
 }
 
-void HUD::increaseHealth(){
-	this->healthLevel->encreaseHealth();
+void HUD::increaseHealth(int v){
+	int tmpHealth = this->health + v;
+	if(tmpHealth >= this->maxHealth){
+		this->health = this->maxHealth;
+	}else{
+		this->health += v;
+	}
+	this->healthBar->increaseInnerHealthBarLength(this->health);
 }
 
-// End HUD
+void HUD::setMaxHealth(int newMax){
+	if(newMax < 3 ){
+		return;
+	}
+	this->maxHealth = newMax;
+}
+/*------------------- End HUD -----------------------*/
