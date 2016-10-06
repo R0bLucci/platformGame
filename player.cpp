@@ -5,12 +5,13 @@
 #include "camera.h"
 
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
+AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),
 isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
+headBox(Vector2(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
+bodyBox(Vector2(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2(7.0, 0.0)),
 isLookingUp(false), isLookingDown(false),
-hud(graphic, "TextBox.png", Vector2(50, 50)),
-AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100) {
+hud(graphic, "TextBox.png", Vector2(50, 50)){
 	this->setUpAnimation();
-	*this->boundingBox = BoundingBox(Vector2(spawnPoint.x + 8, spawnPoint.y), 16, 32);
 }
 
 Player::~Player(){
@@ -25,6 +26,9 @@ void Player::setUpAnimation(){
 	this->addAnimation("lookUpLeft", 1, Vector2(3, 0));
 	this->addAnimation("lookDownRight", 1, Vector2(6, 1));
 	this->addAnimation("lookDownLeft", 1, Vector2(6, 0));
+	
+	//set starting animation
+	this->currentAnimation = "idleLeft";
 }
 
 Vector2 Player::getPosition(){
@@ -45,14 +49,15 @@ void Player::update(double elapsedTime, Camera *camera){
 	}
 	this->posY += this->dy * elapsedTime;
 
-	const Vector2 boundingBoxOffset = {6.0, 0.0};
-	AnimatedSprite::update(elapsedTime, boundingBoxOffset);
+	AnimatedSprite::update(elapsedTime);
+	this->headBox.moveBoundingBox(this->posX, this->posY);
+	this->bodyBox.moveBoundingBox(this->posX, this->posY);
 
 	if(camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
+		this->hud.update(elapsedTime, camera->getPosition());
 	}
 
-	this->hud.update(elapsedTime, camera->getPosition());
 	//std::cout << "posX " << this->posX << std::endl;
 	//std::cout << "posY " << this->posY << std::endl;
 }
@@ -80,40 +85,35 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 	for(int i = 0, n = boxes.size(); i < n ; i++){
 		std::cout << "check boxes[" << i << "]: " << n << std::endl;
 		BoundingBox box = boxes[i];
-		switch(box.sideIsCollidingWidth(*this->boundingBox)){
+
+		switch(box.sideIsCollidingWith(this->bodyBox)){
 			case collision::TOP:
 				if(this->dy >= 0.0){
 					this->dy = 0.0;
 					this->isGrounded = true;
-					std::cout << "Colliding top" << std::endl;
-					this->posY = box.getTopSide() - (this->boundingBox->getHeight());
+					this->posY = box.getTopSide() - this->bodyBox.getHeight();
+					std::cout << "BODY Colliding top" << std::endl;
 				}
 			break;
-		
+		}
+
+		switch(box.sideIsCollidingWith(this->headBox)){
+			case collision::RIGHT:
+				this->posX = box.getRightSide();
+				std::cout << "HEAD Colliding right" << std::endl;
+			break;
+			case collision::LEFT:
+				this->posX = box.getLeftSide() - (this->headBox.getWidth());
+				std::cout << "HEAD Colliding left" << std::endl;
+			break;
 			case collision::BOTTOM:
 				this->dy = 0;
 				this->posY = box.getBottomSide();
-				std::cout << "Colliding bottom" << std::endl;
-			break;
-
-			case collision::RIGHT:
-				this->posX = box.getRightSide();
-				std::cout << "Colliding right" << std::endl;
-				this->hud.decreaseHealth(1);
-			break;
-
-			case collision::LEFT:
-				this->posX = box.getLeftSide() - (this->boundingBox->getWidth());
-				std::cout << "Colliding left" << std::endl;
-				this->hud.increaseHealth(1);
-			break;
-
-			case collision::NONE:
-				this->isGrounded = false;
+				std::cout << "HEAD Colliding bottom" << std::endl;
 			break;
 		}
+
 	}
-	std::cout << "Jump: " << this->isGrounded << std::endl;
 }
 
 void Player::handleCollision(std::vector<BoundingBox*> boxes){
@@ -121,7 +121,7 @@ void Player::handleCollision(std::vector<BoundingBox*> boxes){
 	for(int i = 0, n = boxes.size(); i < n ; i++){
 		box = boxes[i];
 		if(!box){ continue; }
-		switch(box->sideIsCollidingWidth(*this->boundingBox)){
+		switch(box->sideIsCollidingWith(*this->boundingBox)){
 			case collision::TOP:
 			this->dy = 0.0;
 			//std::cout << "Colliding top" << std::endl;
@@ -155,7 +155,7 @@ void Player::handleCollision(std::vector<BoundingBox*> boxes){
 void Player::handleTileCollision(Tile * tile){
 	BoundingBox * box = tile->getBoundingBox();
 	if(!box){ return; }
-	switch(box->sideIsCollidingWidth(*this->boundingBox)){
+	switch(box->sideIsCollidingWith(*this->boundingBox)){
 		case collision::TOP:
 		this->dy = 0.0f;
 		this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);
@@ -191,7 +191,7 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 		if(!tiles[i]) { continue; }
 		BoundingBox * box = tiles[i]->getBoundingBox();
 		if(!box){ continue; }
-		switch(box->sideIsCollidingWidth(*this->boundingBox)){
+		switch(box->sideIsCollidingWith(*this->boundingBox)){
 			case collision::TOP:
 			this->dy = 0.0;
 			this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);

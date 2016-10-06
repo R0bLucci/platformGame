@@ -4,8 +4,8 @@
 #include "animatedSprite.h"
 #include <vector>
 #include "HUD.h"
+#include "boundingBox.h"
 
-struct BoundingBox;
 struct Graphic;
 struct Tile;
 struct Camera;
@@ -47,6 +47,8 @@ private:
 	Direction facing;	
 	void setUpAnimation();
 	HUD hud;
+	BoundingBox headBox;
+	BoundingBox bodyBox;
 };
 
 #endif

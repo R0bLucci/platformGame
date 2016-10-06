@@ -3,7 +3,7 @@
 #include <iostream>
 #include "camera.h"
 
-collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
+collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 	int boxTop = box.getTopSide();
 	int boxRight = box.getRightSide();
 	int boxBottom = box.getBottomSide();
@@ -61,8 +61,8 @@ collision::side BoundingBox::sideIsCollidingWidth(BoundingBox box){
 
 
 void BoundingBox::moveBoundingBox(double x, double y){
-	this->x = std::ceil(x); 
-	this->y = std::ceil(y);
+	this->x = std::ceil(x) + this->offset.x; 
+	this->y = std::ceil(y) + this->offset.y;
 }
 
 Vector2 BoundingBox::getRightSideCentre(){

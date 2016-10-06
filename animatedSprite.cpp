@@ -33,14 +33,14 @@ void AnimatedSprite::setCurrentAnimation(std::string animationName){
 
 void AnimatedSprite::setUpAnimation(){}
 
-void AnimatedSprite::moveBoundingBox(const Vector2& boundingBoxOffset, const Vector2 &cameraOffset){
-	this->boundingBox->moveBoundingBox((this->posX + boundingBoxOffset.x) - cameraOffset.x , 
-			(this->posY + boundingBoxOffset.y) - cameraOffset.y);
+void AnimatedSprite::moveBoundingBox(const Vector2 &cameraOffset){
+	this->boundingBox->moveBoundingBox(this->posX - cameraOffset.x, 
+			this->posY - cameraOffset.y);
 }
 
-void AnimatedSprite::update(double elapsedTime, const Vector2 & boundingBoxOffset, const Vector2& cameraOffset){
+void AnimatedSprite::update(double elapsedTime, const Vector2& cameraOffset){
 	Sprite::update(elapsedTime);
-	this->moveBoundingBox(boundingBoxOffset, cameraOffset);
+	this->moveBoundingBox(cameraOffset);
 
 	this->elapsedTime += elapsedTime;
 	std::vector<SDL_Rect> cachedAnimations = this->animations[this->currentAnimation];
@@ -50,6 +50,7 @@ void AnimatedSprite::update(double elapsedTime, const Vector2 & boundingBoxOffse
 			this->source = cachedAnimations[this->frameIndex++];
 		}else{
 			this->frameIndex = 0;
+			this->source = cachedAnimations[this->frameIndex++];
 		}
 	}
 }
