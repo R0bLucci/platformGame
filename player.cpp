@@ -101,10 +101,12 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 			case collision::RIGHT:
 				this->posX = box.getRightSide();
 				std::cout << "HEAD Colliding right" << std::endl;
+				hud.decreaseHealth(1);
 			break;
 			case collision::LEFT:
 				this->posX = box.getLeftSide() - (this->headBox.getWidth());
 				std::cout << "HEAD Colliding left" << std::endl;
+				hud.increaseHealth(1);
 			break;
 			case collision::BOTTOM:
 				this->dy = 0;

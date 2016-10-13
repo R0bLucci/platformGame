@@ -51,7 +51,7 @@ void HUD::HealthBar::increaseInnerHealthBarLength(int health){
 }
 
 double HUD::HealthBar::getHealthUnit() const{
-	return (double) (HUDUnits::INNER_HEALTH_BAR_WIDTH / this->hud.maxHealth);
+	return (double) ((double)HUDUnits::INNER_HEALTH_BAR_WIDTH / (double) this->hud.maxHealth);
 }
 /*------------------------------- End Health bar ----------------------------------------*/
 
@@ -84,7 +84,7 @@ void HUD::HealthLevel::update(double elapsedTime, const Vector2& cameraOffset){
 	
 void HUD::HealthLevel::draw(Graphic& graphic, const Vector2& cameraOffset){
 	Sprite::draw(graphic, cameraOffset);
-	if(this->source2){
+	if(this->tensColumn != 0){
 		SDL_Rect onesColumns = {
 				(int)(this->posX - cameraOffset.x) + this->source2->w * globals::SPRITE_SCALER, 
 				(int)(this->posY - cameraOffset.y),
@@ -99,7 +99,7 @@ void HUD::HealthLevel::computeOnesAndTensColumn(){
 	if(sHealth.size() == 1){
 		this->parseHealthValue(this->onesColumn, sHealth, 0, 1);
 		this->source.x = this->onesColumn * this->source.w;
-		this->source2 = NULL;
+		this->tensColumn = 0;
 	} else if(sHealth.size() == 2){
 		*this->source2 = this->source;
 		this->parseHealthValue(this->tensColumn, sHealth, 0, 1);
@@ -120,13 +120,13 @@ void HUD::HealthLevel::parseHealthValue(int& column, std::string& sHealth, int b
 /*------------------- Start HUD -----------------------*/
 
 HUD::HUD(Graphic &graphic, std::string source, const Vector2& position) :
-health(3), 
+health(99), 
 position(position){
 	this->healthBar = new HealthBar(graphic, source, position, *this);
 	this->healthLevel = new HealthLevel(graphic, source, 0, 56, 
 			HUDUnits::HEALTH_NUMBER_WIDTH, HUDUnits::HEALTH_NUMBER_HEIGHT, position, *this);
-
 	this->maxHealth = this->health;
+
 }
 
 
