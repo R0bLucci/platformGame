@@ -20,7 +20,7 @@ public:
 	void draw(Graphic & graphic, const Vector2 & cameraOffset = {0.0, 0.0});
 
 protected:
-	int frameIndex;
+	std::size_t frameIndex;
 	const double timeToUpdate;
 	double elapsedTime;
 	std::string currentAnimation;

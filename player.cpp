@@ -6,16 +6,15 @@
 
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),
-isGrounded(false), dx(0.0), dy(0.0), facing(LEFT), 
+isGrounded(false), isLookingUp(false), isLookingDown(false),  
+dx(0.0), dy(0.0), facing(LEFT), 
+hud(graphic, "TextBox.png", Vector2(50, 50)),
 headBox(Vector2(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
-bodyBox(Vector2(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2(7.0, 0.0)),
-isLookingUp(false), isLookingDown(false),
-hud(graphic, "TextBox.png", Vector2(50, 50)){
+bodyBox(Vector2(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2(7.0, 0.0)){
 	this->setUpAnimation();
 }
 
-Player::~Player(){
-}
+Player::~Player(){std::cout << "~Player()" << std::endl;}
 
 void Player::setUpAnimation(){
 	this->addAnimation("walkLeft", 3, Vector2());
@@ -95,6 +94,8 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 					std::cout << "BODY Colliding top" << std::endl;
 				}
 			break;
+			default: 
+			break;
 		}
 
 		switch(box.sideIsCollidingWith(this->headBox)){
@@ -112,6 +113,8 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 				this->dy = 0;
 				this->posY = box.getBottomSide();
 				std::cout << "HEAD Colliding bottom" << std::endl;
+			break;
+			default: 
 			break;
 		}
 

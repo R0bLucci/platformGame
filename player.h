@@ -45,10 +45,10 @@ private:
 	double dx;
 	double dy;
 	Direction facing;	
-	void setUpAnimation();
 	HUD hud;
 	BoundingBox headBox;
 	BoundingBox bodyBox;
+	void setUpAnimation();
 };
 
 #endif

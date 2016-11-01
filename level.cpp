@@ -12,22 +12,24 @@
 using namespace tinyxml2;
 
 Level::Level(Graphic &graphic,std::string levelName):
-spawnPoint(Vector2(0.0, 0.0)), currentLevelName(levelName), size(0,0), tileSize(0,0){
+size(0,0), tileSize(0,0),
+spawnPoint(Vector2(0.0, 0.0)), currentLevelName(levelName),
+width(0), height(0){
 	this->mapLoader(levelName, graphic);
 }
 
 Level::~Level(){
 	for(int i=0, n = this->tilesetList.size(); i < n; i++){
 		delete this->tilesetList[i];
-		this->tilesetList[i] = NULL;
+		this->tilesetList[i] = nullptr;
 	}
 
 	for(int i=0, n = this->collidables.size(); i < n; i++){
 		delete this->collidables[i];
-		this->collidables[i] = NULL;
+		this->collidables[i] = nullptr;
 	}
 	delete this->camera;
-	this->camera = NULL;
+	this->camera = nullptr;
 }
 
 void Level::mapLoader(std::string mapName, Graphic &graphic){
@@ -144,7 +146,7 @@ void Level::parseCSV(const char * text, std::string name, int layerWidth, int la
 	int commaIndex = 0; // Index position of the last occurance of a comma
 	int counter = 0; // Check when the csv has a new line character 
 	int lastComma = 0; // Save index position of the second last comma that was found 
-	int result = commaIndex; // Value to check when the csv formatted string has ended
+	std::size_t result = commaIndex; // Value to check when the csv formatted string has ended
 	int layerX = 0, layerY = 0; // Origin point (x,y) of the square in the map
 	while(result != std::string::npos){
 		commaIndex = csv.find(",", ++commaIndex);
@@ -197,7 +199,7 @@ void Level::addTileToTileset(Tile *tile){
 	}
 }
 
-void Level::update(double elapsedTime, Player * player){	
+void Level::update(double elapsedTime, std::unique_ptr<Player>& player){	
 	std::vector<BoundingBox> onScreen;
 	for(int i = 0, n = this->collidables.size(); i < n; i++){
 		BoundingBox * b = this->collidables[i];

@@ -11,22 +11,23 @@ const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
 
 Game::Game() : 
-elapsedTime(0) {
+elapsedTime(0), player(nullptr), level(nullptr) {
 	SDL_Init(SDL_INIT_EVERYTHING);
 }
 
 Game::~Game(){
-	delete this->player;
-	delete this->level;
-	this->player = NULL;
-	this->level = NULL;
+	//delete this->player;
+	//delete this->level;
+	//this->player = nullptr;
+	//this->level = nullptr;
+	std::cout << "~Game()" << std::endl;
 }
 
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->level = new Level(graphic, "level2");
-	this->player = new Player(graphic, this->level->getSpawnPoint());
+	this->level.reset(new Level(graphic, "level2"));
+	this->player.reset(new Player(graphic, this->level->getSpawnPoint()));
 
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
@@ -81,6 +82,7 @@ void Game::gameLoop(){
 		this->update();
 		this->draw(graphic);
 	} 
+	std::cout << "End of gameLopp()" << std::endl;
 }
 
 void Game::update(){
@@ -95,7 +97,7 @@ void Game::draw(Graphic &graphic){
 	graphic.render();
 }
 
-double Game::calculateElapsedTime(double &lastElapsedTime){
+void Game::calculateElapsedTime(double &lastElapsedTime){
 	double currentFrameDuration = (double) SDL_GetTicks(); 	
 	double elapsedTime = currentFrameDuration - lastElapsedTime;
 	lastElapsedTime = currentFrameDuration;

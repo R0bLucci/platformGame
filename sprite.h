@@ -18,11 +18,11 @@ public:
 	void update(double elapsedTime);
 	bool isColliding(BoundingBox * box);
 protected:
+	double posX;
+	double posY;
 	SDL_Rect source;
 	SDL_Texture * texture;
 	BoundingBox * boundingBox;
-	double posX;
-	double posY;
 };
 
 #endif

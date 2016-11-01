@@ -1,5 +1,6 @@
 #include "HUD.h"
 #include "graphic.h"
+#include <iostream>
 
 /*---------------------------- Start Health bar -----------------------------*/
 
@@ -11,7 +12,7 @@ hud(hud){
 				HUDUnits::INNER_HEALTH_BAR_HEIGHT };
 }
 
-HUD::HealthBar::~HealthBar(){}
+HUD::HealthBar::~HealthBar(){std::cout << "~HealthBar()" << std::endl;}
 
 void HUD::HealthBar::draw(Graphic& graphic, const Vector2 & cameraOffset){
 	// Save outer health bar reference texture away 
@@ -60,13 +61,17 @@ double HUD::HealthBar::getHealthUnit() const{
 
 HUD::HealthLevel::HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, 
 					int height, const Vector2 & position, HUD& hud):
-source2(new SDL_Rect()),
 Sprite(graphic, source, x, y, width, height, position.x, position.y),
-hud(hud){}
+onesColumn(0), tensColumn(0),
+hud(hud), 
+source2(new SDL_Rect())
+{}
+
 
 HUD::HealthLevel::~HealthLevel(){
 	delete this->source2;
-	this->source2 = NULL;
+	this->source2 = nullptr;
+	std::cout << "~HealthLevel()" << std::endl;
 }
 
 void HUD::HealthLevel::update(double elapsedTime, const Vector2& cameraOffset){
@@ -120,12 +125,12 @@ void HUD::HealthLevel::parseHealthValue(int& column, std::string& sHealth, int b
 /*------------------- Start HUD -----------------------*/
 
 HUD::HUD(Graphic &graphic, std::string source, const Vector2& position) :
-health(99), 
-position(position){
+position(position),
+health(99){
+	this->maxHealth = this->health;
 	this->healthBar = new HealthBar(graphic, source, position, *this);
 	this->healthLevel = new HealthLevel(graphic, source, 0, 56, 
 			HUDUnits::HEALTH_NUMBER_WIDTH, HUDUnits::HEALTH_NUMBER_HEIGHT, position, *this);
-	this->maxHealth = this->health;
 
 }
 
@@ -133,8 +138,8 @@ position(position){
 HUD::~HUD(){
 	delete this->healthBar;
 	delete this->healthLevel;
-	this->healthBar = NULL;
-	this->healthLevel = NULL;
+	this->healthBar = nullptr;
+	this->healthLevel = nullptr;
 }
 
 void HUD::draw(Graphic &graphic, const Vector2 &cameraOffset){

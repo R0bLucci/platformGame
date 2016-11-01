@@ -82,10 +82,10 @@ private:
 		void parseHealthValue(int& column, std::string& sHealth, int beginIndex, int length);
 
 	};
-	HealthBar *healthBar;
-	HealthLevel* healthLevel;
 	int health;
 	int maxHealth;
+	HealthBar *healthBar;
+	HealthLevel* healthLevel;
 
 	void offset(double & x, double & y, const Vector2 &offset);
 };

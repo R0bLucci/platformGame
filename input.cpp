@@ -10,9 +10,9 @@ bool Input::handleInput(SDL_Event &event){
 	bool quit = false;
 	if(event.type == SDL_KEYDOWN){
 		this->keysPressed.push_back(EventPair(event.key.keysym.scancode, true));		
-	}else if (event.type = SDL_KEYUP){
+	}else if (event.type == SDL_KEYUP){
 		this->keysReleased.push_back(EventPair(event.key.keysym.scancode, true));		
-	}else if(event.type = SDL_QUIT){
+	}else if(event.type == SDL_QUIT){
 		quit = true;
 	}	
 	return quit;	

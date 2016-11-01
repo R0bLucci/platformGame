@@ -14,15 +14,15 @@ public:
 	Tile(int gid, int layerX, int layerY, int width, int height); 
 	Tile(int gid, int x, int y); 
 	~Tile(); 
+	int gid;
 	int layerX;
 	int layerY;
-	int imageX;
-	int imageY;
 	int w;
 	int h;
-	int gid;
 	SDL_Rect source;
 	SDL_Rect dest;
+	int imageX;
+	int imageY;
 	
 	BoundingBox * getBoundingBox();
 	Vector2 getOrigin();

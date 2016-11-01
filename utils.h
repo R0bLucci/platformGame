@@ -12,7 +12,7 @@ struct EventPair {
 	{}
 	
 	EventPair(SDL_Scancode s, bool b) :
-	code(s), value(b) 
+	value(b), code(s) 
 	{}
 	
 	~EventPair(){}

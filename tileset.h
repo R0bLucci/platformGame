@@ -1,10 +1,11 @@
 #ifndef TILESET_H
 #define TILESET_H
 
-#include <SDL2/SDL.h>
 #include "graphic.h"
+#include <SDL2/SDL.h>
 #include <string>
 #include <vector>
+#include <memory>
 #include <iostream>
 
 class Tile;
@@ -24,7 +25,7 @@ private:
 			width(imageWidth), height(imageHeight), source(source){ 
 				this->createTexture(graphic);
 			}
-			~Image() { }
+			~Image() {}
 			
 			inline int getWidth() const { return this->width; }
 			inline int getHeight() const { return this->height; }
@@ -35,10 +36,13 @@ private:
 			int width;
 			int height;
 			std::string source;
+			Graphic graphic;
 			SDL_Texture * texture;
 
 			void createTexture(Graphic &graphic){
+				std::cout << "TileSet::Image source: " << this->source << std::endl;
 				this->texture = graphic.getTexture(this->source);
+				std::cout << "Texture source addr: " << this->texture << std::endl;
 			}
 	};	
 	Image image;

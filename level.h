@@ -4,6 +4,7 @@
 #include "globals.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 struct Graphic;
 struct Tileset;
@@ -17,7 +18,7 @@ public:
 	Level(Graphic &graphic,std::string levelName);
 	~Level();
 
-	void update(double elapsedTime, Player * player);
+	void update(double elapsedTime, std::unique_ptr<Player>& player);
 	void draw(Graphic &graphic);
 	int getWidth();
 	int getHeight();

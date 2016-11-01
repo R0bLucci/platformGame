@@ -17,8 +17,8 @@ Tile::Tile(int gid, int layerX, int layerY):
 Tile::~Tile() { 
 	delete this->box;
 	delete this->originalBox;
-	this->box = NULL;
-	this->originalBox = NULL;
+	this->box = nullptr;
+	this->originalBox = nullptr;
 }
 
 void Tile::setBoundingBox(BoundingBox * b){
