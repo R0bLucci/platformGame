@@ -5,10 +5,10 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
-#include <memory>
 #include <iostream>
+#include <memory>
+#include "tile.h"
 
-class Tile;
 class Camera;
 
 class Tileset {
@@ -18,14 +18,11 @@ private:
 	int tileHeight;
 	int tileCount;
 	int columns;
-	std::vector<Tile*> tiles;
+	std::vector<std::unique_ptr<Tile>> tiles;
 	class Image {
 		public:
-			Image(std::string source, int imageWidth, int imageHeight, Graphic &graphic):
-			width(imageWidth), height(imageHeight), source(source){ 
-				this->createTexture(graphic);
-			}
-			~Image() {}
+			Image(std::string source, int imageWidth, int imageHeight, Graphic & graphic);
+			~Image(); 
 			
 			inline int getWidth() const { return this->width; }
 			inline int getHeight() const { return this->height; }
@@ -39,16 +36,12 @@ private:
 			Graphic graphic;
 			SDL_Texture * texture;
 
-			void createTexture(Graphic &graphic){
-				std::cout << "TileSet::Image source: " << this->source << std::endl;
-				this->texture = graphic.getTexture(this->source);
-				std::cout << "Texture source addr: " << this->texture << std::endl;
-			}
+			void createTexture(Graphic & graphic);
 	};	
 	Image image;
 public:
 	Tileset(int firstgid, int tileWidth, int tileHeight, int tileCount, int columns, std::string source, 
-			int imageWidth, int imageHeight, Graphic &graphic);
+			int imageWidth, int imageHeight, Graphic & graphic);
 	~Tileset();
 	int getFirstgid() const;
 	int getTileWidth() const;
@@ -56,11 +49,11 @@ public:
 	int getTileCount() const;
 	int getColumns() const;
 	Image getImage() const;
-	bool addTile(Tile *tile);
+	bool addTile(std::unique_ptr<Tile> & tile);
 	void draw(Graphic &graphic, Camera & camera);
-	std::vector<Tile *>  update(double elapedTime, Camera * camera);
+	//std::vector<Tile*>  update(double elapedTime, Camera * camera);
 
-	std::vector<Tile*> getTiles();
+	//std::vector<std::unique_ptr<Tile>> getTiles();
 };
 
 #endif

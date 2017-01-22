@@ -38,7 +38,7 @@ private:
 	void setLevelWidthAndHeight(int w, int h);
 	void mapLoader(std::string mapName, Graphic &graphic);
 	void parseCSV(const char * text, std::string name, int layerWidht, int layerHeight);
-	void addTileToTileset(Tile *tile);
+	void addTileToTileset(std::unique_ptr<Tile> & tile);
 };
 
 

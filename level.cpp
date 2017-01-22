@@ -160,7 +160,8 @@ void Level::parseCSV(const char * text, std::string name, int layerWidth, int la
 		// Create a new tile only if the gid is positive
 		// a gid of zero means that the tile is empty
 		if(gid > 0){
-			Tile * tile = new Tile(gid, layerX, layerY);
+			std::unique_ptr<Tile> tile(new Tile(gid, layerX, layerY));
+			//Tile * tile = new Tile(gid, layerX, layerY);
 			this->addTileToTileset(tile);
 		}
 		// Increment x to move the origin point by one at each iteration 
@@ -191,7 +192,7 @@ int Level::getHeight(){
 	return this->height;
 }
 
-void Level::addTileToTileset(Tile *tile){
+void Level::addTileToTileset(std::unique_ptr<Tile>& tile){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
 		if(this->tilesetList[i]->addTile(tile)){ 
 			break;

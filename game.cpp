@@ -12,7 +12,10 @@ const double MAX_TIME = 1000 / FPS;
 
 Game::Game() : 
 elapsedTime(0), player(nullptr), level(nullptr) {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	//SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Init(0);
+	SDL_InitSubSystem(SDL_INIT_VIDEO);
+	SDL_InitSubSystem(SDL_INIT_TIMER);
 }
 
 Game::~Game(){
