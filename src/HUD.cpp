@@ -1,5 +1,5 @@
-#include "HUD.h"
-#include "graphic.h"
+#include "../header/HUD.h"
+#include "../header/graphic.h"
 #include <iostream>
 
 /*---------------------------- Start Health bar -----------------------------*/

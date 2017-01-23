@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "graphic.h"
-#include "globals.h"
+#include "../header/graphic.h"
+#include "../header/globals.h"
 #include <iostream>
 
 Graphic::Graphic() : window(nullptr), renderer(nullptr) {

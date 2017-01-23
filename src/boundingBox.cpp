@@ -1,7 +1,7 @@
-#include "boundingBox.h"
+#include "../header/boundingBox.h"
 #include <math.h>
 #include <iostream>
-#include "camera.h"
+#include "../header/camera.h"
 
 collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 	int boxTop = box.getTopSide();

@@ -1,8 +1,8 @@
-#include "player.h"
+#include "../header/player.h"
 #include <iostream>
-#include "boundingBox.h"
-#include "tile.h"
-#include "camera.h"
+#include "../header/boundingBox.h"
+#include "../header/tile.h"
+#include "../header/camera.h"
 
 Player::Player(Graphic & graphic, Vector2 spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),

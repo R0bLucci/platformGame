@@ -1,6 +1,6 @@
-#include "animatedSprite.h"
+#include "../header/animatedSprite.h"
 #include <iostream>
-#include "boundingBox.h"
+#include "../header/boundingBox.h"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
 	double posX, double posY, const double timeToUpdate) : 

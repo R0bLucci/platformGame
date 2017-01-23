@@ -1,11 +1,11 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "game.h"
-#include "input.h"
-#include "graphic.h"
-#include "player.h"
-#include "level.h"
-#include "camera.h"
+#include "../header/game.h"
+#include "../header/input.h"
+#include "../header/graphic.h"
+#include "../header/player.h"
+#include "../header/level.h"
+#include "../header/camera.h"
 
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;

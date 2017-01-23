@@ -1,13 +1,13 @@
 #include <SDL2/SDL.h>
-#include "level.h"
-#include "graphic.h"
+#include "../header/level.h"
+#include "../header/graphic.h"
 #include <iostream>
-#include "tinyxml2.h"
-#include "tile.h"
-#include "tileset.h"
-#include "player.h"
-#include "camera.h"
-#include "boundingBox.h"
+#include "../header/tinyxml2.h"
+#include "../header/tile.h"
+#include "../header/tileset.h"
+#include "../header/player.h"
+#include "../header/camera.h"
+#include "../header/boundingBox.h"
 
 using namespace tinyxml2;
 

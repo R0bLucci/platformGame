@@ -1,6 +1,6 @@
-#include "sprite.h"
-#include "graphic.h"
-#include "boundingBox.h"
+#include "../header/sprite.h"
+#include "../header/graphic.h"
+#include "../header/boundingBox.h"
 
 Sprite::Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY) : 
 posX(posX), posY(posY), 

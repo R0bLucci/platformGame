@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h> 
-#include "graphic.h"
-#include "tileset.h"
-#include "tile.h"
-#include "boundingBox.h"
-#include "camera.h"
+#include "../header/graphic.h"
+#include "../header/tileset.h"
+#include "../header/tile.h"
+#include "../header/boundingBox.h"
+#include "../header/camera.h"
 
 Tile::Tile(int gid, int layerX, int layerY, int width, int height):
 	gid(gid), layerX(layerX), layerY(layerY), w(width), h(height), box(nullptr){
