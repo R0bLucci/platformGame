@@ -11,6 +11,11 @@ HEADERS=$(shell ls header/*.h)
 RELEASE=bin/release
 DEBUG=bin/debug
 
+run: 
+	$(RELEASE)/game
+drun: 
+	$(DEBUG)/dgame
+	
 game: $(OBJS) $(HEADERS)
 	$(CC) -o $(RELEASE)/$@ $(OBJS) $(CFLAGS) $(LDFLAGS)
 
