@@ -1,15 +1,15 @@
-#include "../header/boundingBox.h"
+#include "../header/boundingBox.hpp"
 #include <math.h>
 #include <iostream>
-#include "../header/camera.h"
+#include "../header/camera.hpp"
 
-collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
+BoundingBox::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 	int boxTop = box.getTopSide();
 	int boxRight = box.getRightSide();
 	int boxBottom = box.getBottomSide();
 	int boxLeft = box.getLeftSide();
 	int distances[4];
-	collision::side sides[4];
+	BoundingBox::side sides[4];
 	int index = -1;
 
 	// Check left collision with the left side of the bounding box
@@ -17,7 +17,7 @@ collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
 		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
 		distances[++index] = abs(boxRight - this->getLeftSide());
-		sides[index] = collision::LEFT;
+		sides[index] = BoundingBox::side::LEFT;
 	}
 
 	// Check top collision with the top side of this bounding box
@@ -25,7 +25,7 @@ collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
 		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
 		distances[++index] = abs(this->getTopSide() - boxBottom);
-		sides[index] = collision::TOP;
+		sides[index] = BoundingBox::side::TOP;
 	}
 	
 	// Check bottom collision with bottom side of this bounding box	
@@ -33,7 +33,7 @@ collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 		((boxLeft > this->getLeftSide() && boxLeft < this->getRightSide()) ||
 		(boxRight > this->getLeftSide() && boxRight < this->getRightSide()))){
 		distances[++index] = abs(this->getBottomSide() - boxTop);
-		sides[index] = collision::BOTTOM;
+		sides[index] = BoundingBox::side::BOTTOM;
 	}
 	
 	// Check right collision with the right side of the bounding box	
@@ -41,11 +41,11 @@ collision::side BoundingBox::sideIsCollidingWith(BoundingBox box){
 		((boxTop > this->getTopSide() && boxTop < this->getBottomSide()) ||
 		(boxBottom > this->getTopSide() && boxBottom < this->getBottomSide()))){
 		distances[++index] = abs(boxRight - this->getLeftSide());
-		sides[index] = collision::RIGHT;
+		sides[index] = BoundingBox::side::RIGHT;
 	}
 
 	if(index < 0){
-		return collision::NONE;
+		return BoundingBox::side::NONE;
 	}
 
 	double closest = distances[0];
@@ -65,42 +65,42 @@ void BoundingBox::moveBoundingBox(double x, double y){
 	this->y = std::ceil(y) + this->offset.y;
 }
 
-Vector2 BoundingBox::getRightSideCentre(){
+Vector2<double> BoundingBox::getRightSideCentre(){
 	double x = this->getRightSide();
 	double y = this->getTopSide() + (this->getHeight() / 2);
-	Vector2 point(x,y);
+	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2 BoundingBox::getLeftSideCentre(){
+Vector2<double> BoundingBox::getLeftSideCentre(){
 	double x = this->getLeftSide();
 	double y = this->getTopSide() + (this->getHeight() / 2);
-	Vector2 point(x,y);
+	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2 BoundingBox::getTopSideCentre(){
+Vector2<double> BoundingBox::getTopSideCentre(){
 	double x = this->getLeftSide() + (this->getWidth() / 2);
 	double y = this->getTopSide();
-	Vector2 point(x,y);
+	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2 BoundingBox::getBottomSideCentre(){
+Vector2<double> BoundingBox::getBottomSideCentre(){
 	double x = this->getLeftSide() + (this->getWidth() / 2);
 	double y = this->getBottomSide();
-	Vector2 point(x,y);
+	Vector2<double> point(x,y);
 	return point;
 }
 
-double BoundingBox::getDistance(Vector2 v1, Vector2 v2){
-	Vector2 result = v2 - v1;
+double BoundingBox::getDistance(Vector2<double> v1, Vector2<double> v2){
+	Vector2<double> result = v2 - v1;
 	double x = result.x * result.x;
 	double y = result.y * result.y;
 	return sqrt( (x + y) );
 }
 
-void BoundingBox::setOrigin(Vector2 newOrigin){
+void BoundingBox::setOrigin(Vector2<double> newOrigin){
 	this->x = newOrigin.x;
 	this->y = newOrigin.y;
 }
@@ -131,4 +131,9 @@ bool BoundingBox::isOnCamera(Camera * camera){
 	}
 	
 	return true;	
+}
+
+std::ostream & operator<< (std::ostream & o, const BoundingBox & lhs){
+	return o << "BoudingBox: [x: " << lhs.x << ", y: " << lhs.y << ", w: " 
+	<< lhs.w << ", h: " << lhs.h << "]";
 }

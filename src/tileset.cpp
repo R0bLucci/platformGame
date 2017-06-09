@@ -1,8 +1,8 @@
-#include "../header/tile.h"
-#include "../header/tileset.h"
-#include "../header/camera.h"
-#include "../header/globals.h"
-#include "../header/boundingBox.h"
+#include "../header/tile.hpp"
+#include "../header/tileset.hpp"
+#include "../header/camera.hpp"
+#include "../header/globals.hpp"
+#include "../header/boundingBox.hpp"
 
 
 Tileset::Tileset(int firstgid, int tileWidth, int tileHeight, int tileCount, int columns, std::string source,

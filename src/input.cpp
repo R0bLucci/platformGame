@@ -1,4 +1,4 @@
-#include "../header/input.h"
+#include "../header/input.hpp"
 #include <iostream>
 
 Input::Input(){}

@@ -1,6 +1,6 @@
-#include "../header/animatedSprite.h"
+#include "../header/animatedSprite.hpp"
 #include <iostream>
-#include "../header/boundingBox.h"
+#include "../header/boundingBox.hpp"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
 	double posX, double posY, const double timeToUpdate) : 
@@ -10,9 +10,9 @@ Sprite(graphic, textureName, originX, originY, width, height, posX, posY), frame
 
 AnimatedSprite::~AnimatedSprite(){}
 
-void AnimatedSprite::addAnimation(std::string animationName, int frames, Vector2 origin, bool isHorizontal){
+void AnimatedSprite::addAnimation(std::string animationName, int frames, Vector2<double> origin, bool isHorizontal){
 	std::vector<SDL_Rect> rects;
-	origin = origin * 16.0;
+	origin *= 16.0;
 	// Get next rectangles left to right 
 	if(isHorizontal){
 		for(int i = 0; i < frames; i++){
@@ -33,12 +33,12 @@ void AnimatedSprite::setCurrentAnimation(std::string animationName){
 
 void AnimatedSprite::setUpAnimation(){}
 
-void AnimatedSprite::moveBoundingBox(const Vector2 &cameraOffset){
+void AnimatedSprite::moveBoundingBox(const Vector2<double> &cameraOffset){
 	this->boundingBox->moveBoundingBox(this->posX - cameraOffset.x, 
 			this->posY - cameraOffset.y);
 }
 
-void AnimatedSprite::update(double elapsedTime, const Vector2& cameraOffset){
+void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOffset){
 	Sprite::update(elapsedTime);
 	this->moveBoundingBox(cameraOffset);
 
@@ -55,6 +55,6 @@ void AnimatedSprite::update(double elapsedTime, const Vector2& cameraOffset){
 	}
 }
 
-void AnimatedSprite::draw(Graphic &graphic, const Vector2 &cameraOffset){
+void AnimatedSprite::draw(Graphic &graphic, const Vector2<double> &cameraOffset){
 	Sprite::draw(graphic, cameraOffset);
 }

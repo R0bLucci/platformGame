@@ -1,14 +1,16 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "../header/game.h"
-#include "../header/input.h"
-#include "../header/graphic.h"
-#include "../header/player.h"
-#include "../header/level.h"
-#include "../header/camera.h"
+#include "../header/game.hpp"
+#include "../header/input.hpp"
+#include "../header/graphic.hpp"
+#include "../header/player.hpp"
+#include "../header/level.hpp"
+#include "../header/camera.hpp"
+#include "../header/logger.hpp"
 
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
+extern const bool logger::verbose = false;
 
 Game::Game() : 
 elapsedTime(0), player(nullptr), level(nullptr) {
@@ -23,7 +25,7 @@ Game::~Game(){
 	//delete this->level;
 	//this->player = nullptr;
 	//this->level = nullptr;
-	std::cout << "~Game()" << std::endl;
+	logger::log("~Game()");
 }
 
 void Game::gameLoop(){
@@ -85,7 +87,6 @@ void Game::gameLoop(){
 		this->update();
 		this->draw(graphic);
 	} 
-	std::cout << "End of gameLopp()" << std::endl;
 }
 
 void Game::update(){

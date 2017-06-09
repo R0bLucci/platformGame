@@ -1,19 +1,19 @@
 #include <SDL2/SDL.h>
-#include "../header/level.h"
-#include "../header/graphic.h"
+#include "../header/level.hpp"
+#include "../header/graphic.hpp"
 #include <iostream>
-#include "../header/tinyxml2.h"
-#include "../header/tile.h"
-#include "../header/tileset.h"
-#include "../header/player.h"
-#include "../header/camera.h"
-#include "../header/boundingBox.h"
+#include "../header/tinyxml2.hpp"
+#include "../header/tile.hpp"
+#include "../header/tileset.hpp"
+#include "../header/player.hpp"
+#include "../header/camera.hpp"
+#include "../header/boundingBox.hpp"
 
 using namespace tinyxml2;
 
 Level::Level(Graphic &graphic,std::string levelName):
 size(0,0), tileSize(0,0),
-spawnPoint(Vector2(0.0, 0.0)), currentLevelName(levelName),
+spawnPoint(Vector2<double>(0.0, 0.0)), currentLevelName(levelName),
 width(0), height(0){
 	this->mapLoader(levelName, graphic);
 }
@@ -48,18 +48,18 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 	int width = 0, height = 0;
 	mapNode->QueryIntAttribute("width", &width);
 	mapNode->QueryIntAttribute("height", &height);
-	this->size = Vector2(width, height);
+	this->size = Vector2<double>(width, height);
 	
 	int tileWidth = 0, tileHeight = 0;
 	mapNode->QueryIntAttribute("tilewidth", &tileWidth);
 	mapNode->QueryIntAttribute("tileheight", &tileHeight);
-	this->tileSize = Vector2(tileWidth, tileHeight);
+	this->tileSize = Vector2<double>(tileWidth, tileHeight);
 
 	// Determine the whole level width and hieght in pixels	
 	this->setLevelWidthAndHeight(width * tileWidth, height * tileHeight);
 	
 	// set Camera for the level
-	this->camera = new Camera(Vector2(), globals::WIDTH,
+	this->camera = new Camera(Vector2<double>(), globals::WIDTH,
 				globals::HEIGHT, this->width * globals::SPRITE_SCALER, this->height * globals::SPRITE_SCALER);
 	XMLElement * tilesetNode = mapNode->FirstChildElement("tileset");
 	while(tilesetNode){
@@ -123,7 +123,7 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 				obj->QueryDoubleAttribute("width", &width);
 				obj->QueryDoubleAttribute("height", &height);
 				BoundingBox * box = new BoundingBox(
-					Vector2(std::ceil(x) * globals::SPRITE_SCALER,
+					Vector2<double>(std::ceil(x) * globals::SPRITE_SCALER,
 					std::ceil(y) * globals::SPRITE_SCALER), 
 					std::ceil(width) * globals::SPRITE_SCALER, 
 					std::ceil(height) * globals::SPRITE_SCALER);
@@ -132,7 +132,7 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 				double x, y;
 				obj->QueryDoubleAttribute("x", &x);
 				obj->QueryDoubleAttribute("y", &y);
-				this->spawnPoint = Vector2(std::ceil(x) * globals::SPRITE_SCALER, 
+				this->spawnPoint = Vector2<double>(std::ceil(x) * globals::SPRITE_SCALER, 
 							std::ceil(y) * globals::SPRITE_SCALER);
 			}
 			obj = obj->NextSiblingElement("object");
@@ -221,7 +221,7 @@ void Level::draw(Graphic &graphic){
 	}
 }
 
-Vector2 Level::getSpawnPoint(){
+Vector2<double> Level::getSpawnPoint(){
 	return this->spawnPoint;
 }
 

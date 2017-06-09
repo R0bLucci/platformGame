@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h> 
-#include "../header/graphic.h"
-#include "../header/tileset.h"
-#include "../header/tile.h"
-#include "../header/boundingBox.h"
-#include "../header/camera.h"
+#include "../header/graphic.hpp"
+#include "../header/tileset.hpp"
+#include "../header/tile.hpp"
+#include "../header/boundingBox.hpp"
+#include "../header/camera.hpp"
 
 Tile::Tile(int gid, int layerX, int layerY, int width, int height):
 	gid(gid), layerX(layerX), layerY(layerY), w(width), h(height), box(nullptr){
@@ -59,7 +59,7 @@ void Tile::draw(Tileset & tileset, Graphic &graphic, Camera & camera){
 }	
 
 void Tile::update(double elapsedTime, Camera * camera) {
-	//this->box->setOrigin(Vector2((int)((this->layerX * this->w) - camera->getPosition().x),
+	//this->box->setOrigin(Vector2<double>((int)((this->layerX * this->w) - camera->getPosition().x),
 					//(int)((this->layerY * this->h) - camera->getPosition().y)));
 }
 
@@ -93,8 +93,8 @@ bool Tile::isVisible(Camera &camera){
 	return true;	
 }
 
-Vector2 Tile::getOrigin(){
-	return Vector2(this->layerX *  this->w,
+Vector2<double> Tile::getOrigin(){
+	return Vector2<double>(this->layerX *  this->w,
 			this->layerY * this->h);	
 }
 

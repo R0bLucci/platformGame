@@ -1,15 +1,16 @@
-#include "../header/camera.h"
+#include "../header/camera.hpp"
+#include "../header/logger.hpp"
 #include <iostream>
 #include <cmath>
 
-Camera::Camera(Vector2 position, int width, int height, int levelWidth,
+Camera::Camera(const Vector2<double>& position, int width, int height, int levelWidth,
 		int levelHeight):
 	position(position), width(width), height(height), 
 	levelWidth(levelWidth), levelHeight(levelHeight){}
 
 Camera::~Camera(){}
 
-void Camera::move(double x, double y){
+void Camera::move(const double x,const double y){
 	this->position.x = x - (globals::WIDTH / 2.0);
 	this->position.y = y - (globals::HEIGHT / 2.0);
 	
@@ -25,6 +26,5 @@ void Camera::move(double x, double y){
 	if(this->position.y > levelHeight - this->height){
 		this->position.y = levelHeight - this->height;
 	}
-	std::cout << position.x << " "
-	<< position.y << std::endl;
+	logger::log(position);
 }

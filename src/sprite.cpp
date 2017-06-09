@@ -1,21 +1,22 @@
-#include "../header/sprite.h"
-#include "../header/graphic.h"
-#include "../header/boundingBox.h"
+#include "../header/sprite.hpp"
+#include "../header/graphic.hpp"
+#include "../header/boundingBox.hpp"
+#include "../header/logger.hpp"
 
 Sprite::Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY) : 
 posX(posX), posY(posY), 
 texture(graphic.getTexture(textureName, false)),
-boundingBox(new BoundingBox(Vector2(posX, posY), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
+boundingBox(new BoundingBox(Vector2<double>(posX, posY), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
 	this->source = { originX, originY, width, height};
 }
 
 Sprite::~Sprite(){
 	delete this->boundingBox;
 	this->boundingBox = nullptr;
-	std::cout << "~Sprite()" << std::endl;
+	logger::log("~Sprite()");
 }
 	
-void Sprite::draw(Graphic &graphic, const Vector2 & cameraOffset){
+void Sprite::draw(Graphic &graphic, const Vector2<double> & cameraOffset){
 	SDL_Rect destination = {(int)(this->posX - cameraOffset.x), (int)(this->posY - cameraOffset.y),
 		this->source.w * globals::SPRITE_SCALER, this->source.h * globals::SPRITE_SCALER};
 	graphic.blitSurface(this->texture, &this->source, &destination);
