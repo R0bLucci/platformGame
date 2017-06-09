@@ -16,27 +16,27 @@ public:
 	Tile(int gid, int x, int y); 
 	~Tile(); 
 	int gid;
-	int layerX;
-	int layerY;
-	int w;
-	int h;
+	int layerX; // X position of the Tile relative to the cvs map
+	int layerY; // Y position of the Tile relative to the cvs map
+	int w; // width
+	int h; // height
 	SDL_Rect source;
 	SDL_Rect dest;
-	int imageX;
-	int imageY;
+	int imageX; // X position of the tile's source in the tileset image 
+	int imageY; // Y position of the tile's source in the tileset image
 	
 	BoundingBox * getBoundingBox();
 	Vector2<double> getOrigin();
 	void setBoundingBox(BoundingBox * b);
 	void draw(Tileset &tileset, Graphic &graphic, Camera &camera);
 	void update(double elapsedTime, Camera * camera);
-	void setSource(Tileset &tileset);	
+	void setSource(Tileset &tileset); // set the tileset in which the current tile is part of	
 	bool isVisible(Camera & camera);
 private:
 	BoundingBox * box;
 	BoundingBox * originalBox;
-	int scalerX;
-	int scalerY;
+	int scalerX; // Store the scale ratio of which the tile will be scaled to 
+	int scalerY; // Store the scale ratio of which the tile will be scaled to
 	
 };
 

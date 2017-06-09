@@ -10,7 +10,7 @@
 
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
-extern const bool logger::verbose = false;
+extern const bool logger::verbose = true;
 
 Game::Game() : 
 elapsedTime(0), player(nullptr), level(nullptr) {
