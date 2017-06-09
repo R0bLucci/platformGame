@@ -1,7 +1,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "globals.h"
+#include "globals.hpp"
+#include "vector.hpp"
 #include <vector>
 #include <string>
 #include <memory>
@@ -22,12 +23,12 @@ public:
 	void draw(Graphic &graphic);
 	int getWidth();
 	int getHeight();
-	Vector2 getSpawnPoint();
+	Vector2<double> getSpawnPoint();
 	Camera * getCamera();
 private:
-	Vector2 size;
-	Vector2 tileSize;
-	Vector2 spawnPoint;
+	Vector2<double> size;
+	Vector2<double> tileSize;
+	Vector2<double> spawnPoint;
 	std::string currentLevelName;
 	std::vector<BoundingBox*> collidables;
 	std::vector<Tileset*> tilesetList;

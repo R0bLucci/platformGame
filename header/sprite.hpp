@@ -2,8 +2,9 @@
 #define SPRITE_H
 
 #include <SDL2/SDL.h>
-#include "globals.h"
+#include "globals.hpp"
 #include <string>
+#include "vector.hpp" 
 
 struct Graphic;
 struct SDL_Texture;
@@ -14,7 +15,7 @@ public:
 	Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY);
 	~Sprite();
 	
-	void draw(Graphic &graphic, const Vector2 &cameraOffset = {0.0, 0.0});	
+	void draw(Graphic &graphic, const Vector2<double> &cameraOffset = {0.0, 0.0});	
 	void update(double elapsedTime);
 	bool isColliding(BoundingBox * box);
 protected:

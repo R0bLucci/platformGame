@@ -2,7 +2,8 @@
 #define TILE_H
 
 #include <SDL2/SDL.h>
-#include "globals.h"
+#include "globals.hpp"
+#include "vector.hpp"
 
 class Tileset;
 class Graphic;
@@ -25,7 +26,7 @@ public:
 	int imageY;
 	
 	BoundingBox * getBoundingBox();
-	Vector2 getOrigin();
+	Vector2<double> getOrigin();
 	void setBoundingBox(BoundingBox * b);
 	void draw(Tileset &tileset, Graphic &graphic, Camera &camera);
 	void update(double elapsedTime, Camera * camera);

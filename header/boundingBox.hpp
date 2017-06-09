@@ -1,18 +1,27 @@
 #ifndef BOUNDING_BOX_H
 #define BOUNDING_BOX_H
 
-#include "globals.h"
-#include "tile.h"
+#include "globals.hpp"
+#include "tile.hpp"
+#include "vector.hpp"
 #include <iostream>
 
 class Camera;
 
 class BoundingBox {
 public:
-	BoundingBox(Vector2 origin, int width, int height, Vector2 offset = {0.0, 0.0}) :
+	enum side {
+		TOP,
+		RIGHT,
+		BOTTOM,
+		LEFT,
+		NONE
+	};
+
+	BoundingBox(Vector2<double> origin, int width, int height, Vector2<double> offset = {0.0, 0.0}) :
 	x(origin.x + offset.x), y(origin.y + offset.y), w(width), h(height), offset(offset) {} 
 	
-	BoundingBox(Tile & tile, Vector2 offset = {0.0, 0.0}) : x((tile.layerX * tile.w) + offset.x), 
+	BoundingBox(Tile & tile, Vector2<double> offset = {0.0, 0.0}) : x((tile.layerX * tile.w) + offset.x), 
 				y((tile.layerY * tile.h) + offset.y), 
 				w(tile.w), h(tile.h), offset(offset) { } 
 	~BoundingBox();
@@ -27,18 +36,19 @@ public:
 	inline int getHeight() { return this->h; }
 	inline void setWidth(double w) { this->w = w;}
 	inline void setHeight(double h) { this->h = h;}
-	Vector2 getRightSideCentre();
-	Vector2 getLeftSideCentre();
-	Vector2 getTopSideCentre();
-	Vector2 getBottomSideCentre();
-	double getDistance(Vector2 v1, Vector2 v2);
+	Vector2<double> getRightSideCentre();
+	Vector2<double> getLeftSideCentre();
+	Vector2<double> getTopSideCentre();
+	Vector2<double> getBottomSideCentre();
+	double getDistance(Vector2<double> v1, Vector2<double> v2);
 	void moveBoundingBox(double x, double y);
-	void setOrigin(Vector2 newOrigin);
+	void setOrigin(Vector2<double> newOrigin);
 	bool isOnCamera(Camera * camera);
-	collision::side sideIsCollidingWith(BoundingBox box);
+	side sideIsCollidingWith(BoundingBox box);
+	friend std::ostream & operator << (std::ostream & o, const BoundingBox & lhs);
 
 private:
-	Vector2 offset;
+	Vector2<double> offset;
 };
 
 #endif

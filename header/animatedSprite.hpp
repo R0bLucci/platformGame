@@ -5,8 +5,9 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "sprite.h"
-#include "globals.h"
+#include "sprite.hpp"
+#include "globals.hpp"
+#include "vector.hpp"
 struct Graphic;
 
 class AnimatedSprite : public Sprite {
@@ -15,9 +16,9 @@ public:
 		,const double timeToUpdate);
 
 	~AnimatedSprite();
-	void update(double elapsedTime, const Vector2 & cameraOffset = {0.0, 0.0});
+	void update(double elapsedTime, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
-	void draw(Graphic & graphic, const Vector2 & cameraOffset = {0.0, 0.0});
+	void draw(Graphic & graphic, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
 protected:
 	std::size_t frameIndex;
@@ -27,10 +28,10 @@ protected:
 	void setUpAnimation();
 	void setCurrentAnimation(std::string animationName);
 	
-	void addAnimation(std::string animationName, int frames, Vector2 origin,  bool isHorizotal = true);
+	void addAnimation(std::string animationName, int frames, Vector2<double> origin,  bool isHorizotal = true);
 	std::map<std::string, std::vector<SDL_Rect>> animations;	
 private:
-	void moveBoundingBox(const Vector2 &cameraOffset = {0.0, 0.0});
+	void moveBoundingBox(const Vector2<double> &cameraOffset = {0.0, 0.0});
 };
 
 #endif

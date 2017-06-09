@@ -6,7 +6,7 @@ LDFLAGS=-lSDL2 -lSDL2_image
 CPPS=$(shell ls src/*.cpp)
 TEMP=$(subst src/,obj/,$(CPPS))
 OBJS=$(subst .cpp,.o,$(TEMP))
-HEADERS=$(shell ls header/*.h)
+HEADERS=$(shell ls header/*.hpp)
 
 RELEASE=bin/release
 DEBUG=bin/debug

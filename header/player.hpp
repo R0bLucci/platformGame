@@ -1,10 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "globals.h"
-#include "animatedSprite.h"
+#include "globals.hpp"
+#include "animatedSprite.hpp"
 #include <vector>
-#include "HUD.h"
-#include "boundingBox.h"
+#include "HUD.hpp"
+#include "boundingBox.hpp"
 
 struct Graphic;
 struct Tile;
@@ -12,7 +12,7 @@ struct Camera;
 
 class Player : public AnimatedSprite {
 public:
-	Player(Graphic & graphic, Vector2 spawnPoint);
+	Player(Graphic & graphic, Vector2<double> spawnPoint);
 	~Player();
 	
 	void moveRight();
@@ -26,8 +26,8 @@ public:
 	void update(double elapsedTime, Camera * camera);
 	void draw(Graphic & graphic, Camera & cameraOffset);
 	void stopMoving();
-	Vector2 getPosition();
-	std::vector<Vector2> surrindingArea(int unitX, int unitY);
+	Vector2<double> getPosition();
+	std::vector<Vector2<double>> surrindingArea(int unitX, int unitY);
 	void handleTileCollision(std::vector<Tile*> tiles);
 	void handleTileCollision(Tile* tile);
 	void handleCollision(std::vector<BoundingBox*> boxes);

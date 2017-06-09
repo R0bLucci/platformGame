@@ -1,13 +1,13 @@
 #ifndef TILESET_H
 #define TILESET_H
 
-#include "graphic.h"
+#include "graphic.hpp"
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <memory>
-#include "tile.h"
+#include "tile.hpp"
 
 class Camera;
 

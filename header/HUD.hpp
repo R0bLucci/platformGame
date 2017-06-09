@@ -1,9 +1,9 @@
 #ifndef HUD_H
 #define HUD_H
 
-#include "sprite.h"
+#include "sprite.hpp"
 #include <string>
-#include "globals.h"
+#include "globals.hpp"
 
 
 struct Graphic;
@@ -25,26 +25,26 @@ namespace HUDUnits {
 
 class HUD {
 public:
-	HUD(Graphic & graphic, std::string source, const Vector2 & position);
+	HUD(Graphic & graphic, std::string source, const Vector2<double> & position);
 	~HUD();
 	
-	const Vector2 position;
+	const Vector2<double> position;
 
 	int getHealth() const;
 	void decreaseHealth(int v);
 	void increaseHealth(int v);
 	void setMaxHealth(int newMax);	
-	void draw(Graphic &graphic, const Vector2 &cameraOffset);
-	void update(double elapsedTime,const Vector2& cameraOffset);
+	void draw(Graphic &graphic, const Vector2<double> &cameraOffset);
+	void update(double elapsedTime,const Vector2<double>& cameraOffset);
 
 private:
 	class HealthBar : public Sprite {
 	public:
-		HealthBar(Graphic &graphic, std::string source, const Vector2& position, HUD& hud);
+		HealthBar(Graphic &graphic, std::string source, const Vector2<double>& position, HUD& hud);
 		~HealthBar();
 		
-		void update(double elapsedTime, const Vector2& cameraOffset);
-		void draw(Graphic& graphic, const Vector2& cameraOffset);
+		void update(double elapsedTime, const Vector2<double>& cameraOffset);
+		void draw(Graphic& graphic, const Vector2<double>& cameraOffset);
 		void decreaseInnerHealthBarLength(int healthLeft);
 		void increaseInnerHealthBarLength(int healthLeft);
 	private:
@@ -53,13 +53,13 @@ private:
 		SDL_Rect innerBar;
 		HUD& hud;
 
-		Vector2 offsetInnerHealthBar();
+		const Vector2<double> offsetInnerHealthBar() const;
 		double getHealthUnit() const;
 	};
 
 	class HealthLevel : public Sprite {
 	public: 
-		HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, int heigh, const Vector2& position, HUD& hud);
+		HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, int heigh, const Vector2<double>& position, HUD& hud);
 		~HealthLevel();
 
 		inline int getX() const { return this->source.x; }
@@ -67,8 +67,8 @@ private:
 		inline int getWidth() const { return this->source.w; }
 		inline int getHeight() const { return this->source.h; }
 
-		void update(double elapsedTime, const Vector2& cameraOffset);
-		void draw(Graphic& graphic, const Vector2& cameraOffset);
+		void update(double elapsedTime, const Vector2<double>& cameraOffset);
+		void draw(Graphic& graphic, const Vector2<double>& cameraOffset);
 
 	private:
 		int onesColumn;
@@ -87,6 +87,6 @@ private:
 	HealthBar *healthBar;
 	HealthLevel* healthLevel;
 
-	void offset(double & x, double & y, const Vector2 &offset);
+	void offset(double & x, double & y, const Vector2<double> &offset);
 };
 #endif

@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "globals.h"
+#include "globals.hpp"
 #include <memory>
 
 struct Graphic;
