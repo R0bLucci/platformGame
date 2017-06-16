@@ -12,12 +12,12 @@ class BoundingBox;
 
 class Tile {
 public:
-	Tile(int gid, int layerX, int layerY, int width, int height); 
-	Tile(int gid, int x, int y); 
+	Tile(int gid, int layerX, int layerY, int width, int height, bool isBackground); 
+	Tile(int gid, int layerX, int layerY, bool isBackground); 
 	~Tile(); 
 	int gid;
-	int layerX; // X position of the Tile relative to the cvs map
-	int layerY; // Y position of the Tile relative to the cvs map
+	int x; // X position of the Tile relative to the cvs map
+	int y; // Y position of the Tile relative to the cvs map
 	int w; // width
 	int h; // height
 	SDL_Rect source;
@@ -31,12 +31,12 @@ public:
 	void draw(Tileset &tileset, Graphic &graphic, Camera &camera);
 	void update(double elapsedTime, Camera * camera);
 	void setSource(Tileset &tileset); // set the tileset in which the current tile is part of	
-	bool isVisible(Camera & camera);
+	bool isVisible(const Camera & camera) const;
 private:
 	BoundingBox * box;
-	BoundingBox * originalBox;
 	int scalerX; // Store the scale ratio of which the tile will be scaled to 
 	int scalerY; // Store the scale ratio of which the tile will be scaled to
+	bool isBackground; // use to determine if this instance is used as a background tile
 	
 };
 

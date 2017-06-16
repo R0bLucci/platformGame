@@ -19,12 +19,12 @@ width(0), height(0){
 }
 
 Level::~Level(){
-	for(int i=0, n = this->tilesetList.size(); i < n; i++){
+	for(int i=0, n = this->tilesetList.size(); i < n; ++i){
 		delete this->tilesetList[i];
 		this->tilesetList[i] = nullptr;
 	}
 
-	for(int i=0, n = this->collidables.size(); i < n; i++){
+	for(int i=0, n = this->collidables.size(); i < n; ++i){
 		delete this->collidables[i];
 		this->collidables[i] = nullptr;
 	}
@@ -143,6 +143,7 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 
 void Level::parseCSV(const char * text, std::string name, int layerWidth, int layerHeight){
 	std::string csv = text;	
+	bool isBackground = (name == "background");
 	int commaIndex = 0; // Index position of the last occurance of a comma
 	int counter = 0; // Check when the csv has a new line character 
 	int lastComma = 0; // Save index position of the second last comma that was found 
@@ -160,7 +161,7 @@ void Level::parseCSV(const char * text, std::string name, int layerWidth, int la
 		// Create a new tile only if the gid is positive
 		// a gid of zero means that the tile is empty
 		if(gid > 0){
-			std::unique_ptr<Tile> tile(new Tile(gid, layerX, layerY));
+			std::unique_ptr<Tile> tile(new Tile(gid, layerX, layerY, isBackground));
 			//Tile * tile = new Tile(gid, layerX, layerY);
 			this->addTileToTileset(tile);
 		}
@@ -184,11 +185,11 @@ void Level::setLevelWidthAndHeight(int w, int h){
 	this->height = h;
 }
 
-int Level::getWidth(){
+int Level::getWidth() const{
 	return this->width;
 }
 
-int Level::getHeight(){
+int Level::getHeight() const{
 	return this->height;
 }
 
@@ -221,10 +222,10 @@ void Level::draw(Graphic &graphic){
 	}
 }
 
-Vector2<double> Level::getSpawnPoint(){
+Vector2<double> Level::getSpawnPoint() const{
 	return this->spawnPoint;
 }
 
-Camera* Level::getCamera(){
+Camera* Level::getCamera() const{
 	return this->camera;
 }
