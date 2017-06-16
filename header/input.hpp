@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include <SDL2/SDL.h>
-#include <vector>
+#include <map>
 #include "utils.hpp"
 
 class Input {
@@ -10,13 +10,15 @@ class Input {
 public: 
 	Input();
 	~Input();
-	bool handleInput(SDL_Event &event);
-	bool wasKeyPressed(SDL_Scancode code);
-	bool wasKeyReleased(SDL_Scancode code);
+	bool handleInput(const SDL_Event &event);
+	bool wasKeyPressed(const SDL_Scancode code);
+	bool wasKeyReleased(const SDL_Scancode code);
+	bool wasKeyHeld(const SDL_Scancode code);
 private:	
-	std::vector<EventPair> keysPressed;
-	std::vector<EventPair> keysReleased;
-	void clearEventPairList();
+	std::map<SDL_Scancode, bool> keyPressed;
+	std::map<SDL_Scancode, bool> keyReleased;
+	std::map<SDL_Scancode, bool> keyHeld;
+	void clear();
 };
 
 #endif

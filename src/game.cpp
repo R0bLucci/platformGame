@@ -11,6 +11,7 @@
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
 extern const bool logger::verbose = true;
+extern const bool blitBB = true;
 
 Game::Game() : 
 elapsedTime(0), player(nullptr), level(nullptr) {
@@ -38,13 +39,9 @@ void Game::gameLoop(){
 	bool quit = false;
 	while(!quit){
 		SDL_Event event;
-		
 		while(SDL_PollEvent(&event)){
 			quit = input.handleInput(event);
-			if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
-				quit = true;	
-			}else if(input.wasKeyPressed(SDL_SCANCODE_RIGHT) && 
-						input.wasKeyPressed(SDL_SCANCODE_SPACE)){
+			if(input.wasKeyPressed(SDL_SCANCODE_RIGHT) && input.wasKeyPressed(SDL_SCANCODE_SPACE)){
 				this->player->moveRight();
 				this->player->jump();
 			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT) && 
@@ -65,9 +62,9 @@ void Game::gameLoop(){
 				this->player->idle();
 			}
 
-			if(input.wasKeyPressed(SDL_SCANCODE_UP)){
+			if(input.wasKeyHeld(SDL_SCANCODE_UP)){
 				this->player->lookUp();			
-			}else if(input.wasKeyPressed(SDL_SCANCODE_DOWN)){
+			}else if(input.wasKeyHeld(SDL_SCANCODE_DOWN)){
 				this->player->lookDown();
 			}
 			
@@ -75,6 +72,10 @@ void Game::gameLoop(){
 				this->player->stopLookUp();
 			}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
 				this->player->stopLookDown();
+			}
+
+			if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
+				quit = true;
 			}
 		}
 
