@@ -35,6 +35,13 @@ struct Vector2 {
 		Vector2<T> result(x,y);
 		return result;
 	}
+
+	Vector2<T> operator-(const Vector2<T>& v) const{
+		T x = this->x - v.x;
+		T y = this->y - v.y;
+		Vector2<T> result(x,y);
+		return result;
+	}
 	
 	Vector2<T> operator+(const Vector2<T>& v) {
 		T x = this->x + v.x;

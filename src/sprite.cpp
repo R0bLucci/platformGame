@@ -24,7 +24,7 @@ void Sprite::draw(Graphic &graphic, const Vector2<double> & cameraOffset){
 
 void Sprite::update(double elapsedTime){}
 
-bool Sprite::isColliding(BoundingBox * box){ 
+bool Sprite::isColliding(const BoundingBox * const box) const{ 
 
 	int boxLeft, thisLeft;
 	int boxRight, thisRight;

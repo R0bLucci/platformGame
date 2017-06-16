@@ -17,7 +17,7 @@ public:
 	
 	void draw(Graphic &graphic, const Vector2<double> &cameraOffset = {0.0, 0.0});	
 	void update(double elapsedTime);
-	bool isColliding(BoundingBox * box);
+	bool isColliding(const BoundingBox * const box) const;
 protected:
 	double posX;
 	double posY;

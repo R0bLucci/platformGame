@@ -21,10 +21,10 @@ public:
 
 	void update(double elapsedTime, std::unique_ptr<Player>& player);
 	void draw(Graphic &graphic);
-	int getWidth();
-	int getHeight();
-	Vector2<double> getSpawnPoint();
-	Camera * getCamera();
+	int getWidth() const;
+	int getHeight() const;
+	Vector2<double> getSpawnPoint() const;
+	Camera * getCamera() const;
 private:
 	Vector2<double> size;
 	Vector2<double> tileSize;

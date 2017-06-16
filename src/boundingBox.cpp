@@ -2,8 +2,9 @@
 #include <math.h>
 #include <iostream>
 #include "../header/camera.hpp"
+#include "../header/logger.hpp"
 
-BoundingBox::side BoundingBox::sideIsCollidingWith(BoundingBox box){
+BoundingBox::side BoundingBox::sideIsCollidingWith(const BoundingBox & box) const{
 	int boxTop = box.getTopSide();
 	int boxRight = box.getRightSide();
 	int boxBottom = box.getBottomSide();
@@ -65,35 +66,35 @@ void BoundingBox::moveBoundingBox(double x, double y){
 	this->y = std::ceil(y) + this->offset.y;
 }
 
-Vector2<double> BoundingBox::getRightSideCentre(){
+Vector2<double> BoundingBox::getRightSideCentre() const{
 	double x = this->getRightSide();
 	double y = this->getTopSide() + (this->getHeight() / 2);
 	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2<double> BoundingBox::getLeftSideCentre(){
+Vector2<double> BoundingBox::getLeftSideCentre() const {
 	double x = this->getLeftSide();
 	double y = this->getTopSide() + (this->getHeight() / 2);
 	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2<double> BoundingBox::getTopSideCentre(){
+Vector2<double> BoundingBox::getTopSideCentre() const {
 	double x = this->getLeftSide() + (this->getWidth() / 2);
 	double y = this->getTopSide();
 	Vector2<double> point(x,y);
 	return point;
 }
 
-Vector2<double> BoundingBox::getBottomSideCentre(){
+Vector2<double> BoundingBox::getBottomSideCentre() const {
 	double x = this->getLeftSide() + (this->getWidth() / 2);
 	double y = this->getBottomSide();
 	Vector2<double> point(x,y);
 	return point;
 }
 
-double BoundingBox::getDistance(Vector2<double> v1, Vector2<double> v2){
+double BoundingBox::getDistance(const Vector2<double> & v1,const Vector2<double> & v2) const{
 	Vector2<double> result = v2 - v1;
 	double x = result.x * result.x;
 	double y = result.y * result.y;
@@ -105,9 +106,11 @@ void BoundingBox::setOrigin(Vector2<double> newOrigin){
 	this->y = newOrigin.y;
 }
 
-BoundingBox::~BoundingBox(){}
+BoundingBox::~BoundingBox(){
+	logger::log("~BoundingBox()");
+}
 
-bool BoundingBox::isOnCamera(Camera * camera){ 
+bool BoundingBox::isOnCamera(const Camera * const camera) const{ 
 
 	int cameraLeft, boxLeft;
 	int cameraRight, boxRight;
