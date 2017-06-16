@@ -74,6 +74,13 @@ void Graphic::blitSurface(SDL_Texture * texture, const SDL_Rect * source, const 
 	SDL_RenderCopy(Graphic::renderer, texture, source, destination); 
 }
 
+void Graphic::blitBoundingBox(const std::string textureName, const SDL_Rect * source, const SDL_Rect & destination){
+	if(blitBB){
+		SDL_Texture * texture = this->getTexture(textureName, false);
+		SDL_RenderCopy(Graphic::renderer, texture, source, &destination); 
+	}
+}
+
 SDL_Renderer * Graphic::getRenderer(){
 	return this->renderer;
 }

@@ -8,6 +8,7 @@ struct SDL_Window;
 struct SDL_Rederer;
 struct SDL_Rect;
 struct SDL_Texture;
+extern const bool blitBB;
 
 class Graphic {
 public:
@@ -23,6 +24,8 @@ public:
 	SDL_Texture * getTexture(const std::string name, bool isLevel = true);
 	// Prepare sprite to renderer buffer so that it can be displayed later
 	void blitSurface(SDL_Texture * texture, const SDL_Rect * source, const SDL_Rect * destination);
+	// debug drawing method to see bounding box
+	void blitBoundingBox(const std::string textureName, const SDL_Rect * source, const SDL_Rect & destination);
 	
 private:
 	SDL_Window * window;

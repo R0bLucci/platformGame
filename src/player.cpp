@@ -4,6 +4,7 @@
 #include "../header/tile.hpp"
 #include "../header/camera.hpp"
 #include "../header/logger.hpp"
+#include "../header/graphic.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),
@@ -227,6 +228,8 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 void Player::draw(Graphic & graphic, Camera & camera){
 	this->hud.draw(graphic, camera.getPosition());
 	AnimatedSprite::draw(graphic, camera.getPosition());
+	graphic.blitBoundingBox("box.png", NULL, { this->headBox.x, this->headBox.y, this->headBox.w, this->headBox.h});
+	graphic.blitBoundingBox("box.png", NULL, { this->bodyBox.x, this->bodyBox.y, this->bodyBox.w, this->bodyBox.h});
 }
 
 void Player::moveRight(){
