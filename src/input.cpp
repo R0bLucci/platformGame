@@ -6,7 +6,6 @@ Input::Input(){}
 Input::~Input(){}
 
 bool Input::handleInput(const SDL_Event &event){
-	this->clear();
 	bool quit = false;
 	if(event.type == SDL_KEYDOWN){
 		this->keyPressed[event.key.keysym.scancode] = true;

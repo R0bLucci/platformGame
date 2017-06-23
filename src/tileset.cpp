@@ -12,7 +12,7 @@ Tileset::Tileset(int firstgid, int tileWidth, int tileHeight, int tileCount, int
 		image(source, imageWidth, imageHeight, graphic){}
 
 Tileset::~Tileset(){
-	logger::log("~Tileset()");
+	//logger::log("~Tileset()");
 	/*for(int i = 0, n = this->tiles.size(); i < n; i++){
 		delete this->tiles[i];
 		this->tiles[i] = nullptr;

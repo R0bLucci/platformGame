@@ -32,51 +32,54 @@ Game::~Game(){
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->level.reset(new Level(graphic, "level2"));
+	this->level.reset(new Level(graphic, "level1"));
 	this->player.reset(new Player(graphic, this->level->getSpawnPoint()));
 
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
 		SDL_Event event;
+		input.clear();
 		while(SDL_PollEvent(&event)){
+			logger::log("POLL EVENT");
 			quit = input.handleInput(event);
-			if(input.wasKeyPressed(SDL_SCANCODE_RIGHT) && input.wasKeyPressed(SDL_SCANCODE_SPACE)){
-				this->player->moveRight();
-				this->player->jump();
-			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT) && 
-						input.wasKeyPressed(SDL_SCANCODE_SPACE)){
-				this->player->moveLeft();
-				this->player->jump();
-			}else if(input.wasKeyPressed(SDL_SCANCODE_RIGHT)){
-				this->player->moveRight();
-			}else if(input.wasKeyPressed(SDL_SCANCODE_LEFT)){
-				this->player->moveLeft();
-			}
+		}
 
-			if(input.wasKeyPressed(SDL_SCANCODE_SPACE)){
-				this->player->jump();
-			}
+		if(input.wasKeyHeld(SDL_SCANCODE_RIGHT)){
+			logger::log("RIGHT");
+			this->player->moveRight();
+		}else if(input.wasKeyHeld(SDL_SCANCODE_LEFT)){
+			logger::log("LEFT");
+			this->player->moveLeft();
+		}
 
-			if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
-				this->player->idle();
-			}
+		if(input.wasKeyPressed(SDL_SCANCODE_SPACE)){
+			logger::log("JUMP");
+			this->player->jump();
+		}else if(input.wasKeyReleased(SDL_SCANCODE_SPACE)){
+			logger::log("STOP JUMP");
+			this->player->stopJump();
+		}
 
-			if(input.wasKeyHeld(SDL_SCANCODE_UP)){
-				this->player->lookUp();			
-			}else if(input.wasKeyHeld(SDL_SCANCODE_DOWN)){
-				this->player->lookDown();
-			}
-			
-			if(input.wasKeyReleased(SDL_SCANCODE_UP)){
-				this->player->stopLookUp();
-			}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
-				this->player->stopLookDown();
-			}
+		if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
+			logger::log("IDLE");
+			this->player->idle();
+		}
 
-			if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
-				quit = true;
-			}
+		if(input.wasKeyHeld(SDL_SCANCODE_UP)){
+			this->player->lookUp();			
+		}else if(input.wasKeyHeld(SDL_SCANCODE_DOWN)){
+			this->player->lookDown();
+		}
+		
+		if(input.wasKeyReleased(SDL_SCANCODE_UP)){
+			this->player->stopLookUp();
+		}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
+			this->player->stopLookDown();
+		}
+
+		if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
+			quit = true;
 		}
 
 		this->calculateElapsedTime(initFrameTime);	

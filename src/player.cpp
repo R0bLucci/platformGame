@@ -8,7 +8,7 @@
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),
-isGrounded(false), isLookingUp(false), isLookingDown(false),  
+ACC(0.0015), SLOW_ACC(0.75), MAX_ACC(.345), SLOW_JUMP(.65), currentAcc(0.0), isGrounded(false), isLookingUp(false), isLookingDown(false),  
 dx(0.0), dy(0.0), facing(LEFT), 
 hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
@@ -16,7 +16,7 @@ bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SC
 	this->setUpAnimation();
 }
 
-Player::~Player(){logger::log("~Player()");}
+Player::~Player(){/*logger::log("~Player()");*/}
 
 void Player::setUpAnimation(){
 	this->addAnimation("walkLeft", 3, Vector2<double>());
@@ -38,17 +38,17 @@ Vector2<double> Player::getPosition(){
 }
 
 void Player::update(double elapsedTime, Camera *camera){
-	
-	logger::log("time:", elapsedTime);
-	this->posX += this->dx * elapsedTime;
 
-	logger::log("dx:", this->dx);
+	//logger::log("time:", elapsedTime);
+
+	this->posX += elapsedTime * this->currentAcc;
+	this->accelerate(elapsedTime);
 
 	if(this->dy <= globals::GRAVITY_CAP){
 		this->dy += globals::GRAVITY * elapsedTime;
-		logger::log("dy:", this->dy);
 	}
 	this->posY += this->dy * elapsedTime;
+	logger::log("posY POS:", this->posY);
 
 	AnimatedSprite::update(elapsedTime);
 	this->headBox.moveBoundingBox(this->posX, this->posY);
@@ -59,8 +59,8 @@ void Player::update(double elapsedTime, Camera *camera){
 		this->hud.update(elapsedTime, camera->getPosition());
 	}
 
-	logger::log("posX:", this->posX);
-	logger::log("posY:", this->posY);
+	//logger::log("posX:", this->posX);
+	//logger::log("posY:", this->posY);
 }
 
 std::vector<Vector2<double>> Player::surrindingArea(int unitX, int unitY){
@@ -84,9 +84,9 @@ std::vector<Vector2<double>> Player::surrindingArea(int unitX, int unitY){
 void Player::handleCollision2(std::vector<BoundingBox> boxes){
 
 	for(int i = 0, n = boxes.size(); i < n ; i++){
-		logger::log(std::string("check boxes[") + std::to_string(i) + "]: " + std::to_string(n));
+		//logger::log(std::string("check boxes[") + std::to_string(i) + "]: " + std::to_string(n));
 		BoundingBox box = boxes[i];
-		logger::log(box);
+		//logger::log(box);
 
 		switch(box.sideIsCollidingWith(this->bodyBox)){
 			case BoundingBox::side::TOP:
@@ -94,7 +94,7 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 					this->dy = 0.0;
 					this->isGrounded = true;
 					this->posY = box.getTopSide() - this->bodyBox.getHeight();
-					logger::log("BODY Colliding top");	
+					//logger::log("BODY Colliding top");	
 				}
 			break;
 			default: 
@@ -104,19 +104,19 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 		switch(box.sideIsCollidingWith(this->headBox)){
 			case BoundingBox::side::RIGHT:
 				this->posX = box.getRightSide();
-				logger::log("HEAD Colliding right");	
+				//logger::log("HEAD Colliding right");	
 				hud.decreaseHealth(1);
 			break;
 			case BoundingBox::side::LEFT:
 				this->posX = box.getLeftSide() - (this->headBox.getWidth());
 				hud.decreaseHealth(1);
-				logger::log("HEAD Colliding left");	
+				//logger::log("HEAD Colliding left");	
 				hud.increaseHealth(1);
 			break;
 			case BoundingBox::side::BOTTOM:
 				this->dy = 0;
 				this->posY = box.getBottomSide();
-				logger::log("HEAD Colliding bottom");	
+				//logger::log("HEAD Colliding bottom");	
 			break;
 			default: 
 			break;
@@ -233,31 +233,37 @@ void Player::draw(Graphic & graphic, Camera & camera){
 }
 
 void Player::moveRight(){
-	//if(this->isGrounded){
-		this->setCurrentAnimation("walkRight");
-		this->dx = globals::WALK_SPEED;
-	//}
+	this->setCurrentAnimation("walkRight");
+	this->dx = globals::WALK_SPEED;
 	this->facing = RIGHT;
 }
 
 void Player::moveLeft(){
-	//if(this->isGrounded){
-		this->setCurrentAnimation("walkLeft");
-		this->dx = -globals::WALK_SPEED;
-	//}
+	this->setCurrentAnimation("walkLeft");
+	this->dx = -globals::WALK_SPEED;
 	this->facing = LEFT;
+}
+
+void Player::accelerate(double elapsedTime){
+	this->currentAcc += this->dx * elapsedTime * this->ACC;
+	if(this->dx > 0.0){
+		this->currentAcc = std::min(this->currentAcc, this->MAX_ACC);
+	}else if(this->dx < 0.0){
+		this->currentAcc = std::max(this->currentAcc, -this->MAX_ACC);
+	}else if(this->isGrounded){
+		this->currentAcc *= this->SLOW_ACC;
+	}
 }
 
 void Player::jump(){
 	if(this->isGrounded){
 		this->isGrounded = false;
-		this->dy = 0.0;
-		this->dy -= globals::JUMP;
+		this->dy = -globals::JUMP;
 	}
 }
 
-void Player::stopMoving(){
-	this->dx = 0.0;
+void Player::stopJump(){
+	this->dy *= this->SLOW_JUMP;
 }
 
 void Player::lookUp(){
@@ -277,12 +283,10 @@ void Player::lookDown(){
 }
 
 void Player::idle() {
-	//if(this->isGrounded){
-		this->dx = 0.0;
-		this->setCurrentAnimation(this->facing == RIGHT ? "idleRight" : "idleLeft");
-	//}
-
+	this->dx = 0.0;
+	this->setCurrentAnimation(this->facing == RIGHT ? "idleRight" : "idleLeft");
 }
+
 
 void Player::stopLookUp(){
 	this->isLookingUp = false;

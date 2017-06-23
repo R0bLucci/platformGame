@@ -107,7 +107,7 @@ void BoundingBox::setOrigin(Vector2<double> newOrigin){
 }
 
 BoundingBox::~BoundingBox(){
-	logger::log("~BoundingBox()");
+	//logger::log("~BoundingBox()");
 }
 
 bool BoundingBox::isOnCamera(const Camera * const camera) const{ 

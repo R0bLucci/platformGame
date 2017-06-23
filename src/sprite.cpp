@@ -13,7 +13,7 @@ boundingBox(new BoundingBox(Vector2<double>(posX, posY), width * globals::SPRITE
 Sprite::~Sprite(){
 	delete this->boundingBox;
 	this->boundingBox = nullptr;
-	logger::log("~Sprite()");
+	//logger::log("~Sprite()");
 }
 	
 void Sprite::draw(Graphic &graphic, const Vector2<double> & cameraOffset){

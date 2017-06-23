@@ -23,9 +23,9 @@ public:
 	void stopLookUp();
 	void stopLookDown();
 	void idle();
+	void stopJump();
 	void update(double elapsedTime, Camera * camera);
 	void draw(Graphic & graphic, Camera & cameraOffset);
-	void stopMoving();
 	Vector2<double> getPosition();
 	std::vector<Vector2<double>> surrindingArea(int unitX, int unitY);
 	void handleTileCollision(std::vector<Tile*> tiles);
@@ -39,6 +39,11 @@ private:
 		DOWN,
 		LEFT	
 	};
+	const double ACC;
+	const double SLOW_ACC;
+	const double MAX_ACC;
+	const double SLOW_JUMP;
+	double currentAcc;
 	bool isGrounded;
 	bool isLookingUp;
 	bool isLookingDown;
@@ -49,6 +54,7 @@ private:
 	BoundingBox headBox;
 	BoundingBox bodyBox;
 	void setUpAnimation();
+	void accelerate(double elapsedTime);
 };
 
 #endif

@@ -13,7 +13,7 @@ hud(hud){
 				HUDUnits::INNER_HEALTH_BAR_HEIGHT };
 }
 
-HUD::HealthBar::~HealthBar(){logger::log("~HealthBar()");}
+HUD::HealthBar::~HealthBar(){/*logger::log("~HealthBar()");*/}
 
 void HUD::HealthBar::draw(Graphic& graphic, const Vector2<double> & cameraOffset){
 	// Save outer health bar reference texture away 
@@ -72,7 +72,7 @@ source2(new SDL_Rect())
 HUD::HealthLevel::~HealthLevel(){
 	delete this->source2;
 	this->source2 = nullptr;
-	logger::log("~HealthLevel()");
+	//logger::log("~HealthLevel()");
 }
 
 void HUD::HealthLevel::update(double elapsedTime, const Vector2<double>& cameraOffset){

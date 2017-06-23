@@ -26,5 +26,5 @@ void Camera::move(const double x,const double y){
 	if(this->position.y > levelHeight - this->height){
 		this->position.y = levelHeight - this->height;
 	}
-	logger::log(position);
+	//logger::log(position);
 }

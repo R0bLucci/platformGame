@@ -16,7 +16,7 @@ Tile::Tile(int gid, int layerX, int layerY, bool isBackground) :
 	gid(gid), x(layerX), y(layerY), box(nullptr), isBackground(isBackground){}
 
 Tile::~Tile() { 
-	logger::log("~Tile()");
+	//logger::log("~Tile()");
 	if(this->box){
 		delete this->box;
 		this->box = nullptr;

@@ -14,11 +14,11 @@ public:
 	bool wasKeyPressed(const SDL_Scancode code);
 	bool wasKeyReleased(const SDL_Scancode code);
 	bool wasKeyHeld(const SDL_Scancode code);
+	void clear();
 private:	
 	std::map<SDL_Scancode, bool> keyPressed;
 	std::map<SDL_Scancode, bool> keyReleased;
 	std::map<SDL_Scancode, bool> keyHeld;
-	void clear();
 };
 
 #endif
