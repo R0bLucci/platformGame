@@ -12,8 +12,8 @@ struct Graphic;
 
 class AnimatedSprite : public Sprite {
 public:
-	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY
-		,const double timeToUpdate);
+	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
+		Vector2<double> position ,const double timeToUpdate);
 
 	~AnimatedSprite();
 	void update(double elapsedTime, const Vector2<double> & cameraOffset = {0.0, 0.0});

@@ -61,9 +61,14 @@ BoundingBox::side BoundingBox::sideIsCollidingWith(const BoundingBox & box) cons
 }
 
 
-void BoundingBox::moveBoundingBox(double x, double y){
-	this->x = std::ceil(x) + this->offset.x; 
-	this->y = std::ceil(y) + this->offset.y;
+/*void BoundingBox::moveBoundingBox(double x, double y){
+	this->position.x = std::ceil(x) + this->offset.x; 
+	this->position.y = std::ceil(y) + this->offset.y;
+}*/
+
+void BoundingBox::moveBoundingBox(const Vector2<double> & pos){
+	this->position.x = std::ceil(pos.x) + this->offset.x; 
+	this->position.y = std::ceil(pos.y) + this->offset.y;
 }
 
 Vector2<double> BoundingBox::getRightSideCentre() const{
@@ -102,8 +107,8 @@ double BoundingBox::getDistance(const Vector2<double> & v1,const Vector2<double>
 }
 
 void BoundingBox::setOrigin(Vector2<double> newOrigin){
-	this->x = newOrigin.x;
-	this->y = newOrigin.y;
+	this->position.x = newOrigin.x;
+	this->position.y = newOrigin.y;
 }
 
 BoundingBox::~BoundingBox(){
@@ -137,6 +142,6 @@ bool BoundingBox::isOnCamera(const Camera * const camera) const{
 }
 
 std::ostream & operator<< (std::ostream & o, const BoundingBox & lhs){
-	return o << "BoudingBox: [x: " << lhs.x << ", y: " << lhs.y << ", w: " 
+	return o << "BoudingBox: [x: " << lhs.position.x << ", y: " << lhs.position.y << ", w: " 
 	<< lhs.w << ", h: " << lhs.h << "]";
 }

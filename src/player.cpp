@@ -7,7 +7,7 @@
 #include "../header/graphic.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
-AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 100),
+AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, 100),
 ACC(0.0015), SLOW_ACC(0.75), MAX_ACC(.345), SLOW_JUMP(.65), currentAcc(0.0), isGrounded(false), isLookingUp(false), isLookingDown(false),  
 dx(0.0), dy(0.0), facing(LEFT), 
 hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
@@ -33,42 +33,41 @@ void Player::setUpAnimation(){
 }
 
 Vector2<double> Player::getPosition(){
-	return Vector2<double>(this->posX + (this->source.w * globals::SPRITE_SCALER / 2), 
-			this->posY + (this->source.h * globals::SPRITE_SCALER / 2));
+	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
+			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
 }
 
 void Player::update(double elapsedTime, Camera *camera){
 
 	//logger::log("time:", elapsedTime);
 
-	this->posX += elapsedTime * this->currentAcc;
+	this->position.x += elapsedTime * this->currentAcc;
 	this->accelerate(elapsedTime);
 
 	if(this->dy <= globals::GRAVITY_CAP){
 		this->dy += globals::GRAVITY * elapsedTime;
 	}
-	this->posY += this->dy * elapsedTime;
-	logger::log("posY POS:", this->posY);
+	this->position.y += this->dy * elapsedTime;
+	logger::log("posY POS:", this->position.y);
 
 	AnimatedSprite::update(elapsedTime);
-	this->headBox.moveBoundingBox(this->posX, this->posY);
-	this->bodyBox.moveBoundingBox(this->posX, this->posY);
+	this->headBox.moveBoundingBox(this->position);
+	this->bodyBox.moveBoundingBox(this->position);
 
 	if(camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
 		this->hud.update(elapsedTime, camera->getPosition());
 	}
 
-	//logger::log("posX:", this->posX);
-	//logger::log("posY:", this->posY);
+	//logger::log("position:", this->position);
 }
 
 std::vector<Vector2<double>> Player::surrindingArea(int unitX, int unitY){
 	std::vector<Vector2<double>> vects(8);
-	int x = this->posX / unitX;	
-	int y = this->posY / unitY;	
+	int x = this->position.x / unitX;	
+	int y = this->position.y / unitY;	
 	std::cout << "x " << x << "y " << y << std::endl;
-	std::cout << "posX " << posX << "posY " << posY << std::endl;
+	std::cout << "posX " << this->position.x << "posY " << this->position.y << std::endl;
 	vects[0] = Vector2<double>(x,y+2);
 	vects[1] = Vector2<double>(x-1,y+2);
 	vects[2] = Vector2<double>(x+1,y+2);
@@ -93,7 +92,7 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 				if(this->dy >= 0.0){
 					this->dy = 0.0;
 					this->isGrounded = true;
-					this->posY = box.getTopSide() - this->bodyBox.getHeight();
+					this->position.y = box.getTopSide() - this->bodyBox.getHeight();
 					//logger::log("BODY Colliding top");	
 				}
 			break;
@@ -103,19 +102,19 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 
 		switch(box.sideIsCollidingWith(this->headBox)){
 			case BoundingBox::side::RIGHT:
-				this->posX = box.getRightSide();
+				this->position.x = box.getRightSide();
 				//logger::log("HEAD Colliding right");	
 				hud.decreaseHealth(1);
 			break;
 			case BoundingBox::side::LEFT:
-				this->posX = box.getLeftSide() - (this->headBox.getWidth());
+				this->position.x = box.getLeftSide() - (this->headBox.getWidth());
 				hud.decreaseHealth(1);
 				//logger::log("HEAD Colliding left");	
 				hud.increaseHealth(1);
 			break;
 			case BoundingBox::side::BOTTOM:
 				this->dy = 0;
-				this->posY = box.getBottomSide();
+				this->position.y = box.getBottomSide();
 				//logger::log("HEAD Colliding bottom");	
 			break;
 			default: 
@@ -134,23 +133,23 @@ void Player::handleCollision(std::vector<BoundingBox*> boxes){
 			case BoundingBox::side::TOP:
 			this->dy = 0.0;
 			//std::cout << "Colliding top" << std::endl;
-			this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);
+			this->position.y = box->getTopSide() - (this->boundingBox->getHeight() + 1);
 			this->isGrounded = true;
 			break;
 		
 			case BoundingBox::side::BOTTOM:
 			this->dy = 0;
-			this->posY = box->getBottomSide() + 1;
+			this->position.y = box->getBottomSide() + 1;
 			//std::cout << "Colliding bottom" << std::endl;
 			break;
 
 			case BoundingBox::side::RIGHT:
-			this->posX = box->getRightSide() + 1;
+			this->position.x = box->getRightSide() + 1;
 			//std::cout << "Colliding right" << std::endl;
 			break;
 
 			case BoundingBox::side::LEFT:
-			this->posX = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
+			this->position.x = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
 			//std::cout << "Colliding left" << std::endl;
 			break;
 
@@ -167,24 +166,24 @@ void Player::handleTileCollision(Tile * tile){
 	switch(box->sideIsCollidingWith(*this->boundingBox)){
 		case BoundingBox::side::TOP:
 		this->dy = 0.0f;
-		this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);
+		this->position.y = box->getTopSide() - (this->boundingBox->getHeight() + 1);
 		this->isGrounded = true;
 		std::cout << "Colliding top" << std::endl;
 		break;
 	
 		case BoundingBox::side::BOTTOM:
 		this->dy = 0;
-		this->posY = box->getBottomSide() + 1;
+		this->position.y = box->getBottomSide() + 1;
 		std::cout << "Colliding bottom" << std::endl;
 		break;
 
 		case BoundingBox::side::RIGHT:
-		this->posX = box->getRightSide() + 1;
+		this->position.x = box->getRightSide() + 1;
 		std::cout << "Colliding right" << std::endl;
 		break;
 
 		case BoundingBox::side::LEFT:
-		this->posX = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
+		this->position.x = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
 		std::cout << "Colliding left" << std::endl;
 		break;
 
@@ -203,20 +202,20 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 		switch(box->sideIsCollidingWith(*this->boundingBox)){
 			case BoundingBox::side::TOP:
 			this->dy = 0.0;
-			this->posY = box->getTopSide() - (this->boundingBox->getHeight() + 1);
+			this->position.y = box->getTopSide() - (this->boundingBox->getHeight() + 1);
 			this->isGrounded = true;
 			break;
 		
 			case BoundingBox::side::BOTTOM:
-			this->posY = box->getBottomSide() + 1;
+			this->position.y = box->getBottomSide() + 1;
 			break;
 
 			case BoundingBox::side::RIGHT:
-			this->posX = box->getRightSide() + 1;
+			this->position.x = box->getRightSide() + 1;
 			break;
 
 			case BoundingBox::side::LEFT:
-			this->posX = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
+			this->position.x = box->getLeftSide() - (this->boundingBox->getWidth() + 1);
 			break;
 
 			case BoundingBox::side::NONE:
@@ -228,8 +227,8 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 void Player::draw(Graphic & graphic, Camera & camera){
 	this->hud.draw(graphic, camera.getPosition());
 	AnimatedSprite::draw(graphic, camera.getPosition());
-	graphic.blitBoundingBox("box.png", NULL, { this->headBox.x, this->headBox.y, this->headBox.w, this->headBox.h});
-	graphic.blitBoundingBox("box.png", NULL, { this->bodyBox.x, this->bodyBox.y, this->bodyBox.w, this->bodyBox.h});
+	graphic.blitBoundingBox("box.png", NULL, { this->headBox.position.x, this->headBox.position.y, this->headBox.w, this->headBox.h});
+	graphic.blitBoundingBox("box.png", NULL, { this->bodyBox.position.x, this->bodyBox.position.y, this->bodyBox.w, this->bodyBox.h});
 }
 
 void Player::moveRight(){

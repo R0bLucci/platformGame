@@ -32,7 +32,7 @@ Game::~Game(){
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
-	this->level.reset(new Level(graphic, "level1"));
+	this->level.reset(new Level(graphic, "level3"));
 	this->player.reset(new Player(graphic, this->level->getSpawnPoint()));
 
 	double initFrameTime = (double) SDL_GetTicks();	

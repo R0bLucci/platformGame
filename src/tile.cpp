@@ -7,13 +7,13 @@
 #include "../header/logger.hpp"
 
 Tile::Tile(int gid, int layerX, int layerY, int width, int height, bool isBackground):
-	gid(gid), x(layerX * width * globals::SPRITE_SCALER), y(layerY * height * globals::SPRITE_SCALER), w(width * globals::SPRITE_SCALER), h(height * globals::SPRITE_SCALER), box(nullptr), isBackground(isBackground){
+	gid(gid), position(layerX * width * globals::SPRITE_SCALER, layerY * height * globals::SPRITE_SCALER), w(width * globals::SPRITE_SCALER), h(height * globals::SPRITE_SCALER), box(nullptr), isBackground(isBackground){
 	/*this->scalerX = this->w * globals::SPRITE_SCALER; 	
 	this->scalerY = this->h * globals::SPRITE_SCALER; */
 }
 
 Tile::Tile(int gid, int layerX, int layerY, bool isBackground) :
-	gid(gid), x(layerX), y(layerY), box(nullptr), isBackground(isBackground){}
+	gid(gid), position(layerX, layerY), box(nullptr), isBackground(isBackground){}
 
 Tile::~Tile() { 
 	//logger::log("~Tile()");
@@ -34,15 +34,15 @@ BoundingBox * Tile::getBoundingBox(){
 void Tile::setSource(Tileset &tileset){
 	this->w = tileset.getTileWidth() * globals::SPRITE_SCALER;
 	this->h = tileset.getTileHeight() * globals::SPRITE_SCALER;  
-	this->x *= this->w;
-	this->y *= this->h;
+	this->position.x *= this->w;
+	this->position.y *= this->h;
 	this->imageX = ((this->gid -1) % tileset.getTileWidth());
 	this->imageY = std::ceil((((double) this->gid) / tileset.getTileHeight()) - 1 );
 
 	this->source = { this->imageX * tileset.getColumns(), this->imageY * tileset.getColumns(),
 			tileset.getTileWidth(), tileset.getTileHeight()};
-	this->dest = { this->x, 
-			this->y, 
+	this->dest = { this->position.x, 
+			this->position.y, 
 			this->w , 
 			this->h };
 	//Create bounding box if the tile rappresent a forground tile and the box is not created yet
@@ -53,18 +53,18 @@ void Tile::setSource(Tileset &tileset){
 
 void Tile::draw(Tileset & tileset, Graphic &graphic, Camera & camera){
 	if(this->isVisible(camera)){
-		this->dest = { (int)(this->x - camera.getPosition().x), 
-		 		(int)(this->y - camera.getPosition().y), 
+		this->dest = { (int)(this->position.x - camera.getPosition().x), 
+		 		(int)(this->position.y - camera.getPosition().y), 
 				this->w , 
 				this->h };
 		graphic.blitSurface(tileset.getImage().getTexture(), &this->source, &this->dest);
-		graphic.blitBoundingBox("box.png", NULL, { this->x, this->y, this->w, this->h});
+		graphic.blitBoundingBox("box.png", NULL, { this->position.x, this->position.y, this->w, this->h});
 	}
 }	
 
 void Tile::update(double elapsedTime, Camera * camera) {
-	//this->box->setOrigin(Vector2<double>((int)((this->x * this->w) - camera->getPosition().x),
-					//(int)((this->y * this->h) - camera->getPosition().y)));
+	//this->box->setOrigin(Vector2<double>((int)((this->position.x * this->w) - camera->getPosition().x),
+					//(int)((this->position.y * this->h) - camera->getPosition().y)));
 }
 
 bool Tile::isVisible(const Camera &camera) const {
@@ -82,10 +82,10 @@ bool Tile::isVisible(const Camera &camera) const {
 	cameraRight = camera.getRightSide();
 	cameraTop = camera.getTopSide();
 	cameraBottom = camera.getBottomSide();
-	tileLeft = this->x;
-	tileRight = this->x + this->w;	
-	tileTop = this->y;
-	tileBottom = this->y + this->h;
+	tileLeft = this->position.x;
+	tileRight = this->position.x + this->w;	
+	tileTop = this->position.y;
+	tileBottom = this->position.y + this->h;
 	
 	if(cameraBottom <= tileTop ||
 		cameraTop >= tileBottom ||
@@ -97,8 +97,7 @@ bool Tile::isVisible(const Camera &camera) const {
 	return true;	
 }
 
-Vector2<double> Tile::getOrigin(){
-	return Vector2<double>(this->x,
-			this->y);	
+Vector2<int> Tile::getOrigin(){
+	return this->position;
 }
 

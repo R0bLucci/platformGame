@@ -16,8 +16,7 @@ public:
 	Tile(int gid, int layerX, int layerY, bool isBackground); 
 	~Tile(); 
 	int gid;
-	int x; // X position of the Tile relative to the cvs map
-	int y; // Y position of the Tile relative to the cvs map
+	Vector2<int> position; // position of the Tile relative to the cvs map
 	int w; // width
 	int h; // height
 	SDL_Rect source;
@@ -26,7 +25,7 @@ public:
 	int imageY; // Y position of the tile's source in the tileset image
 	
 	BoundingBox * getBoundingBox();
-	Vector2<double> getOrigin();
+	Vector2<int> getOrigin();
 	void setBoundingBox(BoundingBox * b);
 	void draw(Tileset &tileset, Graphic &graphic, Camera &camera);
 	void update(double elapsedTime, Camera * camera);

@@ -3,10 +3,9 @@
 #include "../header/boundingBox.hpp"
 #include "../header/logger.hpp"
 
-Sprite::Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double posX, double posY) : 
-posX(posX), posY(posY), 
-texture(graphic.getTexture(textureName, false)),
-boundingBox(new BoundingBox(Vector2<double>(posX, posY), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
+Sprite::Sprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, Vector2<double> position) : 
+position(position), texture(graphic.getTexture(textureName, false)),
+boundingBox(new BoundingBox(Vector2<double>(position), width * globals::SPRITE_SCALER, height * globals::SPRITE_SCALER)){
 	this->source = { originX, originY, width, height};
 }
 
@@ -17,7 +16,7 @@ Sprite::~Sprite(){
 }
 	
 void Sprite::draw(Graphic &graphic, const Vector2<double> & cameraOffset){
-	SDL_Rect destination = {(int)(this->posX - cameraOffset.x), (int)(this->posY - cameraOffset.y),
+	SDL_Rect destination = {(int)(this->position.x - cameraOffset.x), (int)(this->position.y - cameraOffset.y),
 		this->source.w * globals::SPRITE_SCALER, this->source.h * globals::SPRITE_SCALER};
 	graphic.blitSurface(this->texture, &this->source, &destination);
 }

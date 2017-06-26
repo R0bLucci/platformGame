@@ -19,19 +19,19 @@ public:
 	};
 
 	BoundingBox(Vector2<double> origin, int width, int height, Vector2<double> offset = {0.0, 0.0}) :
-	x(origin.x + offset.x), y(origin.y + offset.y), w(width), h(height), offset(offset) {} 
+	position(origin.x + offset.x, origin.y + offset.y), w(width), h(height), offset(offset) {} 
 	
-	BoundingBox(const Tile & tile, Vector2<double> offset = {0.0, 0.0}) : x(tile.x + offset.x), 
-				y(tile.y + offset.y), 
-				w(tile.w), h(tile.h), offset(offset) { } 
+	BoundingBox(const Tile & tile, Vector2<double> offset = {0.0, 0.0}) : 
+	position(tile.position.x + offset.x, tile.position.y + offset.y), w(tile.w), h(tile.h), offset(offset) { } 
 	~BoundingBox();
 	
-	int x, y, w, h;	
+	Vector2<int> position;
+	int w, h;	
 	
-	inline int getTopSide() const { return this->y + this->offset.y; }
-	inline int getRightSide() const { return (this->x + this->offset.x) + this->w; }
-	inline int getBottomSide() const { return (this->y + this->offset.y) + this->h; }	
-	inline int getLeftSide() const { return this->x + this->offset.x; }
+	inline int getTopSide() const { return this->position.y + this->offset.y; }
+	inline int getRightSide() const { return (this->position.x + this->offset.x) + this->w; }
+	inline int getBottomSide() const { return (this->position.y + this->offset.y) + this->h; }	
+	inline int getLeftSide() const { return this->position.x + this->offset.x; }
 	inline int getWidth() const { return this->w; }
 	inline int getHeight() const { return this->h; }
 	inline void setWidth(double w) { this->w = w;}
@@ -41,7 +41,8 @@ public:
 	Vector2<double> getTopSideCentre() const;
 	Vector2<double> getBottomSideCentre() const;
 	double getDistance(const Vector2<double> & v1, const Vector2<double> & v2) const;
-	void moveBoundingBox(double x, double y);
+	//void moveBoundingBox(double x, double y);
+	void moveBoundingBox(const Vector2<double> & pos);
 	void setOrigin(Vector2<double> newOrigin);
 	bool isOnCamera(const Camera * const camera) const;
 	side sideIsCollidingWith(const BoundingBox & box) const;

@@ -6,7 +6,7 @@
 /*---------------------------- Start Health bar -----------------------------*/
 
 HUD::HealthBar::HealthBar(Graphic &graphic, std::string source, const Vector2<double> & position, HUD& hud):
-Sprite(graphic, source, 0, 40, HUDUnits::OUTER_HEALTH_BAR_WIDTH, HUDUnits::OUTER_HEALTH_BAR_HEIGHT, position.x, position.y),
+Sprite(graphic, source, 0, 40, HUDUnits::OUTER_HEALTH_BAR_WIDTH, HUDUnits::OUTER_HEALTH_BAR_HEIGHT, position),
 hud(hud){
 	this->outerBar = this->source; 
 	this->innerBar = { 0, 25, HUDUnits::INNER_HEALTH_BAR_WIDTH, 
@@ -34,7 +34,7 @@ void HUD::HealthBar::draw(Graphic& graphic, const Vector2<double> & cameraOffset
 
 void HUD::HealthBar::update(double elapsedTime, const Vector2<double>& cameraOffset){
 	Sprite::update(elapsedTime);
-	this->hud.offset(this->posX, this->posY, cameraOffset);
+	this->hud.offset(this->position.x, this->position.y, cameraOffset);
 }
 
 const Vector2<double> HUD::HealthBar::offsetInnerHealthBar() const {
@@ -62,7 +62,7 @@ double HUD::HealthBar::getHealthUnit() const{
 
 HUD::HealthLevel::HealthLevel(Graphic &graphic, std::string source, int x, int y, int width, 
 					int height, const Vector2<double> & position, HUD& hud):
-Sprite(graphic, source, x, y, width, height, position.x, position.y),
+Sprite(graphic, source, x, y, width, height, position),
 onesColumn(0), tensColumn(0),
 hud(hud), 
 source2(new SDL_Rect())
@@ -85,15 +85,15 @@ void HUD::HealthLevel::update(double elapsedTime, const Vector2<double>& cameraO
 	}else{
 		offset = {(double) (this->source.w * globals::SPRITE_SCALER) * 2, 0.0};
 	}
-	this->hud.offset(this->posX, this->posY, cameraOffset + offset);
+	this->hud.offset(this->position.x, this->position.y, cameraOffset + offset);
 }
 	
 void HUD::HealthLevel::draw(Graphic& graphic, const Vector2<double>& cameraOffset){
 	Sprite::draw(graphic, cameraOffset);
 	if(this->tensColumn != 0){
 		SDL_Rect onesColumns = {
-				(int)(this->posX - cameraOffset.x) + this->source2->w * globals::SPRITE_SCALER, 
-				(int)(this->posY - cameraOffset.y),
+				(int)(this->position.x - cameraOffset.x) + this->source2->w * globals::SPRITE_SCALER, 
+				(int)(this->position.y - cameraOffset.y),
 				this->source2->w * globals::SPRITE_SCALER,
 				this->source2->h * globals::SPRITE_SCALER };
 		graphic.blitSurface(this->texture, this->source2, &onesColumns);

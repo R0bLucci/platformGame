@@ -5,7 +5,7 @@
 #include <map>
 
 struct SDL_Window;
-struct SDL_Rederer;
+struct SDL_Renderer;
 struct SDL_Rect;
 struct SDL_Texture;
 extern const bool blitBB;

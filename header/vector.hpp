@@ -9,6 +9,8 @@ struct Vector2 {
 	Vector2() : x(0), y(0) {}
 
 	Vector2(T x, T y) : x(x), y(y) {}
+	
+	Vector2(const Vector2<T> & toCopy): x(toCopy.x), y(toCopy.y){}
 
 	~Vector2() {}
 
@@ -58,7 +60,7 @@ struct Vector2 {
 	}
 
 	friend std::ostream & operator<<(std::ostream & o, const Vector2<T> & lhs){
-		return o << "[x: " << lhs.x << ", y: " << lhs.y << "]";
+		return o << "Vector2 [x: " << lhs.x << ", y: " << lhs.y << "]";
 	}
 };
 

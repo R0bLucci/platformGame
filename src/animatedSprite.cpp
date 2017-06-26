@@ -3,8 +3,8 @@
 #include "../header/boundingBox.hpp"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
-	double posX, double posY, const double timeToUpdate) : 
-Sprite(graphic, textureName, originX, originY, width, height, posX, posY), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""){
+	Vector2<double> position, const double timeToUpdate) : 
+Sprite(graphic, textureName, originX, originY, width, height, position), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""){
 	this->setUpAnimation();
 }
 
@@ -34,8 +34,8 @@ void AnimatedSprite::setCurrentAnimation(std::string animationName){
 void AnimatedSprite::setUpAnimation(){}
 
 void AnimatedSprite::moveBoundingBox(const Vector2<double> &cameraOffset){
-	this->boundingBox->moveBoundingBox(this->posX - cameraOffset.x, 
-			this->posY - cameraOffset.y);
+	Vector2<double> pos = this->position - cameraOffset;
+	this->boundingBox->moveBoundingBox(pos); 
 }
 
 void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOffset){
