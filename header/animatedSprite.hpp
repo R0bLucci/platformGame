@@ -21,6 +21,10 @@ public:
 	void draw(Graphic & graphic, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
 protected:
+	enum Direction {
+		UP, RIGHT, BOTTOM, LEFT 
+	};
+
 	std::size_t frameIndex;
 	const double timeToUpdate;
 	double elapsedTime;

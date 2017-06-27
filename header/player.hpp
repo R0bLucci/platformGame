@@ -33,12 +33,6 @@ public:
 	void handleCollision(std::vector<BoundingBox*> boxes);
 	void handleCollision2(std::vector<BoundingBox> boxes);
 private:
-	enum Direction {
-		UP,
-		RIGHT,
-		DOWN,
-		LEFT	
-	};
 	const double ACC;
 	const double SLOW_ACC;
 	const double MAX_ACC;
