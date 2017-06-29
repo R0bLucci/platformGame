@@ -270,17 +270,17 @@ void Player::stopJump(){
 void Player::lookUp(){
 	this->isLookingUp = true;
 	this->dx = 0.0;
-	if(this->isGrounded){
+	//if(this->isGrounded){
 		this->setCurrentAnimation(this->facing == RIGHT ? "lookUpRight" : "lookUpLeft");	
-	}
+	//}
 }
 
 void Player::lookDown(){
 	this->isLookingDown = true;
 	this->dx = 0.0;
-	if(this->isGrounded){
+	//if(this->isGrounded){
 		this->setCurrentAnimation(this->facing == RIGHT ? "lookDownRight" : "lookDownLeft");	
-	}
+	//}
 }
 
 void Player::idle() {
