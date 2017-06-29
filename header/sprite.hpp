@@ -18,8 +18,8 @@ public:
 	void draw(Graphic &graphic, const Vector2<double> &cameraOffset = {0.0, 0.0});	
 	void update(double elapsedTime);
 	bool isColliding(const BoundingBox * const box) const;
-protected:
 	Vector2<double> position;
+protected:
 	SDL_Rect source;
 	SDL_Texture * texture;
 	BoundingBox * boundingBox;

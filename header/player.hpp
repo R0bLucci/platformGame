@@ -26,12 +26,16 @@ public:
 	void stopJump();
 	void update(double elapsedTime, Camera * camera);
 	void draw(Graphic & graphic, Camera & cameraOffset);
-	Vector2<double> getPosition();
+	Vector2<double> getPosition() const;
+	Vector2<double> getCenteredPosition() const;
 	std::vector<Vector2<double>> surrindingArea(int unitX, int unitY);
 	void handleTileCollision(std::vector<Tile*> tiles);
 	void handleTileCollision(Tile* tile);
 	void handleCollision(std::vector<BoundingBox*> boxes);
 	void handleCollision2(std::vector<BoundingBox> boxes);
+	void decreaseHealth(int damage);
+	void encreaseHealth(int lives);
+	const BoundingBox * getBoundingBox() const;
 private:
 	const double ACC;
 	const double SLOW_ACC;
@@ -43,7 +47,6 @@ private:
 	bool isLookingDown;
 	double dx;
 	double dy;
-	Direction facing;	
 	HUD hud;
 	BoundingBox headBox;
 	BoundingBox bodyBox;

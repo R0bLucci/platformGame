@@ -11,7 +11,7 @@
 const double FPS = 50;
 const double MAX_TIME = 1000 / FPS;
 extern const bool logger::verbose = true;
-extern const bool blitBB = true;
+extern const bool blitBB = false;
 
 Game::Game() : 
 elapsedTime(0), player(nullptr), level(nullptr) {
@@ -90,7 +90,7 @@ void Game::gameLoop(){
 
 		this->update();
 		this->draw(graphic);
-	} 
+	}
 }
 
 void Game::update(){

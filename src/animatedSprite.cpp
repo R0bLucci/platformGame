@@ -3,8 +3,8 @@
 #include "../header/boundingBox.hpp"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
-	Vector2<double> position, const double timeToUpdate) : 
-Sprite(graphic, textureName, originX, originY, width, height, position), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""){
+	Vector2<double> position, Direction facing, const double timeToUpdate) : 
+Sprite(graphic, textureName, originX, originY, width, height, position), facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""){
 	this->setUpAnimation();
 }
 

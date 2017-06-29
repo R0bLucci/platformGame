@@ -12,8 +12,12 @@ struct Graphic;
 
 class AnimatedSprite : public Sprite {
 public:
+	enum Direction {
+		UP, RIGHT, BOTTOM, LEFT 
+	};
+
 	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
-		Vector2<double> position ,const double timeToUpdate);
+		Vector2<double> position , Direction facing, const double timeToUpdate);
 
 	~AnimatedSprite();
 	void update(double elapsedTime, const Vector2<double> & cameraOffset = {0.0, 0.0});
@@ -21,10 +25,8 @@ public:
 	void draw(Graphic & graphic, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
 protected:
-	enum Direction {
-		UP, RIGHT, BOTTOM, LEFT 
-	};
 
+	Direction facing;
 	std::size_t frameIndex;
 	const double timeToUpdate;
 	double elapsedTime;

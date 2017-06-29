@@ -7,9 +7,9 @@
 #include "../header/graphic.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
-AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, 100),
+AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, LEFT, 100),
 ACC(0.0015), SLOW_ACC(0.75), MAX_ACC(.345), SLOW_JUMP(.65), currentAcc(0.0), isGrounded(false), isLookingUp(false), isLookingDown(false),  
-dx(0.0), dy(0.0), facing(LEFT), 
+dx(0.0), dy(0.0), 
 hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
 bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)){
@@ -32,7 +32,11 @@ void Player::setUpAnimation(){
 	this->currentAnimation = "idleLeft";
 }
 
-Vector2<double> Player::getPosition(){
+Vector2<double> Player::getPosition() const {
+	return this->position;
+}
+
+Vector2<double> Player::getCenteredPosition() const {
 	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
 			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
 }
@@ -104,13 +108,10 @@ void Player::handleCollision2(std::vector<BoundingBox> boxes){
 			case BoundingBox::side::RIGHT:
 				this->position.x = box.getRightSide();
 				//logger::log("HEAD Colliding right");	
-				hud.decreaseHealth(1);
 			break;
 			case BoundingBox::side::LEFT:
 				this->position.x = box.getLeftSide() - (this->headBox.getWidth());
-				hud.decreaseHealth(1);
 				//logger::log("HEAD Colliding left");	
-				hud.increaseHealth(1);
 			break;
 			case BoundingBox::side::BOTTOM:
 				this->dy = 0;
@@ -229,6 +230,7 @@ void Player::draw(Graphic & graphic, Camera & camera){
 	AnimatedSprite::draw(graphic, camera.getPosition());
 	graphic.blitBoundingBox("box.png", NULL, { this->headBox.position.x, this->headBox.position.y, this->headBox.w, this->headBox.h});
 	graphic.blitBoundingBox("box.png", NULL, { this->bodyBox.position.x, this->bodyBox.position.y, this->bodyBox.w, this->bodyBox.h});
+	//graphic.blitBoundingBox("box.png", NULL, { this->boundingBox->position.x, this->boundingBox->position.y, this->boundingBox->w, this->boundingBox->h});
 }
 
 void Player::moveRight(){
@@ -295,4 +297,16 @@ void Player::stopLookUp(){
 void Player::stopLookDown(){
 	this->isLookingDown = false;
 	this->idle();
+}
+
+void Player::decreaseHealth(int damage){
+	hud.decreaseHealth(damage);
+}
+
+void Player::encreaseHealth(int lives){
+	hud.increaseHealth(lives);
+}
+
+const BoundingBox * Player::getBoundingBox() const {
+	return this->boundingBox;
 }

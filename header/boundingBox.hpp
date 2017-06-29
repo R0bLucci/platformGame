@@ -28,10 +28,10 @@ public:
 	Vector2<int> position;
 	int w, h;	
 	
-	inline int getTopSide() const { return this->position.y + this->offset.y; }
-	inline int getRightSide() const { return (this->position.x + this->offset.x) + this->w; }
-	inline int getBottomSide() const { return (this->position.y + this->offset.y) + this->h; }	
-	inline int getLeftSide() const { return this->position.x + this->offset.x; }
+	inline int getTopSide() const { return this->position.y /*+ this->offset.y*/; }
+	inline int getRightSide() const { return (this->position.x /*+ this->offset.x*/) + this->w; }
+	inline int getBottomSide() const { return (this->position.y /*+ this->offset.y*/) + this->h; }	
+	inline int getLeftSide() const { return this->position.x /*+ this->offset.x*/; }
 	inline int getWidth() const { return this->w; }
 	inline int getHeight() const { return this->h; }
 	inline void setWidth(double w) { this->w = w;}

@@ -13,6 +13,7 @@ struct Tile;
 struct Player;
 struct Camera;
 struct BoundingBox;
+struct Enemy;
 
 class Level {
 public: 
@@ -32,6 +33,7 @@ private:
 	std::string currentLevelName;
 	std::vector<BoundingBox*> collidables;
 	std::vector<Tileset*> tilesetList;
+	std::vector<Enemy*> enemies;
 	int width;
 	int height;
 	Camera * camera;
@@ -40,6 +42,7 @@ private:
 	void mapLoader(std::string mapName, Graphic &graphic);
 	void parseCSV(const char * text, std::string name, int layerWidht, int layerHeight);
 	void addTileToTileset(std::unique_ptr<Tile> & tile);
+	void generateEnemy(Graphic & graphic, std::string enemyType, const Vector2<double> & spawnPoint);
 };
 
 

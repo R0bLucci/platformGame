@@ -37,6 +37,7 @@ private:
 	int scalerY; // Store the scale ratio of which the tile will be scaled to
 	bool isBackground; // use to determine if this instance is used as a background tile
 	
+	
 };
 
 #endif

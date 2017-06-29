@@ -8,6 +8,7 @@
 #include "../header/player.hpp"
 #include "../header/camera.hpp"
 #include "../header/boundingBox.hpp"
+#include "../header/bat.hpp"
 
 using namespace tinyxml2;
 
@@ -27,6 +28,10 @@ Level::~Level(){
 	for(int i=0, n = this->collidables.size(); i < n; ++i){
 		delete this->collidables[i];
 		this->collidables[i] = nullptr;
+	}
+	for(int i=0, n = this->enemies.size(); i < n; ++i){
+		delete this->enemies[i];
+		this->enemies[i] = nullptr;
 	}
 	delete this->camera;
 	this->camera = nullptr;
@@ -134,10 +139,23 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 				obj->QueryDoubleAttribute("y", &y);
 				this->spawnPoint = Vector2<double>(std::ceil(x) * globals::SPRITE_SCALER, 
 							std::ceil(y) * globals::SPRITE_SCALER);
+			}else if(name == "enemies"){
+				double x = 0, y = 0;	
+				std::string enemyType = obj->Attribute("name");
+				obj->QueryDoubleAttribute("x", &x);
+				obj->QueryDoubleAttribute("y", &y);
+				this->generateEnemy(graphic, enemyType, 
+						Vector2<double>(x, y) * globals::SPRITE_SCALER); 
 			}
 			obj = obj->NextSiblingElement("object");
 		}
 		objGroup = objGroup->NextSiblingElement("objectgroup");
+	}
+}
+
+void Level::generateEnemy(Graphic & graphic, std::string enemyType, const Vector2<double> & spawnPoint){
+	if(enemyType == "bat") {
+		this->enemies.push_back(new Bat(graphic, spawnPoint));
 	}
 }
 
@@ -205,10 +223,15 @@ void Level::update(double elapsedTime, std::unique_ptr<Player>& player){
 	std::vector<BoundingBox> onScreen;
 	for(int i = 0, n = this->collidables.size(); i < n; i++){
 		BoundingBox * b = this->collidables[i];
-		if(b->isOnCamera(this->camera) && player->isColliding(b)){
+		//if(b->isOnCamera(this->camera) && player->isColliding(b)){
+		if(this->camera->isOnCamera(*b) && player->isColliding(b)){
 			BoundingBox copy = *b;
 			onScreen.push_back(copy);
 		}
+	}
+
+	for(int i = 0, n = this->enemies.size(); i < n; i++){
+		this->enemies[i]->update(elapsedTime, *player, *this->camera);
 	}
 
 	if(onScreen.size() > 0){
@@ -219,6 +242,10 @@ void Level::update(double elapsedTime, std::unique_ptr<Player>& player){
 void Level::draw(Graphic &graphic){
 	for(int i = 0, n = this->tilesetList.size(); i < n; i++){
 		this->tilesetList[i]->draw(graphic, *this->camera);
+	}
+
+	for(int i = 0, n = this->enemies.size(); i < n; i++){
+		this->enemies[i]->draw(graphic, *this->camera);
 	}
 }
 
