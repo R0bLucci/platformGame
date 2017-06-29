@@ -52,13 +52,14 @@ void Tile::setSource(Tileset &tileset){
 }
 
 void Tile::draw(Tileset & tileset, Graphic &graphic, Camera & camera){
-	if(this->isVisible(camera)){
-		this->dest = { (int)(this->position.x - camera.getPosition().x), 
-		 		(int)(this->position.y - camera.getPosition().y), 
+	//if(this->isVisible(camera)){
+	if(camera.isOnCamera(BoundingBox(*this))){
+		this->dest = { (int)(this->position.x - camera.getPosition().x), (int)(this->position.y - camera.getPosition().y), 
 				this->w , 
 				this->h };
 		graphic.blitSurface(tileset.getImage().getTexture(), &this->source, &this->dest);
-		graphic.blitBoundingBox("box.png", NULL, { this->position.x, this->position.y, this->w, this->h});
+		if(!this->isBackground)
+			graphic.blitBoundingBox("box.png", NULL, { this->position.x, this->position.y, this->w, this->h});
 	}
 }	
 
@@ -69,10 +70,6 @@ void Tile::update(double elapsedTime, Camera * camera) {
 
 bool Tile::isVisible(const Camera &camera) const {
 	
-	if(!this->box){
-		return false;
-	}
-
 	int cameraLeft, tileLeft;
 	int cameraRight, tileRight;
 	int cameraTop, tileTop;
@@ -100,4 +97,3 @@ bool Tile::isVisible(const Camera &camera) const {
 Vector2<int> Tile::getOrigin(){
 	return this->position;
 }
-
