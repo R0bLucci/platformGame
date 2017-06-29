@@ -39,7 +39,8 @@ SDL_Texture * Graphic::getTexture(const std::string name, bool isLevel){
 			SDL_FreeSurface(surface);
 			return (SDL_Texture*) this->throwError("Could not load surface", name);
 		}
-
+		// make black color transparent
+		SDL_SetColorKey(surface, SDL_TRUE, 0);
 		SDL_Texture * texture = SDL_CreateTextureFromSurface(this->renderer, surface);
 		if(!texture){
 			SDL_FreeSurface(surface);
