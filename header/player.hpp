@@ -9,6 +9,7 @@
 struct Graphic;
 struct Tile;
 struct Camera;
+struct Arm;
 
 class Player : public AnimatedSprite {
 public:
@@ -36,6 +37,8 @@ public:
 	void decreaseHealth(int damage);
 	void encreaseHealth(int lives);
 	const BoundingBox * getBoundingBox() const;
+	
+	int getHealth() const;
 private:
 	const double ACC;
 	const double SLOW_ACC;
@@ -52,6 +55,7 @@ private:
 	BoundingBox bodyBox;
 	void setUpAnimation();
 	void accelerate(double elapsedTime);
+	Arm * weapon;
 };
 
 #endif

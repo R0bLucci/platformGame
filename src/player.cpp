@@ -5,6 +5,7 @@
 #include "../header/camera.hpp"
 #include "../header/logger.hpp"
 #include "../header/graphic.hpp"
+#include "../header/pistol.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, LEFT, 100),
@@ -12,7 +13,8 @@ ACC(0.0015), SLOW_ACC(0.75), MAX_ACC(.345), SLOW_JUMP(.65), currentAcc(0.0), isG
 dx(0.0), dy(0.0), 
 hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
-bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)){
+bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)),
+weapon(new Pistol(graphic, spawnPoint)) {
 	this->setUpAnimation();
 }
 
@@ -57,6 +59,10 @@ void Player::update(double elapsedTime, Camera *camera){
 	AnimatedSprite::update(elapsedTime);
 	this->headBox.moveBoundingBox(this->position);
 	this->bodyBox.moveBoundingBox(this->position);
+
+	if(this->weapon){
+		this->weapon->update(elapsedTime, this->facing);
+	}
 
 	if(camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
@@ -227,6 +233,9 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 
 void Player::draw(Graphic & graphic, Camera & camera){
 	this->hud.draw(graphic, camera.getPosition());
+	if(this->weapon){
+		this->weapon->draw(graphic, camera.getPosition(), this->getCenteredPosition());
+	}
 	AnimatedSprite::draw(graphic, camera.getPosition());
 	graphic.blitBoundingBox("box.png", NULL, { this->headBox.position.x, this->headBox.position.y, this->headBox.w, this->headBox.h});
 	graphic.blitBoundingBox("box.png", NULL, { this->bodyBox.position.x, this->bodyBox.position.y, this->bodyBox.w, this->bodyBox.h});
@@ -271,7 +280,8 @@ void Player::lookUp(){
 	this->isLookingUp = true;
 	this->dx = 0.0;
 	//if(this->isGrounded){
-		this->setCurrentAnimation(this->facing == RIGHT ? "lookUpRight" : "lookUpLeft");	
+	this->facing = (this->facing == RIGHT || this->facing == UP_RIGHT) ? UP_RIGHT : UP_LEFT;
+	this->setCurrentAnimation(this->facing == UP_RIGHT || this->facing == RIGHT ? "lookUpRight" : "lookUpLeft");	
 	//}
 }
 
@@ -279,24 +289,28 @@ void Player::lookDown(){
 	this->isLookingDown = true;
 	this->dx = 0.0;
 	//if(this->isGrounded){
-		this->setCurrentAnimation(this->facing == RIGHT ? "lookDownRight" : "lookDownLeft");	
+	this->facing = (this->facing == RIGHT || this->facing == BOTTOM_RIGHT) ? BOTTOM_RIGHT : BOTTOM_LEFT;
+	this->setCurrentAnimation(this->facing == BOTTOM_RIGHT || this->facing == RIGHT ? "lookDownRight" : "lookDownLeft");	
 	//}
 }
 
 void Player::idle() {
 	this->dx = 0.0;
-	this->setCurrentAnimation(this->facing == RIGHT ? "idleRight" : "idleLeft");
+	this->facing = (this->facing == RIGHT || this->facing == UP_RIGHT || this->facing == BOTTOM_RIGHT) ? RIGHT : LEFT;
+	this->setCurrentAnimation(this->facing == RIGHT || this->facing == UP_RIGHT || this->facing == BOTTOM_RIGHT? "idleRight" : "idleLeft");
 }
 
 
 void Player::stopLookUp(){
 	this->isLookingUp = false;
 	this->idle();
+	this->facing = (this->facing == RIGHT || this->facing == UP_RIGHT) ? RIGHT : LEFT;
 }
 
 void Player::stopLookDown(){
 	this->isLookingDown = false;
 	this->idle();
+	this->facing = (this->facing == RIGHT || this->facing == BOTTOM_RIGHT) ? RIGHT : LEFT;
 }
 
 void Player::decreaseHealth(int damage){
@@ -309,4 +323,8 @@ void Player::encreaseHealth(int lives){
 
 const BoundingBox * Player::getBoundingBox() const {
 	return this->boundingBox;
+}
+
+int Player::getHealth() const {
+	return hud.getHealth();
 }

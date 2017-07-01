@@ -13,7 +13,7 @@ struct Graphic;
 class AnimatedSprite : public Sprite {
 public:
 	enum Direction {
-		UP, RIGHT, BOTTOM, LEFT 
+		UP_RIGHT, UP_LEFT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT 
 	};
 
 	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 

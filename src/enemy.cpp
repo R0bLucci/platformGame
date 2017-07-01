@@ -53,12 +53,10 @@ void Enemy::moveLeft(){
 
 void Enemy::moveUp(){
 	position.y -= 1.0;
-	this->facing = UP;	
 }
 
 void Enemy::moveDown(){
 	position.y += 1.0;
-	this->facing = BOTTOM;	
 }
 
 BoundingBox::side Enemy::isPlayerOnSight(const BoundingBox & player) const{
@@ -78,8 +76,10 @@ void Enemy::moveToPlayer(const Vector2<double> & playerPos){
 
 	if(playerPos.y < this->position.y){
 		this->moveUp();
+		this->facing = (this->facing == RIGHT) ? UP_RIGHT : UP_LEFT;
 	}else if(playerPos.y > this->position.y){
 		this->moveDown();
+		this->facing = (this->facing == RIGHT) ? BOTTOM_RIGHT : BOTTOM_LEFT;
 	}
 	this->attackArea->moveBoundingBox(this->position);
 }
@@ -87,16 +87,16 @@ void Enemy::moveToPlayer(const Vector2<double> & playerPos){
 void Enemy::moveToPlayer(const BoundingBox & playerPos){
 	if(playerPos.getRightSide() > this->boundingBox->getLeftSide()){
 		this->moveRight();
-	}
-	if(playerPos.getLeftSide() < this->boundingBox->getRightSide()){
+	}else if(playerPos.getLeftSide() < this->boundingBox->getRightSide()){
 		this->moveLeft();
 	}
 
 	if(playerPos.getTopSide() < this->boundingBox->getTopSide()){
 		this->moveUp();
-	}
-	if(playerPos.getBottomSide() > this->boundingBox->getBottomSide()){
+		this->facing = (this->facing == RIGHT) ? UP_RIGHT : UP_LEFT;
+	}else if(playerPos.getBottomSide() > this->boundingBox->getBottomSide()){
 		this->moveDown();
+		this->facing = (this->facing == RIGHT) ? BOTTOM_RIGHT : BOTTOM_LEFT;
 	}
 	this->attackArea->moveBoundingBox(this->position);
 }
