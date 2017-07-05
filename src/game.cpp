@@ -26,43 +26,43 @@ Game::~Game(){
 	//delete this->level;
 	//this->player = nullptr;
 	//this->level = nullptr;
-	logger::log("~Game()");
+	////logger::log("~Game()");
 }
 
 void Game::gameLoop(){
 	Graphic graphic;
 	Input input;
+	SDL_Event event;
 	this->level.reset(new Level(graphic, "level3"));
 	this->player.reset(new Player(graphic, this->level->getSpawnPoint()));
 
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
 	while(!quit){
-		SDL_Event event;
 		input.clear();
 		while(SDL_PollEvent(&event)){
-			logger::log("POLL EVENT");
+			//logger::log("POLL EVENT");
 			quit = input.handleInput(event);
 		}
 
 		if(input.wasKeyHeld(SDL_SCANCODE_RIGHT)){
-			logger::log("RIGHT");
+			//logger::log("RIGHT");
 			this->player->moveRight();
 		}else if(input.wasKeyHeld(SDL_SCANCODE_LEFT)){
-			logger::log("LEFT");
+			//logger::log("LEFT");
 			this->player->moveLeft();
 		}
 
-		if(input.wasKeyPressed(SDL_SCANCODE_SPACE)){
-			logger::log("JUMP");
+		if(input.wasKeyPressed(SDL_SCANCODE_Z)){
+			//logger::log("JUMP");
 			this->player->jump();
 		}else if(input.wasKeyReleased(SDL_SCANCODE_SPACE)){
-			logger::log("STOP JUMP");
+			//logger::log("STOP JUMP");
 			this->player->stopJump();
 		}
 
 		if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
-			logger::log("IDLE");
+			//logger::log("IDLE");
 			this->player->idle();
 		}
 
@@ -80,6 +80,10 @@ void Game::gameLoop(){
 
 		if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
 			quit = true;
+		}
+		
+		if(input.wasKeyPressed(SDL_SCANCODE_X)){
+			this->player->fire(graphic, *this->level);
 		}
 
 		this->calculateElapsedTime(initFrameTime);	

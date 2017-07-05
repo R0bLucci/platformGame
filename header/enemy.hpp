@@ -1,3 +1,5 @@
+#ifndef ENEMY_H
+#define ENEMY_H
 #include "animatedSprite.hpp"
 #include "boundingBox.hpp"
 
@@ -36,3 +38,4 @@ protected:
 	
 	BoundingBox::side isPlayerOnSight(const BoundingBox & player) const;
 };
+#endif

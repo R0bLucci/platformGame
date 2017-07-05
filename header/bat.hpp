@@ -1,3 +1,5 @@
+#ifndef BAT_H
+#define BAT_H
 #include "enemy.hpp"
 #include "vector.hpp"
 
@@ -22,3 +24,5 @@ private:
 	
 	void attackPlayer(Player & player, double elapsedTime);
 };
+
+#endif

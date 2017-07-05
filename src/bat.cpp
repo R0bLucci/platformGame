@@ -4,6 +4,7 @@
 #include "../header/logger.hpp"
 #include "../header/camera.hpp"
 #include "../header/globals.hpp"
+#include "../header/logger.hpp"
 
 namespace {
 
@@ -23,7 +24,9 @@ new BoundingBox(Vector2<double>(position.x, position.y), ATTACK_AREA_WIDTH, ATTA
 	this->setUpAnimation();
 }
 
-Bat::~Bat(){}
+Bat::~Bat(){
+	logger::log("R.I.P. Bat");
+}
 
 void Bat::setUpAnimation(){
 	this->addAnimation("flyLeft", 3, Vector2<double>(2, 2));

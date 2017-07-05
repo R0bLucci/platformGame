@@ -48,3 +48,7 @@ bool Sprite::isColliding(const BoundingBox * const box) const{
 	
 	return true;	
 }
+
+BoundingBox * Sprite::getBoundingBox() const{
+	return this->boundingBox;
+}

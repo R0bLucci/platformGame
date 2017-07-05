@@ -10,6 +10,7 @@ struct Graphic;
 struct Tile;
 struct Camera;
 struct Arm;
+struct Level;
 
 class Player : public AnimatedSprite {
 public:
@@ -39,6 +40,7 @@ public:
 	const BoundingBox * getBoundingBox() const;
 	
 	int getHealth() const;
+	void fire(Graphic & graphic, Level & levelEnvironment);
 private:
 	const double ACC;
 	const double SLOW_ACC;

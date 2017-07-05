@@ -14,6 +14,7 @@ struct Player;
 struct Camera;
 struct BoundingBox;
 struct Enemy;
+struct Bullet;
 
 class Level {
 public: 
@@ -26,14 +27,17 @@ public:
 	int getHeight() const;
 	Vector2<double> getSpawnPoint() const;
 	Camera * getCamera() const;
+
+	void handleBullet(Bullet * bullet);
+	std::vector<BoundingBox*> collidables;
+	std::vector<Enemy*> enemies;
+	std::vector<Bullet*> firedBullets;
 private:
 	Vector2<double> size;
 	Vector2<double> tileSize;
 	Vector2<double> spawnPoint;
 	std::string currentLevelName;
-	std::vector<BoundingBox*> collidables;
 	std::vector<Tileset*> tilesetList;
-	std::vector<Enemy*> enemies;
 	int width;
 	int height;
 	Camera * camera;

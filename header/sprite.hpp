@@ -19,6 +19,7 @@ public:
 	void update(double elapsedTime);
 	bool isColliding(const BoundingBox * const box) const;
 	Vector2<double> position;
+	BoundingBox * getBoundingBox() const;
 protected:
 	SDL_Rect source;
 	SDL_Texture * texture;

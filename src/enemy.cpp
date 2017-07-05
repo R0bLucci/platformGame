@@ -3,6 +3,7 @@
 #include "../header/vector.hpp"
 #include "../header/camera.hpp"
 #include "../header/player.hpp"
+#include "../header/logger.hpp"
 #include <string>
 
 Enemy::Enemy(Graphic& graphic, std::string textureName, int sourceX, int sourceY,
@@ -15,6 +16,7 @@ health(health), attackDamage(attackDamage), ATTACK_RATE(attackRate), timeBeforeA
 Enemy::~Enemy(){
 	delete this->attackArea;
 	this->attackArea = nullptr;
+	logger::log("enemy deleted");
 }
 
 

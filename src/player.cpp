@@ -6,6 +6,7 @@
 #include "../header/logger.hpp"
 #include "../header/graphic.hpp"
 #include "../header/pistol.hpp"
+#include "../header/level.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
 AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, LEFT, 100),
@@ -14,7 +15,7 @@ dx(0.0), dy(0.0),
 hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
 bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)),
-weapon(new Pistol(graphic, spawnPoint)) {
+weapon(new Pistol(graphic, 100.0, spawnPoint)) {
 	this->setUpAnimation();
 }
 
@@ -54,14 +55,14 @@ void Player::update(double elapsedTime, Camera *camera){
 		this->dy += globals::GRAVITY * elapsedTime;
 	}
 	this->position.y += this->dy * elapsedTime;
-	logger::log("posY POS:", this->position.y);
+	//logger::log("posY POS:", this->position.y);
 
 	AnimatedSprite::update(elapsedTime);
 	this->headBox.moveBoundingBox(this->position);
 	this->bodyBox.moveBoundingBox(this->position);
 
 	if(this->weapon){
-		this->weapon->update(elapsedTime, this->facing);
+		this->weapon->update(elapsedTime, this->facing, this->getCenteredPosition());
 	}
 
 	if(camera){
@@ -234,7 +235,7 @@ void Player::handleTileCollision(std::vector<Tile *> tiles){
 void Player::draw(Graphic & graphic, Camera & camera){
 	this->hud.draw(graphic, camera.getPosition());
 	if(this->weapon){
-		this->weapon->draw(graphic, camera.getPosition(), this->getCenteredPosition());
+		this->weapon->draw(graphic, camera.getPosition());
 	}
 	AnimatedSprite::draw(graphic, camera.getPosition());
 	graphic.blitBoundingBox("box.png", NULL, { this->headBox.position.x, this->headBox.position.y, this->headBox.w, this->headBox.h});
@@ -327,4 +328,9 @@ const BoundingBox * Player::getBoundingBox() const {
 
 int Player::getHealth() const {
 	return hud.getHealth();
+}
+
+void Player::fire(Graphic & graphic, Level & levelEnvironment){
+	if(!this->weapon) return;
+	levelEnvironment.handleBullet(this->weapon->fire(graphic)); 
 }

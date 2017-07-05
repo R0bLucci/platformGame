@@ -9,6 +9,8 @@
 #include "../header/camera.hpp"
 #include "../header/boundingBox.hpp"
 #include "../header/bat.hpp"
+#include "../header/bullet.hpp"
+#include "../header/logger.hpp"
 
 using namespace tinyxml2;
 
@@ -237,6 +239,20 @@ void Level::update(double elapsedTime, std::unique_ptr<Player>& player){
 	if(onScreen.size() > 0){
 		player->handleCollision2(onScreen);
 	}
+
+	if(this->firedBullets.size() > 0){
+		//logger::log("bullets around", this->firedBullets.size());	
+		std::vector<Bullet*>::iterator bullet = this->firedBullets.begin();
+		while(bullet != this->firedBullets.end()){
+			if((*bullet)){
+				//logger::log("bullet to be updated", ((*bullet)));
+				(*bullet)->update(elapsedTime, *this, bullet);
+			}
+			if(bullet != this->firedBullets.end()){
+				++bullet;
+			}
+		}
+	}
 }
 
 void Level::draw(Graphic &graphic){
@@ -245,7 +261,13 @@ void Level::draw(Graphic &graphic){
 	}
 
 	for(int i = 0, n = this->enemies.size(); i < n; i++){
-		this->enemies[i]->draw(graphic, *this->camera);
+		if(this->enemies[i])
+			this->enemies[i]->draw(graphic, *this->camera);
+	}
+
+	for(unsigned int i = 0; i < this->firedBullets.size();i++){
+		if(this->firedBullets[i])
+			this->firedBullets[i]->draw(graphic, *this->camera);
 	}
 }
 
@@ -255,4 +277,10 @@ Vector2<double> Level::getSpawnPoint() const{
 
 Camera* Level::getCamera() const{
 	return this->camera;
+}
+
+void Level::handleBullet(Bullet * bullet) {
+	if(bullet){
+		this->firedBullets.push_back(bullet);
+	}
 }
