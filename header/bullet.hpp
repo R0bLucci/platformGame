@@ -18,7 +18,7 @@ public:
 	};
 
 	Bullet(Graphic & graphic, int sourceX, int sourceY, int width, int height, 
-		orientation orientation, double timeToLive, Vector2<double> position);
+		double firePower, orientation orientation, double timeToLive, Vector2<double> position);
 
 	virtual ~Bullet();
 	
@@ -37,6 +37,7 @@ protected:
 	const double TIME_TO_LIVE;
 	double lifeTime;
 
+	double firePower;
 	Vector2<double> offset;	
 	
 	bool isTimeToDie() const;

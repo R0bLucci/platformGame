@@ -45,47 +45,45 @@ void Game::gameLoop(){
 			quit = input.handleInput(event);
 		}
 
+
+		if(input.wasKeyPressed(SDL_SCANCODE_UP)){
+			this->player->lookUp();			
+		}else if(input.wasKeyPressed(SDL_SCANCODE_DOWN)){
+			this->player->lookDown();
+		}else if(input.wasKeyReleased(SDL_SCANCODE_UP)){
+			this->player->stopLookUp();
+		}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
+			this->player->stopLookDown();
+		}
+
 		if(input.wasKeyHeld(SDL_SCANCODE_RIGHT)){
 			//logger::log("RIGHT");
 			this->player->moveRight();
 		}else if(input.wasKeyHeld(SDL_SCANCODE_LEFT)){
 			//logger::log("LEFT");
 			this->player->moveLeft();
+		}else if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
+			//logger::log("IDLE");
+			this->player->idle();
 		}
 
 		if(input.wasKeyPressed(SDL_SCANCODE_Z)){
 			//logger::log("JUMP");
 			this->player->jump();
-		}else if(input.wasKeyReleased(SDL_SCANCODE_SPACE)){
+		}else if(input.wasKeyReleased(SDL_SCANCODE_Z)){
 			//logger::log("STOP JUMP");
 			this->player->stopJump();
 		}
 
-		if(input.wasKeyReleased(SDL_SCANCODE_RIGHT) || input.wasKeyReleased(SDL_SCANCODE_LEFT)){
-			//logger::log("IDLE");
-			this->player->idle();
+		if(input.wasKeyPressed(SDL_SCANCODE_X)){
+			this->player->fire(graphic, *this->level);
 		}
 
-		if(input.wasKeyHeld(SDL_SCANCODE_UP)){
-			this->player->lookUp();			
-		}else if(input.wasKeyHeld(SDL_SCANCODE_DOWN)){
-			this->player->lookDown();
-		}
-		
-		if(input.wasKeyReleased(SDL_SCANCODE_UP)){
-			this->player->stopLookUp();
-		}else if(input.wasKeyReleased(SDL_SCANCODE_DOWN)){
-			this->player->stopLookDown();
-		}
 
 		if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
 			quit = true;
 		}
 		
-		if(input.wasKeyPressed(SDL_SCANCODE_X)){
-			this->player->fire(graphic, *this->level);
-		}
-
 		this->calculateElapsedTime(initFrameTime);	
 		
 		if(this->elapsedTime <= MAX_TIME){	

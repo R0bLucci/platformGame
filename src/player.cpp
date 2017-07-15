@@ -9,10 +9,10 @@
 #include "../header/level.hpp"
 
 Player::Player(Graphic & graphic, Vector2<double> spawnPoint) : 
-AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, spawnPoint, LEFT, 100),
+AnimatedSprite(graphic, "MyChar.png", 0, 0, 16, 16, 99.0, spawnPoint, LEFT, 100),
 ACC(0.0015), SLOW_ACC(0.75), MAX_ACC(.345), SLOW_JUMP(.65), currentAcc(0.0), isGrounded(false), isLookingUp(false), isLookingDown(false),  
 dx(0.0), dy(0.0), 
-hud(graphic, "TextBox.png", Vector2<double>(50, 50)),
+hud(graphic, "TextBox.png", 99.0, Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
 bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)),
 weapon(new Pistol(graphic, 100.0, spawnPoint)) {
@@ -33,15 +33,6 @@ void Player::setUpAnimation(){
 	
 	//set starting animation
 	this->currentAnimation = "idleLeft";
-}
-
-Vector2<double> Player::getPosition() const {
-	return this->position;
-}
-
-Vector2<double> Player::getCenteredPosition() const {
-	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
-			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
 }
 
 void Player::update(double elapsedTime, Camera *camera){
@@ -304,21 +295,24 @@ void Player::idle() {
 
 void Player::stopLookUp(){
 	this->isLookingUp = false;
-	this->idle();
 	this->facing = (this->facing == RIGHT || this->facing == UP_RIGHT) ? RIGHT : LEFT;
+	this->setCurrentAnimation(this->facing == RIGHT || this->facing == UP_RIGHT || this->facing == BOTTOM_RIGHT? "idleRight" : "idleLeft");
 }
 
 void Player::stopLookDown(){
 	this->isLookingDown = false;
-	this->idle();
 	this->facing = (this->facing == RIGHT || this->facing == BOTTOM_RIGHT) ? RIGHT : LEFT;
+	this->setCurrentAnimation(this->facing == RIGHT || this->facing == UP_RIGHT || this->facing == BOTTOM_RIGHT? "idleRight" : "idleLeft");
 }
 
 void Player::decreaseHealth(int damage){
+	damageText.resetClock();
+	AnimatedSprite::decreaseHealth(damage);
 	hud.decreaseHealth(damage);
 }
 
 void Player::encreaseHealth(int lives){
+	AnimatedSprite::encreaseHealth(lives);
 	hud.increaseHealth(lives);
 }
 

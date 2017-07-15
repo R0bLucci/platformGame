@@ -25,7 +25,7 @@ namespace HUDUnits {
 
 class HUD {
 public:
-	HUD(Graphic & graphic, std::string source, const Vector2<double> & position);
+	HUD(Graphic & graphic, std::string source, double playerHealth, const Vector2<double> & position);
 	~HUD();
 	
 	const Vector2<double> position;

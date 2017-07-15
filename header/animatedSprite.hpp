@@ -8,6 +8,8 @@
 #include "sprite.hpp"
 #include "globals.hpp"
 #include "vector.hpp"
+#include "text.hpp"
+
 struct Graphic;
 
 class AnimatedSprite : public Sprite {
@@ -16,16 +18,20 @@ public:
 		UP_RIGHT, UP_LEFT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT 
 	};
 
-	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
-		Vector2<double> position , Direction facing, const double timeToUpdate);
+	AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height,
+		double health, Vector2<double> position , Direction facing, const double timeToUpdate);
 
 	~AnimatedSprite();
 	void update(double elapsedTime, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
 	void draw(Graphic & graphic, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
+	Vector2<double> getPosition() const;
+	Vector2<double> getCenteredPosition() const;
+
 protected:
 
+	double health;
 	Direction facing;
 	std::size_t frameIndex;
 	const double timeToUpdate;
@@ -33,9 +39,13 @@ protected:
 	std::string currentAnimation;
 	void setUpAnimation();
 	void setCurrentAnimation(std::string animationName);
+
+	void decreaseHealth(const double damage);
+	void encreaseHealth(const double lives);
 	
 	void addAnimation(std::string animationName, int frames, Vector2<double> origin,  bool isHorizotal = true);
 	std::map<std::string, std::vector<SDL_Rect>> animations;	
+	DamageText damageText;
 private:
 	void moveBoundingBox(const Vector2<double> &cameraOffset = {0.0, 0.0});
 };

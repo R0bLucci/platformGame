@@ -1,10 +1,11 @@
 #include "../header/animatedSprite.hpp"
 #include <iostream>
 #include "../header/boundingBox.hpp"
+#include "../header/logger.hpp"
 
-AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, 
-	Vector2<double> position, Direction facing, const double timeToUpdate) : 
-Sprite(graphic, textureName, originX, originY, width, height, position), facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""){
+AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double health, Vector2<double> position, Direction facing, const double timeToUpdate) : 
+Sprite(graphic, textureName, originX, originY, width, height, position), health(health),
+facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""), damageText(graphic, position){
 	this->setUpAnimation();
 }
 
@@ -40,6 +41,7 @@ void AnimatedSprite::moveBoundingBox(const Vector2<double> &cameraOffset){
 
 void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOffset){
 	Sprite::update(elapsedTime);
+	damageText.update(elapsedTime, this->getCenteredPosition());
 	this->moveBoundingBox(cameraOffset);
 
 	this->elapsedTime += elapsedTime;
@@ -56,5 +58,22 @@ void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOff
 }
 
 void AnimatedSprite::draw(Graphic &graphic, const Vector2<double> &cameraOffset){
+	damageText.draw(graphic, cameraOffset);
 	Sprite::draw(graphic, cameraOffset);
 }
+
+void AnimatedSprite::decreaseHealth(const double damage){
+	damageText.accumulateDamage(damage);
+}
+
+void AnimatedSprite::encreaseHealth(const double lives){}
+
+Vector2<double> AnimatedSprite::getPosition() const {
+	return this->position;
+}
+
+Vector2<double> AnimatedSprite::getCenteredPosition() const {
+	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
+			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
+}
+

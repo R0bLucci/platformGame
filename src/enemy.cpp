@@ -8,10 +8,10 @@
 
 Enemy::Enemy(Graphic& graphic, std::string textureName, int sourceX, int sourceY,
 	int width, int height, double health, double attackDamage, double attackRate, Vector2<double> spawnPoint, BoundingBox * attackArea, AnimatedSprite::Direction facing,  double timeToUpdate) : 
-AnimatedSprite(graphic, textureName, sourceX, sourceY, width, height, spawnPoint, facing, timeToUpdate),
-health(health), attackDamage(attackDamage), ATTACK_RATE(attackRate), timeBeforeAttack(0.0), attackArea(attackArea)
+AnimatedSprite(graphic, textureName, sourceX, sourceY, width, height, health, spawnPoint, facing, timeToUpdate),
+attackDamage(attackDamage), ATTACK_RATE(attackRate), timeBeforeAttack(0.0), attackArea(attackArea),
+intakeDamage(0.0), hitTimer(1000, false)
 {}
-
 
 Enemy::~Enemy(){
 	delete this->attackArea;
@@ -19,11 +19,15 @@ Enemy::~Enemy(){
 	logger::log("enemy deleted");
 }
 
-
 void Enemy::update(double elapsedTime, Player & player, const Camera & camera){
+	this->hitTimer.update(elapsedTime);
+	if(this->hitTimer.isTimeUp() || this->damageText.isTextShowing()){
+		hitTimer.stop();
+		AnimatedSprite::decreaseHealth(this->intakeDamage);
+		this->intakeDamage = 0.0;
+	}
 	AnimatedSprite::update(elapsedTime);
 }
-
 
 void Enemy::draw(Graphic & graphic, const Camera & camera){
 	if(camera.isOnCamera(*this->boundingBox)){
@@ -101,4 +105,14 @@ void Enemy::moveToPlayer(const BoundingBox & playerPos){
 		this->facing = (this->facing == RIGHT) ? BOTTOM_RIGHT : BOTTOM_LEFT;
 	}
 	this->attackArea->moveBoundingBox(this->position);
+}
+
+void Enemy::encreaseHealth(const double lives){
+	AnimatedSprite::encreaseHealth(lives);
+}
+
+void Enemy::decreaseHealth(const double damage){
+	this->hitTimer.start();
+	damageText.resetClock();
+	this->intakeDamage += damage;
 }

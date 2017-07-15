@@ -35,5 +35,5 @@ bool Input::wasKeyHeld(const SDL_Scancode code){
 void Input::clear(){
 	this->keyPressed.clear();
 	this->keyReleased.clear();
-	this->keyHeld.clear();
+	//this->keyHeld.clear();
 }

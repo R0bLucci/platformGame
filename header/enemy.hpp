@@ -2,6 +2,7 @@
 #define ENEMY_H
 #include "animatedSprite.hpp"
 #include "boundingBox.hpp"
+#include "timer.hpp"
 
 struct Graphic;
 struct Camera;
@@ -18,9 +19,11 @@ public:
 	virtual void draw(Graphic & graphic, const Camera & camera);
 
 	inline double getHealth() const { return this->health; }
+	
+	void encreaseHealth(const double lives);
+	void decreaseHealth(const double damage);
 
 private:
-	double health;
 	virtual void setUpAnimation() = 0; // set animation for the enemy
 
 protected:
@@ -35,6 +38,8 @@ protected:
 	const double ATTACK_RATE;
 	double timeBeforeAttack;
 	BoundingBox * attackArea;
+	double intakeDamage;
+	Timer hitTimer;
 	
 	BoundingBox::side isPlayerOnSight(const BoundingBox & player) const;
 };

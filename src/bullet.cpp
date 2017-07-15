@@ -6,10 +6,10 @@
 #include "../header/graphic.hpp"
 #include "../header/logger.hpp"
 
-Bullet::Bullet(Graphic & graphic, int sourceX, int sourceY, int width, int height, orientation orientation, double timeToLive, Vector2<double> position) :
+Bullet::Bullet(Graphic & graphic, int sourceX, int sourceY, int width, int height, double firePower, orientation orientation, double timeToLive, Vector2<double> position) :
 Sprite(graphic, "Bullet.png", sourceX, sourceY, width, height, position),
 bulletOrientation(orientation),
-TIME_TO_LIVE(timeToLive), lifeTime(0.0) {}
+TIME_TO_LIVE(timeToLive), lifeTime(0.0), firePower(firePower) {}
 
 Bullet::~Bullet(){
 	logger::log("~Bullet()");
@@ -53,8 +53,9 @@ bool Bullet::hasBulletHitEnemy(std::vector<Enemy*> & enemies){
 	while(begin != end){
 		if(this->isColliding((*begin)->getBoundingBox())){
 			logger::log("enemy hit"); 
-			delete *begin;
-			enemies.erase(begin);
+			(*begin)->decreaseHealth(this->firePower);
+			/*delete *begin;
+			enemies.erase(begin);*/
 			return true;
 		}
 		++begin;

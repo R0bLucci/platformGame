@@ -253,6 +253,8 @@ void Level::update(double elapsedTime, std::unique_ptr<Player>& player){
 			}
 		}
 	}
+
+
 }
 
 void Level::draw(Graphic &graphic){

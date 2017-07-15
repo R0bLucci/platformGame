@@ -28,8 +28,6 @@ public:
 	void stopJump();
 	void update(double elapsedTime, Camera * camera);
 	void draw(Graphic & graphic, Camera & cameraOffset);
-	Vector2<double> getPosition() const;
-	Vector2<double> getCenteredPosition() const;
 	std::vector<Vector2<double>> surrindingArea(int unitX, int unitY);
 	void handleTileCollision(std::vector<Tile*> tiles);
 	void handleTileCollision(Tile* tile);

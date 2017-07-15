@@ -125,9 +125,9 @@ void HUD::HealthLevel::parseHealthValue(int& column, std::string& sHealth, int b
 
 /*------------------- Start HUD -----------------------*/
 
-HUD::HUD(Graphic &graphic, std::string source, const Vector2<double>& position) :
+HUD::HUD(Graphic &graphic, std::string source, double health, const Vector2<double>& position) :
 position(position),
-health(99){
+health(health){
 	this->maxHealth = this->health;
 	this->healthBar = new HealthBar(graphic, source, position, *this);
 	this->healthLevel = new HealthLevel(graphic, source, 0, 56, 

@@ -10,7 +10,7 @@ bool PistolBullet::isSet = false;
 std::map<Bullet::orientation, std::pair<SDL_Rect, Vector2<double>>> PistolBullet::sources;
 
 PistolBullet::PistolBullet(Graphic & graphic, Bullet::orientation orientation, Vector2<double> position) :
-Bullet(graphic, 64, 23, 16, 2, orientation, 200, position) {
+Bullet(graphic, 64, 23, 16, 2, 1.0, orientation, 200, position) {
 	this->setBulletOrientations();
 	this->source = PistolBullet::sources[orientation].first;
 	this->setBulletOffset(orientation);	
