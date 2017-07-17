@@ -37,3 +37,7 @@ void Digit::draw(Graphic & graphic, const Vector2<double> cameraOffset){
 			(int) units::DIGIT_W_AND_H * globals::SPRITE_SCALER };
 	graphic.blitSurface(this->texture, &this->source, &dest); 
 }
+
+Vector2<double> & Digit::getPosition() {
+	return this->position;
+}

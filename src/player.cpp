@@ -306,7 +306,8 @@ void Player::stopLookDown(){
 }
 
 void Player::decreaseHealth(int damage){
-	damageText.resetClock();
+	damageText->resetClock();
+	damageText->show();
 	AnimatedSprite::decreaseHealth(damage);
 	hud.decreaseHealth(damage);
 }

@@ -8,6 +8,7 @@ struct Graphic;
 struct Player;
 struct Level;
 struct Camera;
+struct GameNotification;
 
 class Game {
 public:
@@ -16,6 +17,7 @@ public:
 
 	// Game loop that handles event, sprites updates, and draw to screen 
 	void gameLoop();
+	static GameNotification * getInGameNotifier();
 private:
 
 	// Update oblects in the game
@@ -28,8 +30,9 @@ private:
 	// Time passed on each interation of the game loop
 	double elapsedTime;
 
-	std::unique_ptr<Player> player;
+	std::shared_ptr<Player> player;
 	std::unique_ptr<Level> level;
+	static GameNotification * notifications;
 };
 
 #endif

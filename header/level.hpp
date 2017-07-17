@@ -21,7 +21,7 @@ public:
 	Level(Graphic &graphic,std::string levelName);
 	~Level();
 
-	void update(double elapsedTime, std::unique_ptr<Player>& player);
+	void update(double elapsedTime, std::shared_ptr<Player>& player);
 	void draw(Graphic &graphic);
 	int getWidth() const;
 	int getHeight() const;
@@ -30,7 +30,7 @@ public:
 
 	void handleBullet(Bullet * bullet);
 	std::vector<BoundingBox*> collidables;
-	std::vector<Enemy*> enemies;
+	std::vector<std::shared_ptr<Enemy>> enemies;
 	std::vector<Bullet*> firedBullets;
 private:
 	Vector2<double> size;

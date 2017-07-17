@@ -10,8 +10,6 @@ clock(0.0), isRunning(startTimer) {}
 Timer::~Timer(){}
 
 bool Timer::isTimeUp() const {
-	if(this->isPaused()) return false;
-
 	return this->clock >= this->INTERVAL;
 }
 
@@ -31,48 +29,24 @@ void Timer::resume(){
 		this->isRunning = !this->isRunning;
 } 
 void Timer::start(){
-	this->clock = 0.0;
 	if(!this->isRunning){
 		this->isRunning = !this->isRunning;
 	}
 }
 
-bool Timer::isPaused() const {
-	return !this->isRunning;
+void Timer::stopAndReset(){
+	this->stop();
+	this->resetClock();
+}
+void Timer::resetAndStart(){
+	this->resetClock();
+	this->start();
 }
 
-/* Start Animation */
-Animation::Animation(double duration) :
-Animation(duration, true) {}
-
-Animation::Animation(double duration, bool start):
-ANIMATION_TIME(duration), animationCurrentTime(duration), isStarted (start){}
-
-Animation::~Animation(){}
-
-void Animation::update(double elapsedTime){
-	if(this->isStarted && !this->isAnimationDone()){
-		this->animationCurrentTime -= elapsedTime;
-	}
+bool Timer::isClockRunning() const {
+	return this->isRunning;
 }
 
-bool Animation::isAnimationDone() const {
-	if(!this->isStarted) return true;
-	return this->animationCurrentTime < 0.0;
+void Timer::resetClock(){
+	this->clock = 0.0;
 }
-
-void Animation::start(){
-	if(!this->isStarted) 
-		this->isStarted = true;
-}
-
-void Animation::stop(){
-	if(this->isStarted)
-		this->isStarted = false;
-}
-
-void Animation::resetAnimationTimer(){
-	if(this->animationCurrentTime < this->ANIMATION_TIME)
-		this->animationCurrentTime = this->ANIMATION_TIME;
-}
-/* End Animation */

@@ -3,6 +3,8 @@
 #include "../header/vector.hpp"
 #include "../header/camera.hpp"
 #include "../header/player.hpp"
+#include "../header/game.hpp"
+#include "../header/gameNotification.hpp"
 #include "../header/logger.hpp"
 #include <string>
 
@@ -16,14 +18,16 @@ intakeDamage(0.0), hitTimer(1000, false)
 Enemy::~Enemy(){
 	delete this->attackArea;
 	this->attackArea = nullptr;
+	damageText->expire();
+	damageText->show();
 	logger::log("enemy deleted");
 }
 
 void Enemy::update(double elapsedTime, Player & player, const Camera & camera){
 	this->hitTimer.update(elapsedTime);
-	if(this->hitTimer.isTimeUp() || this->damageText.isTextShowing()){
-		hitTimer.stop();
-		AnimatedSprite::decreaseHealth(this->intakeDamage);
+	if(this->hitTimer.isTimeUp() || this->damageText->isTextShowing()){
+		hitTimer.stopAndReset();
+		damageText->show();
 		this->intakeDamage = 0.0;
 	}
 	AnimatedSprite::update(elapsedTime);
@@ -48,21 +52,21 @@ void Enemy::draw(Graphic & graphic, const Camera & camera){
 }
 
 void Enemy::moveRight(){
-	position.x += 1.0;
+	this->position.x += 1.0;
 	this->facing = RIGHT;	
 }
 
 void Enemy::moveLeft(){
-	position.x -= 1.0;
+	this->position.x -= 1.0;
 	this->facing = LEFT;	
 }
 
 void Enemy::moveUp(){
-	position.y -= 1.0;
+	this->position.y -= 1.0;
 }
 
 void Enemy::moveDown(){
-	position.y += 1.0;
+	this->position.y += 1.0;
 }
 
 BoundingBox::side Enemy::isPlayerOnSight(const BoundingBox & player) const{
@@ -112,7 +116,8 @@ void Enemy::encreaseHealth(const double lives){
 }
 
 void Enemy::decreaseHealth(const double damage){
-	this->hitTimer.start();
-	damageText.resetClock();
-	this->intakeDamage += damage;
+	this->hitTimer.resetAndStart();
+	damageText->resetClock();
+	//this->intakeDamage += damage;
+	AnimatedSprite::decreaseHealth(damage);
 }

@@ -30,7 +30,7 @@ Text(graphic, position, units::NEG_SIGN_W, units::NEG_SIGN_H),
 onesColumn(graphic, 0.0, position, Digit::color::RED),
 tensColumn(graphic, 0.0, position, Digit::color::RED),
 riseLevel(0.0),
-damage(0.0), drawTime(2000, false) {
+damage(0.0), drawTime(2000, false), expired(false){
 	this->sourceText = {
 			units::NEG_SIGN_X,
 			units::NEG_SIGN_Y,
@@ -39,10 +39,15 @@ damage(0.0), drawTime(2000, false) {
 	};
 }
 
-DamageText::~DamageText(){}
+DamageText::~DamageText(){
+	logger::log("~DamageText()");
+}
+
+void DamageText::show() {
+	this->drawTime.start();
+}
 
 void DamageText::accumulateDamage(const double damage){
-	this->drawTime.start();
 	this->damage += damage; 
 	if(this->damage < 10){
 		this->onesColumn.updateSource(this->damage);
@@ -53,27 +58,21 @@ void DamageText::accumulateDamage(const double damage){
 	}
 }
 
-void DamageText::update(double elapsedTime, const Vector2<double> newPos){
-	if(this->drawTime.isAnimationDone()) return;
+bool DamageText::update(double elapsedTime){
+	if(!this->isTextShowing()){
+		this->resetDamage();
+		this->drawTime.stopAndReset();
+		this->riseLevel = 0.0;
+		return false;	
+	}
 
 	this->drawTime.update(elapsedTime);
 	this->rise();
-	this->position = newPos;
-	this->position.y += this->riseLevel;
-	this->onesColumn.updatePosition(this->position);
-	if(this->damage >= 10){
-		this->tensColumn.updatePosition(this->position + 
-			Vector2<double>(-units::DIGIT_W_AND_H * globals::SPRITE_SCALER, 0.0));
-	}
+	return true;
 }
 
 void DamageText::draw(Graphic & graphic, const Vector2<double> cameraOffset){
-	if(this->drawTime.isAnimationDone()){
-		this->drawTime.stop();
-		this->resetDamage();
-		this->riseLevel = 0.0;
-		return;	
-	}
+	if(!this->isTextShowing()) return ;
 	Text::draw(graphic, cameraOffset - this->getSignOffset());
 	this->onesColumn.draw(graphic, cameraOffset);
 	if(this->damage >= 10){
@@ -92,16 +91,17 @@ Vector2<double> DamageText::getSignOffset() const {
 }
 
 void DamageText::resetDamage(){
-	if(this->damage != 0.0)
+	if(this->drawTime.isClockRunning() && this->damage != 0.0){
 		this->damage = 0.0;
+	}
 }
 
 void DamageText::resetClock(){
-	this->drawTime.resetAnimationTimer();
+	this->drawTime.resetClock();
 }
 
 bool DamageText::isTextShowing() const{
-	return !this->drawTime.isAnimationDone();
+	return this->drawTime.isClockRunning() && !this->drawTime.isTimeUp();
 }
 
 std::pair<int, int> DamageText::handleDigits(){
@@ -116,6 +116,37 @@ std::pair<int, int> DamageText::handleDigits(){
 }
 
 void DamageText::rise(){
-	if(this->riseLevel > -35.0) --(this->riseLevel);
+	double before = this->riseLevel;
+	if(this->riseLevel > -35.0){
+		before = (this->riseLevel)--;
+	}
+
+	if(this->isExpired()){
+		this->position.y += (this->riseLevel - before);
+	}else{
+		this->position.y += this->riseLevel;
+	}
+	this->onesColumn.updatePosition(this->position);
+	if(this->damage >= 10){
+		this->tensColumn.updatePosition(this->position + 
+			Vector2<double>(-units::DIGIT_W_AND_H * globals::SPRITE_SCALER, 0.0));
+	}
+}
+
+void DamageText::setPos(const Vector2<double> & pos){
+	this->position = pos;
+	this->onesColumn.updatePosition(this->position);
+	if(this->damage >= 10){
+		this->tensColumn.updatePosition(this->position + 
+			Vector2<double>(-units::DIGIT_W_AND_H * globals::SPRITE_SCALER, 0.0));
+	}
+}
+
+bool DamageText::isExpired() const {
+	return this->expired;
+}
+
+void DamageText::expire(){
+	this->expired = true;
 }
 /* End DamageText */ 

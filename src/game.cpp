@@ -6,6 +6,7 @@
 #include "../header/player.hpp"
 #include "../header/level.hpp"
 #include "../header/camera.hpp"
+#include "../header/gameNotification.hpp"
 #include "../header/logger.hpp"
 
 const double FPS = 50;
@@ -13,12 +14,20 @@ const double MAX_TIME = 1000 / FPS;
 extern const bool logger::verbose = true;
 extern const bool blitBB = false;
 
+GameNotification * Game::getInGameNotifier(){
+	logger::log("notification", Game::notifications);
+	return Game::notifications;
+}
+
+GameNotification * Game::notifications = GameNotification::createGameNotification();
+
 Game::Game() : 
-elapsedTime(0), player(nullptr), level(nullptr) {
+elapsedTime(0), player(nullptr), level(nullptr){
 	//SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_Init(0);
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
 	SDL_InitSubSystem(SDL_INIT_TIMER);
+	
 }
 
 Game::~Game(){
@@ -35,6 +44,8 @@ void Game::gameLoop(){
 	SDL_Event event;
 	this->level.reset(new Level(graphic, "level3"));
 	this->player.reset(new Player(graphic, this->level->getSpawnPoint()));
+	GameNotification * g = Game::getInGameNotifier(); 
+	g->addPlayerNotifier(player);
 
 	double initFrameTime = (double) SDL_GetTicks();	
 	bool quit = false;
@@ -98,12 +109,14 @@ void Game::gameLoop(){
 void Game::update(){
 	this->player->update(this->elapsedTime, this->level->getCamera());
 	this->level->update(this->elapsedTime, this->player);
+	this->notifications->update(this->elapsedTime);
 }
 
 void Game::draw(Graphic &graphic){ 
 	graphic.clear();
 	this->level->draw(graphic);
 	this->player->draw(graphic, *this->level->getCamera());
+	this->notifications->draw(graphic, this->level->getCamera()->getPosition());
 	graphic.render();
 }
 

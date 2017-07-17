@@ -4,6 +4,7 @@
 #include "sprite.hpp"
 #include "vector.hpp"
 #include <vector>
+#include <memory>
 
 struct Graphic;
 struct Camera;
@@ -30,7 +31,7 @@ protected:
 	virtual void setBulletOrientations() = 0;
 	bool hasBulletCollided(Level & level, std::vector<Bullet*>::iterator & bullet);
 	bool handleWallCollision(std::vector<BoundingBox*> & collidables);
-	bool hasBulletHitEnemy(std::vector<Enemy*> & enemies);
+	bool hasBulletHitEnemy(std::vector<std::shared_ptr<Enemy>> & enemies);
 	void eraseBullet(std::vector<Bullet*> & firedBullets, std::vector<Bullet*>::iterator & bullet);
 	orientation bulletOrientation;
 	

@@ -29,10 +29,14 @@ public:
 	~DamageText();
 	void accumulateDamage(const double damage);
 	void draw(Graphic & graphic, const Vector2<double> cameraOffset = {0.0, 0.0});
-	void update(double elapsedTime, const Vector2<double> newPos);
+	bool update(double elapsedTime);
+	void setPos(const Vector2<double> & pos);
 	void resetClock();
 	bool isTextShowing() const;
+	void show();
 	void rise();
+	bool isExpired() const;
+	void expire();
 private:
 	void resetDamage();
 	Vector2<double> getSignOffset() const;
@@ -42,7 +46,8 @@ private:
 	Digit tensColumn;	
 	double riseLevel;
 	double damage;
-	Animation drawTime;
+	Timer drawTime;
+	bool expired;
 };
 
 #endif 

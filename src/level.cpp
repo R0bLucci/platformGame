@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
+#include <iostream>
 #include "../header/level.hpp"
 #include "../header/graphic.hpp"
-#include <iostream>
 #include "../header/tinyxml2.hpp"
 #include "../header/tile.hpp"
 #include "../header/tileset.hpp"
@@ -10,6 +10,8 @@
 #include "../header/boundingBox.hpp"
 #include "../header/bat.hpp"
 #include "../header/bullet.hpp"
+#include "../header/game.hpp"
+#include "../header/gameNotification.hpp"
 #include "../header/logger.hpp"
 
 using namespace tinyxml2;
@@ -30,10 +32,6 @@ Level::~Level(){
 	for(int i=0, n = this->collidables.size(); i < n; ++i){
 		delete this->collidables[i];
 		this->collidables[i] = nullptr;
-	}
-	for(int i=0, n = this->enemies.size(); i < n; ++i){
-		delete this->enemies[i];
-		this->enemies[i] = nullptr;
 	}
 	delete this->camera;
 	this->camera = nullptr;
@@ -157,7 +155,13 @@ void Level::mapLoader(std::string mapName, Graphic &graphic){
 
 void Level::generateEnemy(Graphic & graphic, std::string enemyType, const Vector2<double> & spawnPoint){
 	if(enemyType == "bat") {
-		this->enemies.push_back(new Bat(graphic, spawnPoint));
+		this->enemies.push_back(std::shared_ptr<Enemy>(new Bat(graphic, spawnPoint)));
+		GameNotification * g = Game::getInGameNotifier(); 
+		for(unsigned int i = 0, n = this->enemies.size(); i < n; ++i){
+			//logger::log("save enemy", &this->enemies[i]);
+			//logger::log("save enemy", enemy);
+			g->addEnemyNotifier(this->enemies[i]); 
+		}
 	}
 }
 
@@ -221,7 +225,7 @@ void Level::addTileToTileset(std::unique_ptr<Tile>& tile){
 	}
 }
 
-void Level::update(double elapsedTime, std::unique_ptr<Player>& player){	
+void Level::update(double elapsedTime, std::shared_ptr<Player>& player){	
 	std::vector<BoundingBox> onScreen;
 	for(int i = 0, n = this->collidables.size(); i < n; i++){
 		BoundingBox * b = this->collidables[i];

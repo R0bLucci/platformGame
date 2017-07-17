@@ -47,15 +47,14 @@ bool Bullet::hasBulletCollided(Level & level, std::vector<Bullet*>::iterator & b
 	return isBulletBusted;
 }
 
-bool Bullet::hasBulletHitEnemy(std::vector<Enemy*> & enemies){
-	std::vector<Enemy*>::iterator begin = enemies.begin();
-	const std::vector<Enemy*>::iterator end  = enemies.end();
+bool Bullet::hasBulletHitEnemy(std::vector<std::shared_ptr<Enemy>> & enemies){
+	std::vector<std::shared_ptr<Enemy>>::iterator begin = enemies.begin();
+	const std::vector<std::shared_ptr<Enemy>>::iterator end  = enemies.end();
 	while(begin != end){
 		if(this->isColliding((*begin)->getBoundingBox())){
 			logger::log("enemy hit"); 
 			(*begin)->decreaseHealth(this->firePower);
-			/*delete *begin;
-			enemies.erase(begin);*/
+			enemies.erase(begin);
 			return true;
 		}
 		++begin;

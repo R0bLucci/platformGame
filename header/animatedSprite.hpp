@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 #include "sprite.hpp"
 #include "globals.hpp"
 #include "vector.hpp"
@@ -28,6 +29,8 @@ public:
 
 	Vector2<double> getPosition() const;
 	Vector2<double> getCenteredPosition() const;
+	
+	const std::shared_ptr<DamageText> getDamageText() const;
 
 protected:
 
@@ -45,7 +48,7 @@ protected:
 	
 	void addAnimation(std::string animationName, int frames, Vector2<double> origin,  bool isHorizotal = true);
 	std::map<std::string, std::vector<SDL_Rect>> animations;	
-	DamageText damageText;
+	std::shared_ptr<DamageText> damageText;
 private:
 	void moveBoundingBox(const Vector2<double> &cameraOffset = {0.0, 0.0});
 };

@@ -5,7 +5,8 @@
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double health, Vector2<double> position, Direction facing, const double timeToUpdate) : 
 Sprite(graphic, textureName, originX, originY, width, height, position), health(health),
-facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""), damageText(graphic, position){
+facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""), 
+damageText(new DamageText(graphic, position)){
 	this->setUpAnimation();
 }
 
@@ -41,7 +42,8 @@ void AnimatedSprite::moveBoundingBox(const Vector2<double> &cameraOffset){
 
 void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOffset){
 	Sprite::update(elapsedTime);
-	damageText.update(elapsedTime, this->getCenteredPosition());
+	//damageText->update(elapsedTime);
+	damageText->setPos(this->getCenteredPosition());
 	this->moveBoundingBox(cameraOffset);
 
 	this->elapsedTime += elapsedTime;
@@ -58,12 +60,11 @@ void AnimatedSprite::update(double elapsedTime, const Vector2<double>& cameraOff
 }
 
 void AnimatedSprite::draw(Graphic &graphic, const Vector2<double> &cameraOffset){
-	damageText.draw(graphic, cameraOffset);
 	Sprite::draw(graphic, cameraOffset);
 }
 
 void AnimatedSprite::decreaseHealth(const double damage){
-	damageText.accumulateDamage(damage);
+	damageText->accumulateDamage(damage);
 }
 
 void AnimatedSprite::encreaseHealth(const double lives){}
@@ -77,3 +78,6 @@ Vector2<double> AnimatedSprite::getCenteredPosition() const {
 			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
 }
 
+const std::shared_ptr<DamageText> AnimatedSprite::getDamageText() const {
+	return this->damageText;
+}

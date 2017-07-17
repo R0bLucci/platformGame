@@ -36,6 +36,7 @@ public:
 	void updateSource(const double digit);
 	void updateColor(Digit::color color);
 	void updatePosition(const Vector2<double> pos);
+	Vector2<double> & getPosition();
 
 private:
 	SDL_Texture * texture;	
