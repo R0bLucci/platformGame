@@ -5,6 +5,7 @@
 #include "../header/player.hpp"
 #include "../header/game.hpp"
 #include "../header/gameNotification.hpp"
+#include "../header/enemyProperty.hpp"
 #include "../header/logger.hpp"
 #include <string>
 
@@ -119,5 +120,6 @@ void Enemy::decreaseHealth(const double damage){
 	this->hitTimer.resetAndStart();
 	damageText->resetClock();
 	//this->intakeDamage += damage;
+	this->health -= damage;
 	AnimatedSprite::decreaseHealth(damage);
 }

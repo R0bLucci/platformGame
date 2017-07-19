@@ -3,6 +3,7 @@
 #include "animatedSprite.hpp"
 #include "boundingBox.hpp"
 #include "timer.hpp"
+#include "enemyProperty.hpp"
 
 struct Graphic;
 struct Camera;

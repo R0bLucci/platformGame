@@ -81,3 +81,7 @@ Vector2<double> AnimatedSprite::getCenteredPosition() const {
 const std::shared_ptr<DamageText> AnimatedSprite::getDamageText() const {
 	return this->damageText;
 }
+
+bool AnimatedSprite::isDead() const {
+	return this->health <= 0.0;
+}

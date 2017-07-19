@@ -32,6 +32,8 @@ public:
 	
 	const std::shared_ptr<DamageText> getDamageText() const;
 
+	bool isDead() const;
+
 protected:
 
 	double health;
