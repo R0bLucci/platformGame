@@ -1,13 +1,15 @@
 #include "../header/animatedSprite.hpp"
 #include <iostream>
 #include "../header/boundingBox.hpp"
+#include "../header/dust.hpp"
 #include "../header/logger.hpp"
 
 AnimatedSprite::AnimatedSprite(Graphic &graphic, std::string textureName, int originX, int originY, int width, int height, double health, Vector2<double> position, Direction facing, const double timeToUpdate) : 
 Sprite(graphic, textureName, originX, originY, width, height, position), health(health),
 facing(facing), frameIndex(0), timeToUpdate(timeToUpdate), elapsedTime(0), currentAnimation(""), 
-damageText(new DamageText(graphic, position)){
+damageText(new DamageText(graphic, position)) {
 	this->setUpAnimation();
+	this->dust.reset(new Dust(graphic, position));
 }
 
 AnimatedSprite::~AnimatedSprite(){}
@@ -84,4 +86,8 @@ const std::shared_ptr<DamageText> AnimatedSprite::getDamageText() const {
 
 bool AnimatedSprite::isDead() const {
 	return this->health <= 0.0;
+}
+
+std::unique_ptr<Dust> AnimatedSprite::getDust(){
+	return std::move(this->dust);
 }

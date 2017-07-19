@@ -15,7 +15,8 @@ dx(0.0), dy(0.0),
 hud(graphic, "TextBox.png", 99.0, Vector2<double>(50, 50)),
 headBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 16 * globals::SPRITE_SCALER, 16),
 bodyBox(Vector2<double>(spawnPoint.x, spawnPoint.y), 18, 16 * globals::SPRITE_SCALER, Vector2<double>(7.0, 0.0)),
-weapon(new Pistol(graphic, 100.0, spawnPoint)) {
+weapon(new Pistol(graphic, 100.0, spawnPoint))
+{
 	this->setUpAnimation();
 }
 
@@ -60,7 +61,6 @@ void Player::update(double elapsedTime, Camera *camera){
 		camera->move(this->getPosition().x, this->getPosition().y);
 		this->hud.update(elapsedTime, camera->getPosition());
 	}
-
 	//logger::log("position:", this->position);
 }
 

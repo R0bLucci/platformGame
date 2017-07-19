@@ -21,6 +21,11 @@ Enemy::~Enemy(){
 	this->attackArea = nullptr;
 	damageText->expire();
 	damageText->show();
+
+	GameNotification * g = GameNotification::createGameNotification();
+	this->dust->setPos(this->getPosition());
+	g->addDustNotifier(this->getDust());
+
 	logger::log("enemy deleted");
 }
 

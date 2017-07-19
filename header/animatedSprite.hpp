@@ -10,6 +10,7 @@
 #include "globals.hpp"
 #include "vector.hpp"
 #include "text.hpp"
+#include "dust.hpp"
 
 struct Graphic;
 
@@ -42,15 +43,19 @@ protected:
 	const double timeToUpdate;
 	double elapsedTime;
 	std::string currentAnimation;
+	std::map<std::string, std::vector<SDL_Rect>> animations;	
+	std::shared_ptr<DamageText> damageText;
+	std::unique_ptr<Dust> dust;
+
+
 	void setUpAnimation();
 	void setCurrentAnimation(std::string animationName);
 
 	void decreaseHealth(const double damage);
 	void encreaseHealth(const double lives);
-	
 	void addAnimation(std::string animationName, int frames, Vector2<double> origin,  bool isHorizotal = true);
-	std::map<std::string, std::vector<SDL_Rect>> animations;	
-	std::shared_ptr<DamageText> damageText;
+
+	std::unique_ptr<Dust> getDust();
 private:
 	void moveBoundingBox(const Vector2<double> &cameraOffset = {0.0, 0.0});
 };
