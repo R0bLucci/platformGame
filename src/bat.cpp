@@ -17,8 +17,11 @@ namespace {
 	const int ATTACK_FRQ = 1000; // attack frequency
 }
 
+double enemyProperty::attackDamage = 2.0;
+double enemyProperty::health = 5.0;
+
 Bat::Bat(Graphic & graphic, Vector2<double> position) : 
-Enemy(graphic, "NpcCemet.png", 32, 32, 16, 16, 30.0, 2.0, ATTACK_FRQ, position, 
+Enemy(graphic, "NpcCemet.png", 32, 32, 16, 16, enemyProperty::health, enemyProperty::attackDamage, ATTACK_FRQ, position, 
 new BoundingBox(Vector2<double>(position.x, position.y), ATTACK_AREA_WIDTH, ATTACK_AREA_HEIGHT, 
 {AAW_OFFSET, AAH_OFFSET}), LEFT, ANIMATION_SPEED){
 	this->setUpAnimation();
