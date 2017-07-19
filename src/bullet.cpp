@@ -54,7 +54,9 @@ bool Bullet::hasBulletHitEnemy(std::vector<std::shared_ptr<Enemy>> & enemies){
 		if(this->isColliding((*begin)->getBoundingBox())){
 			logger::log("enemy hit"); 
 			(*begin)->decreaseHealth(this->firePower);
-			enemies.erase(begin);
+			if((*begin)->isDead()){
+				enemies.erase(begin);
+			}
 			return true;
 		}
 		++begin;

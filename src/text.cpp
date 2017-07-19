@@ -148,5 +148,6 @@ bool DamageText::isExpired() const {
 
 void DamageText::expire(){
 	this->expired = true;
+	this->riseLevel = 0.0;
 }
 /* End DamageText */ 
