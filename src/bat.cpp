@@ -71,7 +71,7 @@ void Bat::moveDown(){
 void Bat::attackPlayer(Player & player, double elapsedTime){
 	if(this->isColliding(player.getBoundingBox())){
 		if(this->timeBeforeAttack <= 0.0){
-			this->currentAnimation = (this->position.x < player.position.x) ? "attackRight" : "attackLeft";
+			this->currentAnimation = (this->position.x < player.getPosition().x) ? "attackRight" : "attackLeft";
 			Enemy::attackPlayer(player, elapsedTime);
 			this->timeBeforeAttack += this->ATTACK_RATE;
 		}else{

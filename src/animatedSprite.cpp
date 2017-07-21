@@ -71,15 +71,6 @@ void AnimatedSprite::decreaseHealth(const double damage){
 
 void AnimatedSprite::encreaseHealth(const double lives){}
 
-Vector2<double> AnimatedSprite::getPosition() const {
-	return this->position;
-}
-
-Vector2<double> AnimatedSprite::getCenteredPosition() const {
-	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
-			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
-}
-
 const std::shared_ptr<DamageText> AnimatedSprite::getDamageText() const {
 	return this->damageText;
 }

@@ -27,9 +27,6 @@ public:
 	void update(double elapsedTime, const Vector2<double> & cameraOffset = {0.0, 0.0});
 
 	void draw(Graphic & graphic, const Vector2<double> & cameraOffset = {0.0, 0.0});
-
-	Vector2<double> getPosition() const;
-	Vector2<double> getCenteredPosition() const;
 	
 	const std::shared_ptr<DamageText> getDamageText() const;
 

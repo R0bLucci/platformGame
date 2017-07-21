@@ -52,3 +52,13 @@ bool Sprite::isColliding(const BoundingBox * const box) const{
 BoundingBox * Sprite::getBoundingBox() const{
 	return this->boundingBox;
 }
+
+Vector2<double> Sprite::getPosition() const {
+	return this->position;
+}
+
+Vector2<double> Sprite::getCenteredPosition() const {
+	return Vector2<double>(this->position.x + (this->source.w * globals::SPRITE_SCALER / 2), 
+			this->position.y + (this->source.h * globals::SPRITE_SCALER / 2));
+}
+
