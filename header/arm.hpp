@@ -22,7 +22,7 @@ public:
 	}; 
 	Arm(Graphic & graphic, int sourceX, int sourceY, int width, int height, double reloadTime, Vector2<double> position);
 
-	~Arm();
+	virtual ~Arm();
 
 	virtual void update(double elapsedTime, AnimatedSprite::Direction wielderFacing, const Vector2<double> & playerPos);
 	void draw(Graphic & graphic, const Vector2<double> & cameraOffset);
