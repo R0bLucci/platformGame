@@ -23,8 +23,8 @@ Enemy::~Enemy(){
 	damageText->show();
 
 	GameNotification * g = GameNotification::createGameNotification();
-	this->dust->setPos(this->getPosition());
-	g->addDustNotifier(this->getDust());
+	this->deathCloud->setPos(this->getPosition());
+	g->addParticleNotifier(this->getDeathCloud());
 
 	logger::log("enemy deleted");
 }
