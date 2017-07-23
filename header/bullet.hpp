@@ -11,6 +11,7 @@ struct Camera;
 struct Level;
 struct Enemy;
 struct BoundingBox;
+struct Particle;
 
 class Bullet : public Sprite {
 public:
@@ -33,6 +34,12 @@ protected:
 	bool handleWallCollision(std::vector<BoundingBox*> & collidables);
 	bool hasBulletHitEnemy(std::vector<std::shared_ptr<Enemy>> & enemies);
 	void eraseBullet(std::vector<Bullet*> & firedBullets, std::vector<Bullet*>::iterator & bullet);
+	bool isTimeToDie() const;
+	void updateLifeTime(double elapsedTime);
+	Vector2<double> getDeathStarPosition() const;
+	
+	std::unique_ptr<Particle> moveDeathStar();
+
 	orientation bulletOrientation;
 	
 	const double TIME_TO_LIVE;
@@ -41,7 +48,6 @@ protected:
 	double firePower;
 	Vector2<double> offset;	
 	
-	bool isTimeToDie() const;
-	void updateLifeTime(double elapsedTime);
+	std::unique_ptr<Particle> deathStar;
 };
 #endif 
