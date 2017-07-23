@@ -5,6 +5,7 @@
 #include "vector.hpp"
 #include "animatedSprite.hpp"
 #include "bullet.hpp"
+#include "starFire.hpp"
 #include <string>
 #include <map>
 
@@ -35,11 +36,13 @@ protected:
 	Bullet::orientation bulletOrientationState;
 
 	void reload();
+	Vector2<double> getArmCenteredPos(Arm::orientation orientation) const;
 	void reloading(double elapsedTime);
 	bool isReadyToFire() const;
 	
 	const double TIME_TO_RELOAD;
 	double timeToFire;
+	StarFire starFire;
 	
 };
 

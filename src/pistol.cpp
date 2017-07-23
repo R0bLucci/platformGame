@@ -21,6 +21,7 @@ void Pistol::setArmOrientations() {
 
 Bullet * Pistol::fire(Graphic & graphic){
 	if(this->isReadyToFire()){
+		this->starFire.resetCurrentFrame();
 		Bullet * b = new PistolBullet(graphic, this->bulletOrientationState, this->position);
 		this->reload();
 		return b;

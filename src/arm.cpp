@@ -7,7 +7,7 @@
 Arm::Arm(Graphic & graphic, int sourceX, int sourceY, int width, int height, double reloadTime, Vector2<double> position)
 : Sprite(graphic, "Arms.png", sourceX, sourceY, width, height, position), 
 bulletOrientationState(Bullet::orientation::HORIZONTAL_LEFT), TIME_TO_RELOAD(reloadTime),
-timeToFire(0.0) {}
+timeToFire(0.0), starFire(graphic, position, false) {}
 
 Arm::~Arm(){}
 
@@ -51,6 +51,8 @@ void Arm::update(double elapsedTime, AnimatedSprite::Direction wielderFacing, co
 	this->boundingBox->moveBoundingBox(this->position);
 
 	this->reloading(elapsedTime);
+	this->starFire.setPos(this->getArmCenteredPos(armOrientationState));
+	this->starFire.update(elapsedTime);
 }
 
 
@@ -62,6 +64,7 @@ void Arm::draw(Graphic & graphic,const Vector2<double> & cameraOffset){
 				this->boundingBox->w, 
 				this->boundingBox->h 
 			});
+	starFire.draw(graphic, cameraOffset);
 }
 
 void Arm::updateOrientationState(const orientation & currentState){
@@ -95,4 +98,29 @@ void Arm::reloading(double elapsedTime){
 
 bool Arm::isReadyToFire() const {
 	return this->timeToFire <= 0.0;
+}
+
+Vector2<double> Arm::getArmCenteredPos(Arm::orientation orientation) const {
+	double x,y;
+	switch(orientation){
+		case orientation::HORIZONTAL_RIGHT:
+			x = this->position.x + this->source.w * globals::SPRITE_SCALER;
+			y = this->position.y + ((this->source.h * globals::SPRITE_SCALER) / 2);
+		break;
+		case orientation::HORIZONTAL_LEFT:
+			x = this->position.x;
+			y = this->position.y + ((this->source.h * globals::SPRITE_SCALER) / 2);
+		break;
+		case orientation::VERTICAL_UP_RIGHT:
+		case orientation::VERTICAL_UP_LEFT:
+			x = this->position.x + ((this->source.w * globals::SPRITE_SCALER) / 2);
+			y = this->position.y;
+		break;
+		case orientation::VERTICAL_DOWN_RIGHT:
+		case orientation::VERTICAL_DOWN_LEFT:
+			x = this->position.x + ((this->source.w * globals::SPRITE_SCALER) / 2);
+			y = this->position.y + this->source.h * globals::SPRITE_SCALER;
+		break;
+	}
+	return Vector2<double>(x, y);	
 }
