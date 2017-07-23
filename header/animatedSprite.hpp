@@ -10,7 +10,7 @@
 #include "globals.hpp"
 #include "vector.hpp"
 #include "text.hpp"
-#include "dust.hpp"
+#include "deathCloud.hpp"
 
 struct Graphic;
 
@@ -42,7 +42,7 @@ protected:
 	std::string currentAnimation;
 	std::map<std::string, std::vector<SDL_Rect>> animations;	
 	std::shared_ptr<DamageText> damageText;
-	std::unique_ptr<Dust> dust;
+	std::unique_ptr<Particle> deathCloud;
 
 
 	void setUpAnimation();
@@ -52,7 +52,7 @@ protected:
 	void encreaseHealth(const double lives);
 	void addAnimation(std::string animationName, int frames, Vector2<double> origin,  bool isHorizotal = true);
 
-	std::unique_ptr<Dust> getDust();
+	std::unique_ptr<Particle> getDeathCloud();
 private:
 	void moveBoundingBox(const Vector2<double> &cameraOffset = {0.0, 0.0});
 };
