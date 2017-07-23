@@ -4,7 +4,7 @@
 #include "../header/bat.hpp"
 #include "../header/text.hpp"
 #include "../header/graphic.hpp"
-#include "../header/dust.hpp"
+#include "../header/deathCloud.hpp"
 #include "../header/logger.hpp"
 
 GameNotification * GameNotification::theGNInstance = nullptr;
@@ -32,9 +32,9 @@ void GameNotification::addPlayerNotifier(const std::shared_ptr<Player> & player)
 	this->player = std::make_pair(player->getDamageText(), std::weak_ptr<Player>(player));
 }
 
-void GameNotification::addDustNotifier(std::unique_ptr<Dust> dust){
-	//this->dusts.push_back(std::unique_ptr<Dust>(std::move(dust)));
-	this->dusts.emplace_back(std::move(dust));
+void GameNotification::addParticleNotifier(std::unique_ptr<Particle> particle){
+	//this->particles.push_back(std::unique_ptr<Particle>(std::move(particle)));
+	this->particles.emplace_back(std::move(particle));
 }
 
 void GameNotification::update(double elapsedTime){
@@ -53,12 +53,12 @@ void GameNotification::update(double elapsedTime){
 		}
 	}	
 
-	for(auto dust = this->dusts.begin(); dust != this->dusts.end(); ){
-		if(!dust->get()->isDissipated()){
-			dust->get()->update(elapsedTime);	
-			++dust;
+	for(auto particle = this->particles.begin(); particle != this->particles.end(); ){
+		if(!particle->get()->isDone()){
+			particle->get()->update(elapsedTime);	
+			++particle;
 		}else{
-			dust = this->dusts.erase(dust);
+			particle = this->particles.erase(particle);
 		}
 	}
 
@@ -71,8 +71,8 @@ void GameNotification::draw(Graphic & graphic, const Vector2<double> & cameraOff
 	for(auto it = this->enemies.begin(); it != this->enemies.end(); ++it){
 		it->first->draw(graphic, cameraOffset);
 	}	
-	for(unsigned int i = 0; i < this->dusts.size(); ++i){
-		this->dusts[i]->draw(graphic, cameraOffset);
+	for(unsigned int i = 0; i < this->particles.size(); ++i){
+		this->particles[i]->draw(graphic, cameraOffset);
 	}
 
 	this->player.first->draw(graphic, cameraOffset);
