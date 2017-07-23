@@ -36,6 +36,12 @@ struct Vector2 {
 		this->y += operand.y;
 		return *this;
 	}
+
+	Vector2<T>& operator-=(const Vector2<T>& operand) {
+		this->x -= operand.x;
+		this->y -= operand.y;
+		return *this;
+	}
 	
 	Vector2<T> operator-(const Vector2<T>& v) {
 		T x = this->x - v.x;
