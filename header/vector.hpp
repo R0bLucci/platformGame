@@ -71,6 +71,10 @@ struct Vector2 {
 		return result;
 	}
 
+	bool operator==(const Vector2<T>& v) const{
+		return this->x == v.x && this->y == v.y;
+	}
+
 	friend std::ostream & operator<<(std::ostream & o, const Vector2<T> & lhs){
 		return o << "Vector2 [x: " << lhs.x << ", y: " << lhs.y << "]";
 	}
