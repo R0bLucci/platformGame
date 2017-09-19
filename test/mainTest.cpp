@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "cameraTest.h"
+#include "cameraTest.hpp"
 
 int main(int argc, char* argv[]){
 	::testing::InitGoogleTest(&argc, argv);
